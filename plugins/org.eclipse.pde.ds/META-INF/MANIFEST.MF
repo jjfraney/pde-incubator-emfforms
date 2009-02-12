@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.pde.ds;singleton:=true
+Bundle-Version: 0.1.0
+Bundle-ClassPath: .
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.eclipse.pde.ds.scr,
+ org.eclipse.pde.ds.scr.impl,
+ org.eclipse.pde.ds.scr.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport
+Bundle-ActivationPolicy: lazy
+Bundle-Localization: plugin
+Bundle-Vendor: %providerName
