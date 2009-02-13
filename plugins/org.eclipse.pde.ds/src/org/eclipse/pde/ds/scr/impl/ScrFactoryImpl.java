@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrFactoryImpl.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: ScrFactoryImpl.java,v 1.2 2009/02/13 13:30:40 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -120,10 +120,11 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public Component createComponent() {
 		ComponentImpl component = new ComponentImpl();
+		component.setImplementation(createImplementation());
 		return component;
 	}
 
