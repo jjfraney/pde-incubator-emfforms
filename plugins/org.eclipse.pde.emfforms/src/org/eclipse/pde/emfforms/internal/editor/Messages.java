@@ -8,14 +8,14 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Messages.java,v 1.1 2009/02/12 22:20:33 bcabe Exp $
+ * $Id: Messages.java,v 1.2 2009/02/13 10:24:39 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal.editor;
 
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.pde.emfforms.editor.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.eclipse.pde.emfforms.internal.editor.messages"; //$NON-NLS-1$
 
 	public static String EmfFormEditor_DiaDialog_InvalidModel_Title;
 
