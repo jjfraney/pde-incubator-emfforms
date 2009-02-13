@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.pde.ds.ui.internal.editor.DSEditor"
+            contributorClass="org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor"
+            default="true"
+            extensions="numerical"
+            filenames="component.xml"
+            icon="icons/obj16/ds_obj.gif"
+            id="org.eclipse.pde.ds.ui.emf.editor"
+            name="%editor.name">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.pde.ds.content-type">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+</plugin>
