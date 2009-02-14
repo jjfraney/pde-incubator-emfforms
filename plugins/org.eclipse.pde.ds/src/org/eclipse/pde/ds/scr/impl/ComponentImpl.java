@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentImpl.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: ComponentImpl.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -25,7 +25,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.BasicFeatureMap;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.pde.ds.scr.Component;
@@ -52,6 +54,7 @@ import org.eclipse.pde.ds.scr.Service;
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getDeactivate <em>Deactivate</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getConfigurationPolicy <em>Configuration Policy</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getImplementation <em>Implementation</em>}</li>
+ *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getAllProperties <em>All Properties</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getProperty <em>Property</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getService <em>Service</em>}</li>
@@ -231,24 +234,14 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	protected Implementation implementation;
 
 	/**
-	 * The cached value of the '{@link #getProperty() <em>Property</em>}' containment reference list.
+	 * The cached value of the '{@link #getAllProperties() <em>All Properties</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProperty()
+	 * @see #getAllProperties()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Property> property;
-
-	/**
-	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getProperties()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Properties> properties;
+	protected FeatureMap allProperties;
 
 	/**
 	 * The cached value of the '{@link #getService() <em>Service</em>}' containment reference.
@@ -534,11 +527,20 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Property> getProperty() {
-		if (property == null) {
-			property = new EObjectContainmentEList<Property>(Property.class, this, ScrPackage.COMPONENT__PROPERTY);
+	public FeatureMap getAllProperties() {
+		if (allProperties == null) {
+			allProperties = new BasicFeatureMap(this, ScrPackage.COMPONENT__ALL_PROPERTIES);
 		}
-		return property;
+		return allProperties;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Property> getProperty() {
+		return getAllProperties().list(ScrPackage.Literals.COMPONENT__PROPERTY);
 	}
 
 	/**
@@ -547,10 +549,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	 * @generated
 	 */
 	public EList<Properties> getProperties() {
-		if (properties == null) {
-			properties = new EObjectContainmentEList<Properties>(Properties.class, this, ScrPackage.COMPONENT__PROPERTIES);
-		}
-		return properties;
+		return getAllProperties().list(ScrPackage.Literals.COMPONENT__PROPERTIES);
 	}
 
 	/**
@@ -618,6 +617,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 		switch (featureID) {
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 				return basicSetImplementation(null, msgs);
+			case ScrPackage.COMPONENT__ALL_PROPERTIES:
+				return ((InternalEList<?>)getAllProperties()).basicRemove(otherEnd, msgs);
 			case ScrPackage.COMPONENT__PROPERTY:
 				return ((InternalEList<?>)getProperty()).basicRemove(otherEnd, msgs);
 			case ScrPackage.COMPONENT__PROPERTIES:
@@ -654,6 +655,9 @@ public class ComponentImpl extends EObjectImpl implements Component {
 				return getConfigurationPolicy();
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 				return getImplementation();
+			case ScrPackage.COMPONENT__ALL_PROPERTIES:
+				if (coreType) return getAllProperties();
+				return ((FeatureMap.Internal)getAllProperties()).getWrapper();
 			case ScrPackage.COMPONENT__PROPERTY:
 				return getProperty();
 			case ScrPackage.COMPONENT__PROPERTIES:
@@ -698,6 +702,9 @@ public class ComponentImpl extends EObjectImpl implements Component {
 				return;
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 				setImplementation((Implementation)newValue);
+				return;
+			case ScrPackage.COMPONENT__ALL_PROPERTIES:
+				((FeatureMap.Internal)getAllProperties()).set(newValue);
 				return;
 			case ScrPackage.COMPONENT__PROPERTY:
 				getProperty().clear();
@@ -750,6 +757,9 @@ public class ComponentImpl extends EObjectImpl implements Component {
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 				setImplementation((Implementation)null);
 				return;
+			case ScrPackage.COMPONENT__ALL_PROPERTIES:
+				getAllProperties().clear();
+				return;
 			case ScrPackage.COMPONENT__PROPERTY:
 				getProperty().clear();
 				return;
@@ -790,10 +800,12 @@ public class ComponentImpl extends EObjectImpl implements Component {
 				return configurationPolicy != CONFIGURATION_POLICY_EDEFAULT;
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 				return implementation != null;
+			case ScrPackage.COMPONENT__ALL_PROPERTIES:
+				return allProperties != null && !allProperties.isEmpty();
 			case ScrPackage.COMPONENT__PROPERTY:
-				return property != null && !property.isEmpty();
+				return !getProperty().isEmpty();
 			case ScrPackage.COMPONENT__PROPERTIES:
-				return properties != null && !properties.isEmpty();
+				return !getProperties().isEmpty();
 			case ScrPackage.COMPONENT__SERVICE:
 				return service != null;
 			case ScrPackage.COMPONENT__REFERENCE:
@@ -826,6 +838,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 		result.append(deactivate);
 		result.append(", configurationPolicy: ");
 		result.append(configurationPolicy);
+		result.append(", allProperties: ");
+		result.append(allProperties);
 		result.append(')');
 		return result.toString();
 	}

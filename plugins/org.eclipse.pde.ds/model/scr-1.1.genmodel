@@ -4,9 +4,18 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2009 Anyware Technologies and others.&#xD;&#xA;All rights reserved. This program and the accompanying materials&#xD;&#xA;are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA;which accompanies this distribution, and is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;    Anyware Technologies - initial API and implementation"
     modelDirectory="/org.eclipse.pde.ds/src" modelPluginID="org.eclipse.pde.ds" modelName="Scr"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false">
+  <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/exporter/org.eclipse.xsd.ecore.exporter">
+    <genAnnotations source="selectedPackages">
+      <details key="http://www.osgi.org/xmlns/scr/v1.1.0" value="scr-1.1.xsd"/>
+    </genAnnotations>
+    <details key="directoryURI" value="."/>
+  </genAnnotations>
   <foreignModel>scr-1.1.ecore</foreignModel>
   <genPackages prefix="Scr" basePackage="org.eclipse.pde.ds" resource="XML" disposableProviderFactory="true"
       contentTypeIdentifier="org.eclipse.pde.ds.content-type" ecorePackage="scr-1.1.ecore#/">
+    <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/exporter/org.eclipse.xsd.ecore.exporter">
+      <genAnnotations source="scr-1.1.xsd"/>
+    </genAnnotations>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.1.ecore#//Policy">
       <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//Policy/static"/>
       <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//Policy/dynamic"/>

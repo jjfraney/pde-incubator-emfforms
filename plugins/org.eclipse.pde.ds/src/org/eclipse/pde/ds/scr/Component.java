@@ -8,13 +8,14 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Component.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: Component.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.FeatureMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getDeactivate <em>Deactivate</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getConfigurationPolicy <em>Configuration Policy</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getImplementation <em>Implementation</em>}</li>
+ *   <li>{@link org.eclipse.pde.ds.scr.Component#getAllProperties <em>All Properties</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getProperty <em>Property</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getService <em>Service</em>}</li>
@@ -40,7 +42,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  *
  * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent()
- * @model
+ * @model extendedMetaData="name='component' kind='element'"
  * @generated
  */
 public interface Component extends EObject {
@@ -313,6 +315,23 @@ public interface Component extends EObject {
 	void setImplementation(Implementation value);
 
 	/**
+	 * Returns the value of the '<em><b>All Properties</b></em>' attribute list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.util.FeatureMap.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>All Properties</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>All Properties</em>' attribute list.
+	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_AllProperties()
+	 * @model dataType="org.eclipse.emf.ecore.EFeatureMapEntry" many="true"
+	 *        extendedMetaData="kind='group' name='group:1'"
+	 * @generated
+	 */
+	FeatureMap getAllProperties();
+
+	/**
 	 * Returns the value of the '<em><b>Property</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.pde.ds.scr.Property}.
 	 * <!-- begin-user-doc -->
@@ -323,7 +342,8 @@ public interface Component extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Property</em>' containment reference list.
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Property()
-	 * @model containment="true" derived="true"
+	 * @model containment="true" transient="true" volatile="true" derived="true"
+	 *        extendedMetaData="group='#group:1'"
 	 * @generated
 	 */
 	EList<Property> getProperty();
@@ -339,7 +359,8 @@ public interface Component extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Properties()
-	 * @model containment="true" derived="true"
+	 * @model containment="true" transient="true" volatile="true" derived="true"
+	 *        extendedMetaData="group='#group:1'"
 	 * @generated
 	 */
 	EList<Properties> getProperties();

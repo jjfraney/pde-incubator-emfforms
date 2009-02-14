@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrPackageImpl.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: ScrPackageImpl.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -270,8 +270,8 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getComponent_Property() {
-		return (EReference)componentEClass.getEStructuralFeatures().get(8);
+	public EAttribute getComponent_AllProperties() {
+		return (EAttribute)componentEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getComponent_Properties() {
+	public EReference getComponent_Property() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -288,7 +288,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getComponent_Service() {
+	public EReference getComponent_Properties() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -297,8 +297,17 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getComponent_Reference() {
+	public EReference getComponent_Service() {
 		return (EReference)componentEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getComponent_Reference() {
+		return (EReference)componentEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -554,6 +563,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		createEAttribute(componentEClass, COMPONENT__DEACTIVATE);
 		createEAttribute(componentEClass, COMPONENT__CONFIGURATION_POLICY);
 		createEReference(componentEClass, COMPONENT__IMPLEMENTATION);
+		createEAttribute(componentEClass, COMPONENT__ALL_PROPERTIES);
 		createEReference(componentEClass, COMPONENT__PROPERTY);
 		createEReference(componentEClass, COMPONENT__PROPERTIES);
 		createEReference(componentEClass, COMPONENT__SERVICE);
@@ -634,8 +644,9 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		initEAttribute(getComponent_Deactivate(), ecorePackage.getEString(), "deactivate", null, 0, 1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getComponent_ConfigurationPolicy(), this.getConfigurationPolicy(), "configurationPolicy", "optional", 0, 1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComponent_Implementation(), this.getImplementation(), null, "implementation", null, 1, 1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getComponent_Property(), this.getProperty(), null, "property", null, 0, -1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEReference(getComponent_Properties(), this.getProperties(), null, "properties", null, 0, -1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEAttribute(getComponent_AllProperties(), ecorePackage.getEFeatureMapEntry(), "allProperties", null, 0, -1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponent_Property(), this.getProperty(), null, "property", null, 0, -1, Component.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getComponent_Properties(), this.getProperties(), null, "properties", null, 0, -1, Component.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getComponent_Service(), this.getService(), null, "service", null, 0, 1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComponent_Reference(), this.getReference(), null, "reference", null, 0, -1, Component.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -705,11 +716,37 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	protected void createExtendedMetaDataAnnotations() {
 		String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";		
 		addAnnotation
+		  (componentEClass, 
+		   source, 
+		   new String[] {
+			 "name", "component",
+			 "kind", "element"
+		   });		
+		addAnnotation
 		  (getComponent_ConfigurationPolicy(), 
 		   source, 
 		   new String[] {
 			 "kind", "attribute",
 			 "name", "configuration-policy"
+		   });		
+		addAnnotation
+		  (getComponent_AllProperties(), 
+		   source, 
+		   new String[] {
+			 "kind", "group",
+			 "name", "group:1"
+		   });		
+		addAnnotation
+		  (getComponent_Property(), 
+		   source, 
+		   new String[] {
+			 "group", "#group:1"
+		   });		
+		addAnnotation
+		  (getComponent_Properties(), 
+		   source, 
+		   new String[] {
+			 "group", "#group:1"
 		   });		
 		addAnnotation
 		  (getComponent_Service(), 

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrPackage.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: ScrPackage.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -157,13 +157,22 @@ public interface ScrPackage extends EPackage {
 	int COMPONENT__IMPLEMENTATION = 7;
 
 	/**
+	 * The feature id for the '<em><b>All Properties</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT__ALL_PROPERTIES = 8;
+
+	/**
 	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__PROPERTY = 8;
+	int COMPONENT__PROPERTY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -172,7 +181,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__PROPERTIES = 9;
+	int COMPONENT__PROPERTIES = 10;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference.
@@ -181,7 +190,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__SERVICE = 10;
+	int COMPONENT__SERVICE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' containment reference list.
@@ -190,7 +199,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__REFERENCE = 11;
+	int COMPONENT__REFERENCE = 12;
 
 	/**
 	 * The number of structural features of the '<em>Component</em>' class.
@@ -199,7 +208,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_FEATURE_COUNT = 12;
+	int COMPONENT_FEATURE_COUNT = 13;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.pde.ds.scr.impl.ImplementationImpl <em>Implementation</em>}' class.
@@ -578,6 +587,17 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getComponent_Implementation();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.eclipse.pde.ds.scr.Component#getAllProperties <em>All Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>All Properties</em>'.
+	 * @see org.eclipse.pde.ds.scr.Component#getAllProperties()
+	 * @see #getComponent()
+	 * @generated
+	 */
+	EAttribute getComponent_AllProperties();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.pde.ds.scr.Component#getProperty <em>Property</em>}'.
@@ -973,6 +993,14 @@ public interface ScrPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMPONENT__IMPLEMENTATION = eINSTANCE.getComponent_Implementation();
+
+		/**
+		 * The meta object literal for the '<em><b>All Properties</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPONENT__ALL_PROPERTIES = eINSTANCE.getComponent_AllProperties();
 
 		/**
 		 * The meta object literal for the '<em><b>Property</b></em>' containment reference list feature.
