@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentItemProvider.java,v 1.2 2009/02/14 20:00:08 bcabe Exp $
+ * $Id: ComponentItemProvider.java,v 1.3 2009/02/14 20:05:34 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.provider;
 
@@ -254,8 +254,6 @@ public class ComponentItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ScrPackage.Literals.COMPONENT__IMPLEMENTATION);
 			childrenFeatures.add(ScrPackage.Literals.COMPONENT__ALL_PROPERTIES);
-			childrenFeatures.add(ScrPackage.Literals.COMPONENT__PROPERTY);
-			childrenFeatures.add(ScrPackage.Literals.COMPONENT__PROPERTIES);
 			childrenFeatures.add(ScrPackage.Literals.COMPONENT__SERVICE);
 			childrenFeatures.add(ScrPackage.Literals.COMPONENT__REFERENCE);
 		}
@@ -319,12 +317,12 @@ public class ComponentItemProvider
 			case ScrPackage.COMPONENT__ACTIVATE:
 			case ScrPackage.COMPONENT__DEACTIVATE:
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
+			case ScrPackage.COMPONENT__PROPERTY:
+			case ScrPackage.COMPONENT__PROPERTIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 			case ScrPackage.COMPONENT__ALL_PROPERTIES:
-			case ScrPackage.COMPONENT__PROPERTY:
-			case ScrPackage.COMPONENT__PROPERTIES:
 			case ScrPackage.COMPONENT__SERVICE:
 			case ScrPackage.COMPONENT__REFERENCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -365,16 +363,6 @@ public class ComponentItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__PROPERTY,
-				 ScrFactory.eINSTANCE.createProperty()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__PROPERTIES,
-				 ScrFactory.eINSTANCE.createProperties()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(ScrPackage.Literals.COMPONENT__SERVICE,
 				 ScrFactory.eINSTANCE.createService()));
 
@@ -382,35 +370,6 @@ public class ComponentItemProvider
 			(createChildParameter
 				(ScrPackage.Literals.COMPONENT__REFERENCE,
 				 ScrFactory.eINSTANCE.createReference()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		if (childFeature instanceof EStructuralFeature && FeatureMapUtil.isFeatureMap((EStructuralFeature)childFeature)) {
-			FeatureMap.Entry entry = (FeatureMap.Entry)childObject;
-			childFeature = entry.getEStructuralFeature();
-			childObject = entry.getValue();
-		}
-
-		boolean qualify =
-			childFeature == ScrPackage.Literals.COMPONENT__PROPERTY ||
-			childFeature == ScrPackage.Literals.COMPONENT__PROPERTIES;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**
