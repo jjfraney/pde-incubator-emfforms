@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.1 2009/02/12 22:20:32 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.2 2009/02/15 00:38:30 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -136,8 +136,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		_adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 		_adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		_adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		_adapterFactory.addAdapterFactory(getSpecificAdapterFactory());
+		_adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are
 		// executed.
@@ -538,6 +538,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		public void setClipboard(Collection<Object> clipboard) {
 			SharedClipboardAdapterFactoryEditingDomain.clipboard = clipboard;
 		}
+	}
+
+	public ComposedAdapterFactory getAdapterFactory() {
+		return _adapterFactory;
 	}
 
 }
