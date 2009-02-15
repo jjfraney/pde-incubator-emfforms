@@ -11,7 +11,7 @@
  Contributors:
      Anyware Technologies - initial API and implementation
 
- $Id: plugin.xml,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ $Id: plugin.xml,v 1.2 2009/02/15 00:42:42 bcabe Exp $
 -->
 
 <plugin>
@@ -35,11 +35,21 @@
             file-extensions="scr,xml,ds"
             id="org.eclipse.pde.ds.content-type"
             name="%_UI_Scr_content_type"
-            priority="normal">
+            priority="high">
          <describer class="org.eclipse.emf.ecore.xmi.impl.RootXMLContentHandlerImpl$Describer">
             <parameter name="namespace" value="http://www.osgi.org/xmlns/scr/v1.1.0"/>
          </describer>
       </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.wst.xml.core.catalogContributions">
+      <catalogContribution
+            id="default">
+         <uri
+               name="http://www.osgi.org/xmlns/scr/v1.1.0"
+               uri="model/scr-1.1.xsd">
+         </uri>
+      </catalogContribution>
    </extension>
 
 </plugin>

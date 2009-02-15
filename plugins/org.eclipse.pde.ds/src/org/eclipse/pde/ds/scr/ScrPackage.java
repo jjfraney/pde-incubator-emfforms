@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrPackage.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
+ * $Id: ScrPackage.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -85,13 +85,22 @@ public interface ScrPackage extends EPackage {
 	int COMPONENT = 0;
 
 	/**
+	 * The feature id for the '<em><b>Mixed</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT__MIXED = 0;
+
+	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__ENABLED = 0;
+	int COMPONENT__ENABLED = 1;
 
 	/**
 	 * The feature id for the '<em><b>Factory</b></em>' attribute.
@@ -100,7 +109,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__FACTORY = 1;
+	int COMPONENT__FACTORY = 2;
 
 	/**
 	 * The feature id for the '<em><b>Immediate</b></em>' attribute.
@@ -109,7 +118,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__IMMEDIATE = 2;
+	int COMPONENT__IMMEDIATE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -118,7 +127,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__NAME = 3;
+	int COMPONENT__NAME = 4;
 
 	/**
 	 * The feature id for the '<em><b>Activate</b></em>' attribute.
@@ -127,7 +136,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__ACTIVATE = 4;
+	int COMPONENT__ACTIVATE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Deactivate</b></em>' attribute.
@@ -136,7 +145,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__DEACTIVATE = 5;
+	int COMPONENT__DEACTIVATE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Configuration Policy</b></em>' attribute.
@@ -145,7 +154,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__CONFIGURATION_POLICY = 6;
+	int COMPONENT__CONFIGURATION_POLICY = 7;
 
 	/**
 	 * The feature id for the '<em><b>Implementation</b></em>' containment reference.
@@ -154,7 +163,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__IMPLEMENTATION = 7;
+	int COMPONENT__IMPLEMENTATION = 8;
 
 	/**
 	 * The feature id for the '<em><b>All Properties</b></em>' attribute list.
@@ -163,7 +172,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__ALL_PROPERTIES = 8;
+	int COMPONENT__ALL_PROPERTIES = 9;
 
 	/**
 	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
@@ -172,7 +181,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__PROPERTY = 9;
+	int COMPONENT__PROPERTY = 10;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -181,7 +190,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__PROPERTIES = 10;
+	int COMPONENT__PROPERTIES = 11;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference.
@@ -190,7 +199,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__SERVICE = 11;
+	int COMPONENT__SERVICE = 12;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' containment reference list.
@@ -199,7 +208,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__REFERENCE = 12;
+	int COMPONENT__REFERENCE = 13;
 
 	/**
 	 * The number of structural features of the '<em>Component</em>' class.
@@ -208,7 +217,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_FEATURE_COUNT = 13;
+	int COMPONENT_FEATURE_COUNT = 14;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.pde.ds.scr.impl.ImplementationImpl <em>Implementation</em>}' class.
@@ -644,6 +653,17 @@ public interface ScrPackage extends EPackage {
 	EReference getComponent_Reference();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link org.eclipse.pde.ds.scr.Component#getMixed <em>Mixed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Mixed</em>'.
+	 * @see org.eclipse.pde.ds.scr.Component#getMixed()
+	 * @see #getComponent()
+	 * @generated
+	 */
+	EAttribute getComponent_Mixed();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.pde.ds.scr.Implementation <em>Implementation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1033,6 +1053,14 @@ public interface ScrPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMPONENT__REFERENCE = eINSTANCE.getComponent_Reference();
+
+		/**
+		 * The meta object literal for the '<em><b>Mixed</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPONENT__MIXED = eINSTANCE.getComponent_Mixed();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.pde.ds.scr.impl.ImplementationImpl <em>Implementation</em>}' class.

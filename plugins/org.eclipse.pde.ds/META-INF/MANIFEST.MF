@@ -10,7 +10,8 @@ Export-Package: org.eclipse.pde.ds.scr,
  org.eclipse.pde.ds.scr.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.emf.ecore.xmi;visibility:=reexport
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
+ org.eclipse.wst.xml.core;bundle-version="1.1.400";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
 Bundle-Vendor: %providerName

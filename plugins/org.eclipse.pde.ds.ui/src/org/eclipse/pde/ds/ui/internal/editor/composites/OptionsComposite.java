@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OptionsComposite.java,v 1.1 2009/02/13 13:26:27 bcabe Exp $
+ * $Id: OptionsComposite.java,v 1.2 2009/02/15 00:42:33 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
@@ -16,7 +16,9 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.pde.ds.scr.ConfigurationPolicy;
 import org.eclipse.pde.ds.ui.internal.editor.Messages;
 import org.eclipse.pde.emfforms.editor.PDEFormToolkit;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 public class OptionsComposite extends Composite {
 
@@ -42,16 +44,11 @@ public class OptionsComposite extends Composite {
 	}
 
 	private void createContents() {
-		_textFactory = PDEFormToolkit.createLabelAndText(
-				Messages.OptionsComposite_Factory, this);
-		_comboviewerConfigurationPolicy = PDEFormToolkit
-				.createLabelAndComboViewer(
-						Messages.OptionsComposite_ConfigurationPolicy, this);
+		_textFactory = PDEFormToolkit.createLabelAndText(Messages.OptionsComposite_Factory, this);
+		_comboviewerConfigurationPolicy = PDEFormToolkit.createLabelAndComboViewer(Messages.OptionsComposite_ConfigurationPolicy, this);
 		_comboviewerConfigurationPolicy.setInput(ConfigurationPolicy.values());
-		_buttonEnabled = PDEFormToolkit.createCheckBoxAndLabel(
-				Messages.OptionsComposite_Enabled, this);
-		_buttonImmediate = PDEFormToolkit.createCheckBoxAndLabel(
-				Messages.OptionsComposite_Immediate, this);
+		_buttonEnabled = PDEFormToolkit.createCheckBoxAndLabel(Messages.OptionsComposite_Enabled, this);
+		_buttonImmediate = PDEFormToolkit.createCheckBoxAndLabel(Messages.OptionsComposite_Immediate, this);
 	}
 
 	public Text getTextFactory() {

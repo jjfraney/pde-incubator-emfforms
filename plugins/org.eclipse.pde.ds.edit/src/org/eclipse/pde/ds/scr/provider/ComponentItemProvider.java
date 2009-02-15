@@ -8,10 +8,16 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentItemProvider.java,v 1.3 2009/02/14 20:05:34 bcabe Exp $
+ * $Id: ComponentItemProvider.java,v 1.4 2009/02/15 00:42:47 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.provider;
 
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.provider.*;
+
+import org.eclipse.emf.ecore.EObject;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +31,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -252,12 +260,35 @@ public class ComponentItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ScrPackage.Literals.COMPONENT__IMPLEMENTATION);
-			childrenFeatures.add(ScrPackage.Literals.COMPONENT__ALL_PROPERTIES);
-			childrenFeatures.add(ScrPackage.Literals.COMPONENT__SERVICE);
-			childrenFeatures.add(ScrPackage.Literals.COMPONENT__REFERENCE);
+			childrenFeatures.add(ScrPackage.Literals.COMPONENT__MIXED);
 		}
 		return childrenFeatures;
+	}
+
+	@Override
+	protected Object createWrapper(EObject object, EStructuralFeature feature,
+			Object value, int index) {
+		if (!isWrappingNeeded(object))
+			return value;
+
+		if (FeatureMapUtil.isFeatureMap(feature)) {
+			value = new FeatureMapEntryWrapperItemProvider(
+					(FeatureMap.Entry) value, object, (EAttribute) feature,
+					index, adapterFactory, getResourceLocator()) {
+				protected String addEntryFeature(String text) {
+					return text;
+				};
+			};
+		} else if (feature instanceof EAttribute) {
+			value = new AttributeValueWrapperItemProvider(value, object,
+					(EAttribute) feature, index, adapterFactory,
+					getResourceLocator());
+		} else if (!((EReference) feature).isContainment()) {
+			value = new DelegatingWrapperItemProvider(value, object, feature,
+					index, adapterFactory);
+		}
+
+		return value;
 	}
 
 	/**
@@ -317,14 +348,9 @@ public class ComponentItemProvider
 			case ScrPackage.COMPONENT__ACTIVATE:
 			case ScrPackage.COMPONENT__DEACTIVATE:
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
-			case ScrPackage.COMPONENT__PROPERTY:
-			case ScrPackage.COMPONENT__PROPERTIES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case ScrPackage.COMPONENT__IMPLEMENTATION:
-			case ScrPackage.COMPONENT__ALL_PROPERTIES:
-			case ScrPackage.COMPONENT__SERVICE:
-			case ScrPackage.COMPONENT__REFERENCE:
+			case ScrPackage.COMPONENT__MIXED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -344,32 +370,45 @@ public class ComponentItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__IMPLEMENTATION,
-				 ScrFactory.eINSTANCE.createImplementation()));
+				(ScrPackage.Literals.COMPONENT__MIXED,
+				 FeatureMapUtil.createEntry
+					(XMLTypePackage.Literals.XML_TYPE_DOCUMENT_ROOT__COMMENT,
+					 "")));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__ALL_PROPERTIES,
+				(ScrPackage.Literals.COMPONENT__MIXED,
+				 FeatureMapUtil.createEntry
+					(XMLTypePackage.Literals.XML_TYPE_DOCUMENT_ROOT__TEXT,
+					 "")));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScrPackage.Literals.COMPONENT__MIXED,
+				 FeatureMapUtil.createEntry
+					(XMLTypePackage.Literals.XML_TYPE_DOCUMENT_ROOT__PROCESSING_INSTRUCTION,
+					 XMLTypeFactory.eINSTANCE.createProcessingInstruction())));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScrPackage.Literals.COMPONENT__MIXED,
+				 FeatureMapUtil.createEntry
+					(XMLTypePackage.Literals.XML_TYPE_DOCUMENT_ROOT__CDATA,
+					 "")));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScrPackage.Literals.COMPONENT__MIXED,
 				 FeatureMapUtil.createEntry
 					(ScrPackage.Literals.COMPONENT__PROPERTY,
 					 ScrFactory.eINSTANCE.createProperty())));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__ALL_PROPERTIES,
+				(ScrPackage.Literals.COMPONENT__MIXED,
 				 FeatureMapUtil.createEntry
 					(ScrPackage.Literals.COMPONENT__PROPERTIES,
 					 ScrFactory.eINSTANCE.createProperties())));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__SERVICE,
-				 ScrFactory.eINSTANCE.createService()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ScrPackage.Literals.COMPONENT__REFERENCE,
-				 ScrFactory.eINSTANCE.createReference()));
 	}
 
 	/**

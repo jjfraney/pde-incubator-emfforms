@@ -18,6 +18,9 @@ public class Messages extends NLS {
 	public static String OverviewPage_Options_Section;
 	public static String OverviewPage_Options_Section_desc;
 
+	public static String OverviewPage_Properties_Section;
+	public static String OverviewPage_Properties_Section_desc;
+
 	public static String OverviewPage_Title;
 
 	public static String OptionsComposite_Factory;

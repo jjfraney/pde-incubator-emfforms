@@ -8,12 +8,15 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Activator.java,v 1.1 2009/02/13 13:26:27 bcabe Exp $
+ * $Id: Activator.java,v 1.2 2009/02/15 00:42:33 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal;
 
 import java.lang.reflect.InvocationTargetException;
-import org.eclipse.core.runtime.*;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -36,9 +39,7 @@ public class Activator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
@@ -49,8 +50,7 @@ public class Activator extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
 	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
@@ -79,8 +79,7 @@ public class Activator extends AbstractUIPlugin {
 		if (e instanceof CoreException) {
 			status = ((CoreException) e).getStatus();
 		} else if (e.getMessage() != null) {
-			status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, e
-					.getMessage(), e);
+			status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, e.getMessage(), e);
 		}
 		log(status);
 	}
@@ -105,8 +104,7 @@ public class Activator extends AbstractUIPlugin {
 				message = e.getMessage();
 			if (message == null)
 				message = e.toString();
-			status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message,
-					e);
+			status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message, e);
 		}
 		log(status);
 	}

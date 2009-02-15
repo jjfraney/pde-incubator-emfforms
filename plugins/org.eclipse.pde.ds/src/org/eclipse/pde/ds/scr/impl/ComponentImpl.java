@@ -8,28 +8,21 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentImpl.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
+ * $Id: ComponentImpl.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.BasicFeatureMap;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.eclipse.pde.ds.scr.Component;
 import org.eclipse.pde.ds.scr.ConfigurationPolicy;
 import org.eclipse.pde.ds.scr.Implementation;
@@ -38,14 +31,16 @@ import org.eclipse.pde.ds.scr.Property;
 import org.eclipse.pde.ds.scr.Reference;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.scr.Service;
+import org.eclipse.emf.ecore.util.*;
+import org.eclipse.pde.ds.scr.*;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Component</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Component</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getMixed <em>Mixed</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getFactory <em>Factory</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#isImmediate <em>Immediate</em>}</li>
@@ -66,9 +61,17 @@ import org.eclipse.pde.ds.scr.Service;
  */
 public class ComponentImpl extends EObjectImpl implements Component {
 	/**
+	 * The cached value of the '{@link #getMixed() <em>Mixed</em>}' attribute list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getMixed()
+	 * @generated
+	 * @ordered
+	 */
+	protected FeatureMap mixed;
+
+	/**
 	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isEnabled()
 	 * @generated
 	 * @ordered
@@ -77,8 +80,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isEnabled()
 	 * @generated
 	 * @ordered
@@ -87,8 +89,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * This is true if the Enabled attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -96,8 +98,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The default value of the '{@link #getFactory() <em>Factory</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFactory()
 	 * @generated
 	 * @ordered
@@ -106,8 +107,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #getFactory() <em>Factory</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFactory()
 	 * @generated
 	 * @ordered
@@ -116,8 +116,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The default value of the '{@link #isImmediate() <em>Immediate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isImmediate()
 	 * @generated
 	 * @ordered
@@ -126,8 +125,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #isImmediate() <em>Immediate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #isImmediate()
 	 * @generated
 	 * @ordered
@@ -136,8 +134,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * This is true if the Immediate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -145,8 +143,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -155,8 +152,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -165,8 +161,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The default value of the '{@link #getActivate() <em>Activate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getActivate()
 	 * @generated
 	 * @ordered
@@ -175,8 +170,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #getActivate() <em>Activate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getActivate()
 	 * @generated
 	 * @ordered
@@ -185,8 +179,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The default value of the '{@link #getDeactivate() <em>Deactivate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDeactivate()
 	 * @generated
 	 * @ordered
@@ -195,8 +188,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #getDeactivate() <em>Deactivate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getDeactivate()
 	 * @generated
 	 * @ordered
@@ -205,8 +197,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The default value of the '{@link #getConfigurationPolicy() <em>Configuration Policy</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getConfigurationPolicy()
 	 * @generated
 	 * @ordered
@@ -215,8 +207,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 
 	/**
 	 * The cached value of the '{@link #getConfigurationPolicy() <em>Configuration Policy</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getConfigurationPolicy()
 	 * @generated
 	 * @ordered
@@ -224,48 +216,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	protected ConfigurationPolicy configurationPolicy = CONFIGURATION_POLICY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getImplementation() <em>Implementation</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getImplementation()
-	 * @generated
-	 * @ordered
-	 */
-	protected Implementation implementation;
-
-	/**
-	 * The cached value of the '{@link #getAllProperties() <em>All Properties</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAllProperties()
-	 * @generated
-	 * @ordered
-	 */
-	protected FeatureMap allProperties;
-
-	/**
-	 * The cached value of the '{@link #getService() <em>Service</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getService()
-	 * @generated
-	 * @ordered
-	 */
-	protected Service service;
-
-	/**
-	 * The cached value of the '{@link #getReference() <em>Reference</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReference()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Reference> reference;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected ComponentImpl() {
@@ -273,8 +224,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -283,8 +233,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isEnabled() {
@@ -292,8 +241,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setEnabled(boolean newEnabled) {
@@ -306,8 +254,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void unsetEnabled() {
@@ -320,8 +267,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetEnabled() {
@@ -329,8 +275,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getFactory() {
@@ -338,8 +283,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setFactory(String newFactory) {
@@ -350,8 +294,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isImmediate() {
@@ -359,8 +302,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setImmediate(boolean newImmediate) {
@@ -373,8 +315,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void unsetImmediate() {
@@ -387,8 +328,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetImmediate() {
@@ -396,8 +336,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getName() {
@@ -405,8 +344,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -417,8 +355,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getActivate() {
@@ -426,8 +363,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setActivate(String newActivate) {
@@ -438,8 +374,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public String getDeactivate() {
@@ -447,8 +382,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setDeactivate(String newDeactivate) {
@@ -459,8 +393,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public ConfigurationPolicy getConfigurationPolicy() {
@@ -468,11 +401,11 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setConfigurationPolicy(ConfigurationPolicy newConfigurationPolicy) {
+	public void setConfigurationPolicy(
+			ConfigurationPolicy newConfigurationPolicy) {
 		ConfigurationPolicy oldConfigurationPolicy = configurationPolicy;
 		configurationPolicy = newConfigurationPolicy == null ? CONFIGURATION_POLICY_EDEFAULT : newConfigurationPolicy;
 		if (eNotificationRequired())
@@ -485,22 +418,16 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	 * @generated
 	 */
 	public Implementation getImplementation() {
-		return implementation;
+		return (Implementation)getMixed().get(ScrPackage.Literals.COMPONENT__IMPLEMENTATION, true);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetImplementation(Implementation newImplementation, NotificationChain msgs) {
-		Implementation oldImplementation = implementation;
-		implementation = newImplementation;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScrPackage.COMPONENT__IMPLEMENTATION, oldImplementation, newImplementation);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public NotificationChain basicSetImplementation(
+			Implementation newImplementation, NotificationChain msgs) {
+		return ((FeatureMap.Internal)getMixed()).basicAdd(ScrPackage.Literals.COMPONENT__IMPLEMENTATION, newImplementation, msgs);
 	}
 
 	/**
@@ -509,34 +436,19 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	 * @generated
 	 */
 	public void setImplementation(Implementation newImplementation) {
-		if (newImplementation != implementation) {
-			NotificationChain msgs = null;
-			if (implementation != null)
-				msgs = ((InternalEObject)implementation).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScrPackage.COMPONENT__IMPLEMENTATION, null, msgs);
-			if (newImplementation != null)
-				msgs = ((InternalEObject)newImplementation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScrPackage.COMPONENT__IMPLEMENTATION, null, msgs);
-			msgs = basicSetImplementation(newImplementation, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScrPackage.COMPONENT__IMPLEMENTATION, newImplementation, newImplementation));
+		((FeatureMap.Internal)getMixed()).set(ScrPackage.Literals.COMPONENT__IMPLEMENTATION, newImplementation);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public FeatureMap getAllProperties() {
-		if (allProperties == null) {
-			allProperties = new BasicFeatureMap(this, ScrPackage.COMPONENT__ALL_PROPERTIES);
-		}
-		return allProperties;
+		return (FeatureMap)getMixed().<FeatureMap.Entry>list(ScrPackage.Literals.COMPONENT__ALL_PROPERTIES);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<Property> getProperty() {
@@ -544,8 +456,7 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<Properties> getProperties() {
@@ -553,68 +464,59 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Service getService() {
-		return service;
+		return (Service)getMixed().get(ScrPackage.Literals.COMPONENT__SERVICE, true);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetService(Service newService, NotificationChain msgs) {
-		Service oldService = service;
-		service = newService;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScrPackage.COMPONENT__SERVICE, oldService, newService);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public NotificationChain basicSetService(Service newService,
+			NotificationChain msgs) {
+		return ((FeatureMap.Internal)getMixed()).basicAdd(ScrPackage.Literals.COMPONENT__SERVICE, newService, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setService(Service newService) {
-		if (newService != service) {
-			NotificationChain msgs = null;
-			if (service != null)
-				msgs = ((InternalEObject)service).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScrPackage.COMPONENT__SERVICE, null, msgs);
-			if (newService != null)
-				msgs = ((InternalEObject)newService).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScrPackage.COMPONENT__SERVICE, null, msgs);
-			msgs = basicSetService(newService, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScrPackage.COMPONENT__SERVICE, newService, newService));
+		((FeatureMap.Internal)getMixed()).set(ScrPackage.Literals.COMPONENT__SERVICE, newService);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EList<Reference> getReference() {
-		if (reference == null) {
-			reference = new EObjectContainmentEList<Reference>(Reference.class, this, ScrPackage.COMPONENT__REFERENCE);
-		}
-		return reference;
+		return getMixed().list(ScrPackage.Literals.COMPONENT__REFERENCE);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FeatureMap getMixed() {
+		if (mixed == null) {
+			mixed = new BasicFeatureMap(this, ScrPackage.COMPONENT__MIXED);
+		}
+		return mixed;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd,
+			int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case ScrPackage.COMPONENT__MIXED:
+				return ((InternalEList<?>)getMixed()).basicRemove(otherEnd, msgs);
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
 				return basicSetImplementation(null, msgs);
 			case ScrPackage.COMPONENT__ALL_PROPERTIES:
@@ -632,13 +534,15 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ScrPackage.COMPONENT__MIXED:
+				if (coreType) return getMixed();
+				return ((FeatureMap.Internal)getMixed()).getWrapper();
 			case ScrPackage.COMPONENT__ENABLED:
 				return isEnabled();
 			case ScrPackage.COMPONENT__FACTORY:
@@ -671,14 +575,16 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ScrPackage.COMPONENT__MIXED:
+				((FeatureMap.Internal)getMixed()).set(newValue);
+				return;
 			case ScrPackage.COMPONENT__ENABLED:
 				setEnabled((Boolean)newValue);
 				return;
@@ -726,13 +632,15 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ScrPackage.COMPONENT__MIXED:
+				getMixed().clear();
+				return;
 			case ScrPackage.COMPONENT__ENABLED:
 				unsetEnabled();
 				return;
@@ -777,13 +685,14 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ScrPackage.COMPONENT__MIXED:
+				return mixed != null && !mixed.isEmpty();
 			case ScrPackage.COMPONENT__ENABLED:
 				return isSetEnabled();
 			case ScrPackage.COMPONENT__FACTORY:
@@ -799,24 +708,23 @@ public class ComponentImpl extends EObjectImpl implements Component {
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
 				return configurationPolicy != CONFIGURATION_POLICY_EDEFAULT;
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
-				return implementation != null;
+				return getImplementation() != null;
 			case ScrPackage.COMPONENT__ALL_PROPERTIES:
-				return allProperties != null && !allProperties.isEmpty();
+				return !getAllProperties().isEmpty();
 			case ScrPackage.COMPONENT__PROPERTY:
 				return !getProperty().isEmpty();
 			case ScrPackage.COMPONENT__PROPERTIES:
 				return !getProperties().isEmpty();
 			case ScrPackage.COMPONENT__SERVICE:
-				return service != null;
+				return getService() != null;
 			case ScrPackage.COMPONENT__REFERENCE:
-				return reference != null && !reference.isEmpty();
+				return !getReference().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -824,7 +732,9 @@ public class ComponentImpl extends EObjectImpl implements Component {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (enabled: ");
+		result.append(" (mixed: ");
+		result.append(mixed);
+		result.append(", enabled: ");
 		if (enabledESet) result.append(enabled); else result.append("<unset>");
 		result.append(", factory: ");
 		result.append(factory);
@@ -838,10 +748,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 		result.append(deactivate);
 		result.append(", configurationPolicy: ");
 		result.append(configurationPolicy);
-		result.append(", allProperties: ");
-		result.append(allProperties);
 		result.append(')');
 		return result.toString();
 	}
 
-} //ComponentImpl
+} // ComponentImpl

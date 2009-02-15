@@ -32,6 +32,7 @@
       <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//ConfigurationPolicy/ignore"/>
     </genEnums>
     <genClasses ecoreClass="scr-1.1.ecore#//Component">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/mixed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/enabled"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/factory"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/immediate"/>
@@ -39,12 +40,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/activate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/deactivate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/configurationPolicy"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/implementation"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/allProperties"/>
-      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/property"/>
-      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/properties"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/service"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/reference"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/implementation"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/allProperties"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/property"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/properties"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/service"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/reference"/>
     </genClasses>
     <genClasses ecoreClass="scr-1.1.ecore#//Implementation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Implementation/class"/>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="scr" ecore:package="org.eclipse.pde.ds.scr" targetNamespace="http://www.osgi.org/xmlns/scr/v1.1.0">
+  <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:element ecore:ignore="true" name="Implementation" type="scr:Implementation"/>
+  <xsd:element ecore:ignore="true" name="Property" type="scr:Property"/>
+  <xsd:element ecore:ignore="true" name="Properties" type="scr:Properties"/>
+  <xsd:element ecore:ignore="true" name="Service" type="scr:Service"/>
+  <xsd:element ecore:ignore="true" name="Provide" type="scr:Provide"/>
+  <xsd:element ecore:ignore="true" name="Reference" type="scr:Reference"/>
+  <xsd:complexType ecore:name="Component" mixed="true" name="component">
+    <xsd:sequence>
+      <xsd:element name="implementation" type="scr:Implementation"/>
+      <xsd:choice ecore:featureMap="allProperties" maxOccurs="unbounded">
+        <xsd:element ecore:lowerBound="0" ecore:upperBound="-1" name="property" type="scr:Property"/>
+        <xsd:element ecore:lowerBound="0" ecore:upperBound="-1" name="properties" type="scr:Properties"/>
+      </xsd:choice>
+      <xsd:element minOccurs="0" name="service" type="scr:Service"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="reference" type="scr:Reference"/>
+    </xsd:sequence>
+    <xsd:attribute default="true" name="enabled" type="ecore:EBoolean"/>
+    <xsd:attribute name="factory" type="ecore:EString"/>
+    <xsd:attribute name="immediate" type="ecore:EBoolean"/>
+    <xsd:attribute name="name" type="ecore:EString"/>
+    <xsd:attribute name="activate" type="ecore:EString"/>
+    <xsd:attribute name="deactivate" type="ecore:EString"/>
+    <xsd:attribute default="optional" ecore:name="configurationPolicy" ecore:unsettable="false" name="configuration-policy" type="scr:ConfigurationPolicy"/>
+  </xsd:complexType>
+  <xsd:complexType name="Implementation">
+    <xsd:attribute name="class" type="ecore:EString" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Property">
+    <xsd:attribute name="value" type="ecore:EString"/>
+    <xsd:attribute name="name" type="ecore:EString" use="required"/>
+    <xsd:attribute default="java.lang.String" ecore:type="ecore:EJavaClass{?}" name="type" type="ecore:EJavaClass"/>
+  </xsd:complexType>
+  <xsd:complexType name="Properties">
+    <xsd:attribute name="entry" type="ecore:EString" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Service">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="provide" type="scr:Provide"/>
+    </xsd:sequence>
+    <xsd:attribute default="false" name="servicefactory" type="xsd:boolean"/>
+  </xsd:complexType>
+  <xsd:complexType name="Provide">
+    <xsd:attribute ecore:type="ecore:EJavaClass{?}" name="interface" type="ecore:EJavaClass" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="Reference">
+    <xsd:attribute name="bind" type="ecore:EString"/>
+    <xsd:attribute default="1..1" name="cardinality" type="scr:Cardinality"/>
+    <xsd:attribute name="interface" type="ecore:EString" use="required"/>
+    <xsd:attribute name="name" type="ecore:EString"/>
+    <xsd:attribute default="static" name="policy" type="scr:Policy"/>
+    <xsd:attribute name="target" type="xsd:string"/>
+    <xsd:attribute name="unbind" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:simpleType name="Policy">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="static"/>
+      <xsd:enumeration value="dynamic"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Cardinality">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration ecore:name="_0_1" value="0..1"/>
+      <xsd:enumeration ecore:name="_0_N" value="0..n"/>
+      <xsd:enumeration ecore:name="_1_1" value="1..1"/>
+      <xsd:enumeration ecore:name="_1_N" value="1..n"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ConfigurationPolicy">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="optional"/>
+      <xsd:enumeration value="require"/>
+      <xsd:enumeration value="ignore"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Component.java,v 1.2 2009/02/14 19:43:46 bcabe Exp $
+ * $Id: Component.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.eclipse.pde.ds.scr.Component#getMixed <em>Mixed</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getFactory <em>Factory</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#isImmediate <em>Immediate</em>}</li>
@@ -42,7 +43,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * </p>
  *
  * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent()
- * @model extendedMetaData="name='component' kind='element'"
+ * @model extendedMetaData="name='component' kind='mixed'"
  * @generated
  */
 public interface Component extends EObject {
@@ -299,7 +300,8 @@ public interface Component extends EObject {
 	 * @return the value of the '<em>Implementation</em>' containment reference.
 	 * @see #setImplementation(Implementation)
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Implementation()
-	 * @model containment="true" required="true"
+	 * @model containment="true" required="true" transient="true" volatile="true"
+	 *        extendedMetaData="kind='element' name='implementation'"
 	 * @generated
 	 */
 	Implementation getImplementation();
@@ -325,8 +327,8 @@ public interface Component extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>All Properties</em>' attribute list.
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_AllProperties()
-	 * @model dataType="org.eclipse.emf.ecore.EFeatureMapEntry" many="true"
-	 *        extendedMetaData="kind='group' name='group:1'"
+	 * @model dataType="org.eclipse.emf.ecore.EFeatureMapEntry" many="true" transient="true" volatile="true" derived="true"
+	 *        extendedMetaData="kind='group' name='group:2'"
 	 * @generated
 	 */
 	FeatureMap getAllProperties();
@@ -343,7 +345,7 @@ public interface Component extends EObject {
 	 * @return the value of the '<em>Property</em>' containment reference list.
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Property()
 	 * @model containment="true" transient="true" volatile="true" derived="true"
-	 *        extendedMetaData="group='#group:1'"
+	 *        extendedMetaData="kind='element' name='property' group='#group:2'"
 	 * @generated
 	 */
 	EList<Property> getProperty();
@@ -360,7 +362,7 @@ public interface Component extends EObject {
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Properties()
 	 * @model containment="true" transient="true" volatile="true" derived="true"
-	 *        extendedMetaData="group='#group:1'"
+	 *        extendedMetaData="kind='element' name='properties' group='#group:2'"
 	 * @generated
 	 */
 	EList<Properties> getProperties();
@@ -376,7 +378,7 @@ public interface Component extends EObject {
 	 * @return the value of the '<em>Service</em>' containment reference.
 	 * @see #setService(Service)
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Service()
-	 * @model containment="true"
+	 * @model containment="true" transient="true" volatile="true"
 	 *        extendedMetaData="kind='element' name='service'"
 	 * @generated
 	 */
@@ -403,10 +405,27 @@ public interface Component extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Reference</em>' containment reference list.
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Reference()
-	 * @model containment="true"
+	 * @model containment="true" transient="true" volatile="true"
 	 *        extendedMetaData="kind='element' name='reference'"
 	 * @generated
 	 */
 	EList<Reference> getReference();
+
+	/**
+	 * Returns the value of the '<em><b>Mixed</b></em>' attribute list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.util.FeatureMap.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Mixed</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mixed</em>' attribute list.
+	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Mixed()
+	 * @model unique="false" dataType="org.eclipse.emf.ecore.EFeatureMapEntry" many="true"
+	 *        extendedMetaData="kind='elementWildcard' name=':mixed'"
+	 * @generated
+	 */
+	FeatureMap getMixed();
 
 } // Component

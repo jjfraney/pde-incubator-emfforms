@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrResourceFactoryImpl.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: ScrResourceFactoryImpl.java,v 1.2 2009/02/15 00:42:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.util;
 
