@@ -31,6 +31,17 @@
       <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//ConfigurationPolicy/require"/>
       <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//ConfigurationPolicy/ignore"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="scr-1.1.ecore#//JavaType">
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/String"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Long"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Double"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Float"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Integer"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Byte"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Character"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Boolean"/>
+      <genEnumLiterals ecoreEnumLiteral="scr-1.1.ecore#//JavaType/Short"/>
+    </genEnums>
     <genClasses ecoreClass="scr-1.1.ecore#//Component">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/mixed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Component/enabled"/>
@@ -54,6 +65,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Property/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Property/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Property/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Property/value1"/>
     </genClasses>
     <genClasses ecoreClass="scr-1.1.ecore#//Properties">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Properties/entry"/>

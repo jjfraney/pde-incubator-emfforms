@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrPackage.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
+ * $Id: ScrPackage.java,v 1.4 2009/02/15 20:54:36 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -285,13 +285,22 @@ public interface ScrPackage extends EPackage {
 	int PROPERTY__TYPE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Value1</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__VALUE1 = 3;
+
+	/**
 	 * The number of structural features of the '<em>Property</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_FEATURE_COUNT = 3;
+	int PROPERTY_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.pde.ds.scr.impl.PropertiesImpl <em>Properties</em>}' class.
@@ -498,6 +507,16 @@ public interface ScrPackage extends EPackage {
 	 */
 	int CONFIGURATION_POLICY = 9;
 
+	/**
+	 * The meta object id for the '{@link org.eclipse.pde.ds.scr.JavaType <em>Java Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.pde.ds.scr.JavaType
+	 * @see org.eclipse.pde.ds.scr.impl.ScrPackageImpl#getJavaType()
+	 * @generated
+	 */
+	int JAVA_TYPE = 10;
+
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.pde.ds.scr.Component <em>Component</em>}'.
@@ -508,6 +527,17 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getComponent();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.eclipse.pde.ds.scr.Component#getMixed <em>Mixed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Mixed</em>'.
+	 * @see org.eclipse.pde.ds.scr.Component#getMixed()
+	 * @see #getComponent()
+	 * @generated
+	 */
+	EAttribute getComponent_Mixed();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.pde.ds.scr.Component#isEnabled <em>Enabled</em>}'.
@@ -653,17 +683,6 @@ public interface ScrPackage extends EPackage {
 	EReference getComponent_Reference();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.eclipse.pde.ds.scr.Component#getMixed <em>Mixed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Mixed</em>'.
-	 * @see org.eclipse.pde.ds.scr.Component#getMixed()
-	 * @see #getComponent()
-	 * @generated
-	 */
-	EAttribute getComponent_Mixed();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.pde.ds.scr.Implementation <em>Implementation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -726,6 +745,17 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getProperty_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.pde.ds.scr.Property#getValue1 <em>Value1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value1</em>'.
+	 * @see org.eclipse.pde.ds.scr.Property#getValue1()
+	 * @see #getProperty()
+	 * @generated
+	 */
+	EAttribute getProperty_Value1();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.pde.ds.scr.Properties <em>Properties</em>}'.
@@ -919,6 +949,16 @@ public interface ScrPackage extends EPackage {
 	EEnum getConfigurationPolicy();
 
 	/**
+	 * Returns the meta object for enum '{@link org.eclipse.pde.ds.scr.JavaType <em>Java Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Java Type</em>'.
+	 * @see org.eclipse.pde.ds.scr.JavaType
+	 * @generated
+	 */
+	EEnum getJavaType();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -949,6 +989,14 @@ public interface ScrPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COMPONENT = eINSTANCE.getComponent();
+
+		/**
+		 * The meta object literal for the '<em><b>Mixed</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPONENT__MIXED = eINSTANCE.getComponent_Mixed();
 
 		/**
 		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
@@ -1055,14 +1103,6 @@ public interface ScrPackage extends EPackage {
 		EReference COMPONENT__REFERENCE = eINSTANCE.getComponent_Reference();
 
 		/**
-		 * The meta object literal for the '<em><b>Mixed</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COMPONENT__MIXED = eINSTANCE.getComponent_Mixed();
-
-		/**
 		 * The meta object literal for the '{@link org.eclipse.pde.ds.scr.impl.ImplementationImpl <em>Implementation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1113,6 +1153,14 @@ public interface ScrPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROPERTY__TYPE = eINSTANCE.getProperty_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Value1</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROPERTY__VALUE1 = eINSTANCE.getProperty_Value1();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.pde.ds.scr.impl.PropertiesImpl <em>Properties</em>}' class.
@@ -1271,6 +1319,16 @@ public interface ScrPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CONFIGURATION_POLICY = eINSTANCE.getConfigurationPolicy();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.pde.ds.scr.JavaType <em>Java Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.pde.ds.scr.JavaType
+		 * @see org.eclipse.pde.ds.scr.impl.ScrPackageImpl#getJavaType()
+		 * @generated
+		 */
+		EEnum JAVA_TYPE = eINSTANCE.getJavaType();
 
 	}
 

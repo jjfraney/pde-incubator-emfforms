@@ -2,7 +2,6 @@
 <xsd:schema xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="scr" ecore:package="org.eclipse.pde.ds.scr" targetNamespace="http://www.osgi.org/xmlns/scr/v1.1.0">
   <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
   <xsd:element ecore:ignore="true" name="Implementation" type="scr:Implementation"/>
-  <xsd:element ecore:ignore="true" name="Property" type="scr:Property"/>
   <xsd:element ecore:ignore="true" name="Properties" type="scr:Properties"/>
   <xsd:element ecore:ignore="true" name="Service" type="scr:Service"/>
   <xsd:element ecore:ignore="true" name="Provide" type="scr:Provide"/>
@@ -28,10 +27,14 @@
   <xsd:complexType name="Implementation">
     <xsd:attribute name="class" type="ecore:EString" use="required"/>
   </xsd:complexType>
-  <xsd:complexType name="Property">
-    <xsd:attribute name="value" type="ecore:EString"/>
-    <xsd:attribute name="name" type="ecore:EString" use="required"/>
-    <xsd:attribute default="java.lang.String" ecore:type="ecore:EJavaClass{?}" name="type" type="ecore:EJavaClass"/>
+  <xsd:complexType ecore:constraints="isValueConsistent" name="Property">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute default="String" name="type" type="scr:JavaType"/>
+        <xsd:attribute ecore:name="value1" name="value" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
   <xsd:complexType name="Properties">
     <xsd:attribute name="entry" type="ecore:EString" use="required"/>
@@ -73,6 +76,19 @@
       <xsd:enumeration value="optional"/>
       <xsd:enumeration value="require"/>
       <xsd:enumeration value="ignore"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="JavaType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="String"/>
+      <xsd:enumeration value="Long"/>
+      <xsd:enumeration value="Double"/>
+      <xsd:enumeration value="Float"/>
+      <xsd:enumeration value="Integer"/>
+      <xsd:enumeration value="Byte"/>
+      <xsd:enumeration value="Character"/>
+      <xsd:enumeration value="Boolean"/>
+      <xsd:enumeration value="Short"/>
     </xsd:restriction>
   </xsd:simpleType>
 </xsd:schema>

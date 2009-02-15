@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrPackageImpl.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
+ * $Id: ScrPackageImpl.java,v 1.4 2009/02/15 20:54:36 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
@@ -27,6 +28,7 @@ import org.eclipse.pde.ds.scr.Cardinality;
 import org.eclipse.pde.ds.scr.Component;
 import org.eclipse.pde.ds.scr.ConfigurationPolicy;
 import org.eclipse.pde.ds.scr.Implementation;
+import org.eclipse.pde.ds.scr.JavaType;
 import org.eclipse.pde.ds.scr.Policy;
 import org.eclipse.pde.ds.scr.Properties;
 import org.eclipse.pde.ds.scr.Property;
@@ -35,6 +37,7 @@ import org.eclipse.pde.ds.scr.Reference;
 import org.eclipse.pde.ds.scr.ScrFactory;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.scr.Service;
+import org.eclipse.pde.ds.scr.util.ScrValidator;
 
 /**
  * <!-- begin-user-doc -->
@@ -114,6 +117,13 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	private EEnum configurationPolicyEEnum = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum javaTypeEEnum = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -177,6 +187,15 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 
 		// Initialize created meta-data
 		theScrPackage.initializePackageContents();
+
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theScrPackage, 
+			 new EValidator.Descriptor() {
+				 public EValidator getEValidator() {
+					 return ScrValidator.INSTANCE;
+				 }
+			 });
 
 		// Mark meta-data to indicate it can't be changed
 		theScrPackage.freeze();
@@ -378,6 +397,15 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getProperty_Value1() {
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getProperties() {
 		return propertiesEClass;
 	}
@@ -540,6 +568,15 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getJavaType() {
+		return javaTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScrFactory getScrFactory() {
 		return (ScrFactory)getEFactoryInstance();
 	}
@@ -586,6 +623,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		createEAttribute(propertyEClass, PROPERTY__VALUE);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
 		createEAttribute(propertyEClass, PROPERTY__TYPE);
+		createEAttribute(propertyEClass, PROPERTY__VALUE1);
 
 		propertiesEClass = createEClass(PROPERTIES);
 		createEAttribute(propertiesEClass, PROPERTIES__ENTRY);
@@ -610,6 +648,7 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		policyEEnum = createEEnum(POLICY);
 		cardinalityEEnum = createEEnum(CARDINALITY);
 		configurationPolicyEEnum = createEEnum(CONFIGURATION_POLICY);
+		javaTypeEEnum = createEEnum(JAVA_TYPE);
 	}
 
 	/**
@@ -665,12 +704,10 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		initEAttribute(getImplementation_Class(), ecorePackage.getEString(), "class", null, 1, 1, Implementation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getProperty_Value(), ecorePackage.getEString(), "value", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		EGenericType g1 = createEGenericType(ecorePackage.getEJavaClass());
-		EGenericType g2 = createEGenericType();
-		g1.getETypeArguments().add(g2);
-		initEAttribute(getProperty_Type(), g1, "type", "java.lang.String", 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Value(), theXMLTypePackage.getString(), "value", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Name(), theXMLTypePackage.getString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Type(), this.getJavaType(), "type", "String", 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Value1(), theXMLTypePackage.getString(), "value1", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertiesEClass, Properties.class, "Properties", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperties_Entry(), ecorePackage.getEString(), "entry", null, 1, 1, Properties.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -680,8 +717,8 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		initEAttribute(getService_Servicefactory(), theXMLTypePackage.getBoolean(), "servicefactory", "false", 0, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(provideEClass, Provide.class, "Provide", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(ecorePackage.getEJavaClass());
-		g2 = createEGenericType();
+		EGenericType g1 = createEGenericType(ecorePackage.getEJavaClass());
+		EGenericType g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
 		initEAttribute(getProvide_Interface(), g1, "interface", null, 1, 1, Provide.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -710,12 +747,25 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		addEEnumLiteral(configurationPolicyEEnum, ConfigurationPolicy.REQUIRE);
 		addEEnumLiteral(configurationPolicyEEnum, ConfigurationPolicy.IGNORE);
 
+		initEEnum(javaTypeEEnum, JavaType.class, "JavaType");
+		addEEnumLiteral(javaTypeEEnum, JavaType.STRING);
+		addEEnumLiteral(javaTypeEEnum, JavaType.LONG);
+		addEEnumLiteral(javaTypeEEnum, JavaType.DOUBLE);
+		addEEnumLiteral(javaTypeEEnum, JavaType.FLOAT);
+		addEEnumLiteral(javaTypeEEnum, JavaType.INTEGER);
+		addEEnumLiteral(javaTypeEEnum, JavaType.BYTE);
+		addEEnumLiteral(javaTypeEEnum, JavaType.CHARACTER);
+		addEEnumLiteral(javaTypeEEnum, JavaType.BOOLEAN);
+		addEEnumLiteral(javaTypeEEnum, JavaType.SHORT);
+
 		// Create resource
 		createResource(eNS_URI);
 
 		// Create annotations
 		// http:///org/eclipse/emf/ecore/util/ExtendedMetaData
 		createExtendedMetaDataAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
 	}
 
 	/**
@@ -739,6 +789,13 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		   new String[] {
 			 "kind", "elementWildcard",
 			 "name", ":mixed"
+		   });		
+		addAnnotation
+		  (getComponent_Name(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "name"
 		   });		
 		addAnnotation
 		  (getComponent_ConfigurationPolicy(), 
@@ -790,6 +847,39 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 		   new String[] {
 			 "kind", "element",
 			 "name", "reference"
+		   });			
+		addAnnotation
+		  (propertyEClass, 
+		   source, 
+		   new String[] {
+			 "kind", "simple"
+		   });		
+		addAnnotation
+		  (getProperty_Value(), 
+		   source, 
+		   new String[] {
+			 "kind", "simple"
+		   });		
+		addAnnotation
+		  (getProperty_Name(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "name"
+		   });		
+		addAnnotation
+		  (getProperty_Type(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "type"
+		   });		
+		addAnnotation
+		  (getProperty_Value1(), 
+		   source, 
+		   new String[] {
+			 "kind", "attribute",
+			 "name", "value"
 		   });		
 		addAnnotation
 		  (getService_Provide(), 
@@ -798,6 +888,22 @@ public class ScrPackageImpl extends EPackageImpl implements ScrPackage {
 			 "kind", "element",
 			 "name", "provide"
 		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore";												
+		addAnnotation
+		  (propertyEClass, 
+		   source, 
+		   new String[] {
+			 "constraints", "isValueConsistent"
+		   });						
 	}
 
 } //ScrPackageImpl

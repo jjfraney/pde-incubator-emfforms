@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Component.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
+ * $Id: Component.java,v 1.4 2009/02/15 20:54:36 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -191,7 +191,7 @@ public interface Component extends EObject {
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Name()
-	 * @model
+	 * @model extendedMetaData="kind='attribute' name='name'"
 	 * @generated
 	 */
 	String getName();

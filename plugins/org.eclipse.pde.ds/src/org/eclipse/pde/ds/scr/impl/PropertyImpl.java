@@ -8,17 +8,21 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertyImpl.java,v 1.1 2009/02/12 17:06:39 bcabe Exp $
+ * $Id: PropertyImpl.java,v 1.2 2009/02/15 20:54:36 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.pde.ds.scr.JavaType;
 import org.eclipse.pde.ds.scr.Property;
 import org.eclipse.pde.ds.scr.ScrPackage;
 
@@ -32,6 +36,7 @@ import org.eclipse.pde.ds.scr.ScrPackage;
  *   <li>{@link org.eclipse.pde.ds.scr.impl.PropertyImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.PropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.PropertyImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.pde.ds.scr.impl.PropertyImpl#getValue1 <em>Value1</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,6 +84,16 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	protected String name = NAME_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final JavaType TYPE_EDEFAULT = JavaType.STRING;
+
+	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -86,7 +101,7 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * @generated
 	 * @ordered
 	 */
-	protected Class<?> type;
+	protected JavaType type = TYPE_EDEFAULT;
 
 	/**
 	 * This is true if the Type attribute has been set.
@@ -96,6 +111,26 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * @ordered
 	 */
 	protected boolean typeESet;
+
+	/**
+	 * The default value of the '{@link #getValue1() <em>Value1</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue1()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VALUE1_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getValue1() <em>Value1</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValue1()
+	 * @generated
+	 * @ordered
+	 */
+	protected String value1 = VALUE1_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -163,7 +198,7 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Class<?> getType() {
+	public JavaType getType() {
 		return type;
 	}
 
@@ -172,9 +207,9 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setType(Class<?> newType) {
-		Class<?> oldType = type;
-		type = newType;
+	public void setType(JavaType newType) {
+		JavaType oldType = type;
+		type = newType == null ? TYPE_EDEFAULT : newType;
 		boolean oldTypeESet = typeESet;
 		typeESet = true;
 		if (eNotificationRequired())
@@ -187,12 +222,12 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * @generated
 	 */
 	public void unsetType() {
-		Class<?> oldType = type;
+		JavaType oldType = type;
 		boolean oldTypeESet = typeESet;
-		type = null;
+		type = TYPE_EDEFAULT;
 		typeESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, ScrPackage.PROPERTY__TYPE, oldType, null, oldTypeESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ScrPackage.PROPERTY__TYPE, oldType, TYPE_EDEFAULT, oldTypeESet));
 	}
 
 	/**
@@ -209,6 +244,27 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getValue1() {
+		return value1;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setValue1(String newValue1) {
+		String oldValue1 = value1;
+		value1 = newValue1;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScrPackage.PROPERTY__VALUE1, oldValue1, value1));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -218,6 +274,8 @@ public class PropertyImpl extends EObjectImpl implements Property {
 				return getName();
 			case ScrPackage.PROPERTY__TYPE:
 				return getType();
+			case ScrPackage.PROPERTY__VALUE1:
+				return getValue1();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -227,6 +285,7 @@ public class PropertyImpl extends EObjectImpl implements Property {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -237,7 +296,10 @@ public class PropertyImpl extends EObjectImpl implements Property {
 				setName((String)newValue);
 				return;
 			case ScrPackage.PROPERTY__TYPE:
-				setType((Class<?>)newValue);
+				setType((JavaType)newValue);
+				return;
+			case ScrPackage.PROPERTY__VALUE1:
+				setValue1((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -260,6 +322,9 @@ public class PropertyImpl extends EObjectImpl implements Property {
 			case ScrPackage.PROPERTY__TYPE:
 				unsetType();
 				return;
+			case ScrPackage.PROPERTY__VALUE1:
+				setValue1(VALUE1_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -278,6 +343,8 @@ public class PropertyImpl extends EObjectImpl implements Property {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case ScrPackage.PROPERTY__TYPE:
 				return isSetType();
+			case ScrPackage.PROPERTY__VALUE1:
+				return VALUE1_EDEFAULT == null ? value1 != null : !VALUE1_EDEFAULT.equals(value1);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -298,6 +365,8 @@ public class PropertyImpl extends EObjectImpl implements Property {
 		result.append(name);
 		result.append(", type: ");
 		if (typeESet) result.append(type); else result.append("<unset>");
+		result.append(", value1: ");
+		result.append(value1);
 		result.append(')');
 		return result.toString();
 	}
