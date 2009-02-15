@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrFactoryImpl.java,v 1.2 2009/02/13 13:30:40 bcabe Exp $
+ * $Id: ScrFactoryImpl.java,v 1.3 2009/02/15 15:26:22 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -93,6 +93,8 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 				return createCardinalityFromString(eDataType, initialValue);
 			case ScrPackage.CONFIGURATION_POLICY:
 				return createConfigurationPolicyFromString(eDataType, initialValue);
+			case ScrPackage.JAVA_TYPE:
+				return createJavaTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -112,6 +114,8 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 				return convertCardinalityToString(eDataType, instanceValue);
 			case ScrPackage.CONFIGURATION_POLICY:
 				return convertConfigurationPolicyToString(eDataType, instanceValue);
+			case ScrPackage.JAVA_TYPE:
+				return convertJavaTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -245,6 +249,26 @@ public class ScrFactoryImpl extends EFactoryImpl implements ScrFactory {
 	 * @generated
 	 */
 	public String convertConfigurationPolicyToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public JavaType createJavaTypeFromString(EDataType eDataType, String initialValue) {
+		JavaType result = JavaType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertJavaTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
