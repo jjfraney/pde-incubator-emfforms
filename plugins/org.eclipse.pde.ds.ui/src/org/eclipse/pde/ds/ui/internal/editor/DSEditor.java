@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditor.java,v 1.2 2009/02/15 00:42:33 bcabe Exp $
+ * $Id: DSEditor.java,v 1.3 2009/02/15 20:48:20 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -150,6 +150,11 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 		List<AbstractEmfFormPage> pages = new ArrayList<AbstractEmfFormPage>(1);
 
 		pages.add(new OverviewPage(this));
+		try {
+			pages.add(new SourcePage(this));
+		} catch (NoClassDefFoundError ex) {
+			Activator.logErrorMessage("WTP SSE not available... No source page at the moment"); //$NON-NLS-1$
+		}
 
 		return pages;
 	}
@@ -175,6 +180,7 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 
 	@Override
 	public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		super.dispose();
 	}
 

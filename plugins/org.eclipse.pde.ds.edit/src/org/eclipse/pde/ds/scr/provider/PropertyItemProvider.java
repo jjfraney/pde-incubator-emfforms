@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertyItemProvider.java,v 1.2 2009/02/15 00:42:47 bcabe Exp $
+ * $Id: PropertyItemProvider.java,v 1.3 2009/02/15 20:48:23 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.provider;
 
@@ -73,6 +73,7 @@ public class PropertyItemProvider
 			addValuePropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
+			addValue1PropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -144,6 +145,28 @@ public class PropertyItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Value1 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addValue1PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Property_value1_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Property_value1_feature", "_UI_Property_type"),
+				 ScrPackage.Literals.PROPERTY__VALUE1,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Property.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -183,6 +206,7 @@ public class PropertyItemProvider
 			case ScrPackage.PROPERTY__VALUE:
 			case ScrPackage.PROPERTY__NAME:
 			case ScrPackage.PROPERTY__TYPE:
+			case ScrPackage.PROPERTY__VALUE1:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

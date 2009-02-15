@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.2 2009/02/15 00:38:30 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.3 2009/02/15 20:48:16 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -23,6 +23,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.command.*;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.ui.MarkerHelper;
 import org.eclipse.emf.common.ui.dialogs.DiagnosticDialog;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -36,7 +37,10 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
+import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
@@ -50,6 +54,8 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 
 /**
  * A {@link FormEditor} allowing to edit an EMF {@link EObject} in a convenient
@@ -93,6 +99,13 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			});
 		}
 	};
+
+	private PropertySheetPage propertySheetPage;
+
+	/**
+	 * The MarkerHelper is responsible for creating workspace resource markers presented in Eclipse's Problems View.
+	 */
+	protected MarkerHelper markerHelper = new EditUIMarkerHelper();
 
 	public EmfFormEditor() {
 		_editingDomain = createEditingDomain();
@@ -152,7 +165,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * 
 	 * @return
 	 */
 	protected abstract AdapterFactory getSpecificAdapterFactory();
@@ -544,4 +556,34 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		return _adapterFactory;
 	}
 
+	@Override
+	public Object getAdapter(Class key) {
+		if (key.equals(IPropertySheetPage.class)) {
+			return getPropertySheetPage();
+		} else {
+			return super.getAdapter(key);
+		}
+	}
+
+	public IPropertySheetPage getPropertySheetPage() {
+		if (propertySheetPage == null) {
+			propertySheetPage = new ExtendedPropertySheetPage((AdapterFactoryEditingDomain) _editingDomain) {
+				@Override
+				public void setSelectionToViewer(List<?> selection) {
+					// TODO
+					//	EmfFormEditor.this.setSelectionToViewer(selection);
+					EmfFormEditor.this.setFocus();
+				}
+
+				@Override
+				public void setActionBars(IActionBars actionBars) {
+					super.setActionBars(actionBars);
+					getActionBarContributor().shareGlobalActions(this, actionBars);
+				}
+			};
+			propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(_adapterFactory));
+		}
+
+		return propertySheetPage;
+	}
 }
