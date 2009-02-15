@@ -8,10 +8,12 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesItemProvider.java,v 1.1 2009/02/12 21:18:28 bcabe Exp $
+ * $Id: PropertiesItemProvider.java,v 1.2 2009/02/15 00:54:55 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.provider;
 
+
+import org.eclipse.pde.ds.scr.Property;
 
 import java.util.Collection;
 import java.util.List;
@@ -112,14 +114,14 @@ public class PropertiesItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Properties)object).getEntry();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Properties_type") :
-			getString("_UI_Properties_type") + " " + label;
+			"<empty>" :
+			label;
 	}
 
 	/**
