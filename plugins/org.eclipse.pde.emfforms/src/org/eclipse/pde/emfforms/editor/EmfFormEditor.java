@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.3 2009/02/15 20:48:16 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.4 2009/02/27 09:26:33 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -220,7 +220,11 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				// Refresh the necessary state.
 				((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
 				firePropertyChange(IEditorPart.PROP_DIRTY);
-				getEditingDomain().getCommandStack().flush();
+				// if we have a BasicCommandStack (that's to say almost all the time), don't flush it but call saveIsDone instead  
+				if (getEditingDomain().getCommandStack() instanceof BasicCommandStack)
+					((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
+				else
+					getEditingDomain().getCommandStack().flush();
 
 			} catch (Exception exception) {
 				// Something went wrong that shouldn't.
