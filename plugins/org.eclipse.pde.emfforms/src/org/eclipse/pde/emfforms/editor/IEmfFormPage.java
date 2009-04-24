@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IEmfFormPage.java,v 1.1 2009/04/24 11:52:09 bcabe Exp $
+ * $Id: IEmfFormPage.java,v 1.2 2009/04/24 12:16:08 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -29,5 +29,12 @@ public interface IEmfFormPage extends IFormPage {
 	 * @return a viewer of special interest, or <code>null</code> if no viewer.
 	 */
 	Viewer getViewer();
+
+	/**
+	 * In order to benefit from an automatic grid layout management, this method can be used to indicate the 
+	 * desired number of columns for the actual page  
+	 * @return a positive number of desired columns 
+	 */
+	int getNumColumns();
 
 }

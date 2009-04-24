@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.2 2009/04/24 11:52:09 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.3 2009/04/24 12:16:08 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -111,6 +111,9 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	@Override
 	public abstract String getId();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public int getNumColumns() {
 		return numColumns;
 	}
@@ -119,6 +122,11 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 		return isMasterDetail;
 	}
 
+	/**
+	 * {@inheritDoc} <br><br>
+	 * The default implementation of this method just returns <code>null</code>.
+	 * It must be overriden if the actual page contains an interesting viewer.
+	 */
 	public Viewer getViewer() {
 		return null;
 	}
