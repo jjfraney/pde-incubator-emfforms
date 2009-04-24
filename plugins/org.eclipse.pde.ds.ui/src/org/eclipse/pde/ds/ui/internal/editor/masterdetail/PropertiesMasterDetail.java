@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.4 2009/04/24 22:01:01 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -20,7 +20,6 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.*;
@@ -32,11 +31,9 @@ import org.eclipse.pde.ds.ui.internal.editor.detailpart.PropertyDetailsPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
@@ -60,6 +57,13 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 
 	public PropertiesMasterDetail() {
 		super();
+	}
+
+	@Override
+	public void createContent(IManagedForm managedForm) {
+		super.createContent(managedForm);
+		sashForm.setLayout(new FillLayout());
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(sashForm);
 	}
 
 	public StructuredViewer getViewer() {
@@ -104,7 +108,7 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 
 		Section section = toolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText(Messages.PropertyPage_Title);
-		//section.setDescription("Sélectionnez ci-dessous la donnée à éditer."); //$NON-NLS-1$
+		section.setDescription("Select the property/properties you want to edit"); //$NON-NLS-1$
 		section.marginWidth = 10;
 		section.setLayout(new FillLayout());
 		section.marginHeight = 5;
@@ -139,14 +143,13 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).applyTo(removeButton);
 		removeButton.setText("Remove..."); //$NON-NLS-1$
 
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(buttonComposite);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(browseComposite);
+		GridDataFactory.fillDefaults().applyTo(buttonComposite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(browseComposite);
 
 		ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ScrItemProviderAdapterFactory());
-		//adapterFactory.addAdapterFactory(new ConfigurationItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		getViewer().setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
@@ -171,36 +174,11 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				_managedForm.fireSelectionChanged(spart, event.getSelection());
-				//updateActionsEnablement();
+				updateActionsEnablement();
 			}
 
-			/*	private void updateActionsEnablement() {
-					// if(_managedForm.getMessageManager().)
-
-					if (_component.getVersion() == null) {
-						IStructuredSelection sel = ((IStructuredSelection) getViewer().getSelection());
-						// the tree root may be a DataList => then disable action
-						boolean hasAllSameParent = (!sel.isEmpty()) && sel.toArray()[0] instanceof AbstractData;
-						Object o = null;
-						int i = 0;
-						while (i < sel.size() && hasAllSameParent) {
-							AbstractData ad = (AbstractData) sel.toArray()[i];
-							if (o == null)
-								o = ad.eContainer();
-							else {
-								hasAllSameParent = (ad.eContainer() == o);
-							}
-							i++;
-						}
-						_groupDataAction.setEnabled(hasAllSameParent);
-
-						// set enable the ungroupdataAction when a DataBlock is
-						// selected and only one selection and datablock has element
-						boolean isDataBlockEnabled = !sel.isEmpty() && sel.getFirstElement() instanceof DataBlock && sel.size() == 1 && ((DataBlock) sel.getFirstElement()).getContents().size() > 0;
-						_ungroupDataAction.setEnabled(isDataBlockEnabled);
-					}
-
-				}*/
+			private void updateActionsEnablement() {
+			}
 
 		});
 
@@ -216,105 +194,9 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 
 	}
 
-	private void createMasterSectionActions(Section section) {
-		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
-		ToolBar toolbar = toolBarManager.createControl(section);
-		final Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
-		toolbar.setCursor(handCursor);
-		// Cursor needs to be explicitly disposed
-		toolbar.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				if ((handCursor != null) && (handCursor.isDisposed() == false)) {
-					handCursor.dispose();
-				}
-			}
-
-		});
-
-		/*		groupDataAction = new Action() {
-					@Override
-					public void run() {
-						IStructuredSelection sel = (IStructuredSelection) getViewer().getSelection();
-						Property selectedElement = (Property) sel.getFirstElement();
-						Object container = selectedElement.eContainer();
-
-						DataBlock newBlock = NumericalFactory.eINSTANCE.createDataBlock();
-						newBlock.setName("bloc_" + System.currentTimeMillis());
-						CompoundCommand c = new CompoundCommand();
-
-						// then add them to their new block
-						c.append(AddCommand.create(_editingDomain, newBlock, null, sel.toList()));
-
-						// then add the blocl to the case
-						// no need to tell the feature to use to perform the "add"; EMF
-						// deduces it...
-						c.append(AddCommand.create(_editingDomain, container, null, newBlock));
-
-						_editingDomain.getCommandStack().execute(c);
-
-						getViewer().refresh();
-						getViewer().setSelection(new StructuredSelection(newBlock), true);
-					}
-
-					@Override
-					public ImageDescriptor getImageDescriptor() {
-						return ImageDescriptor.createFromURL(Activator.getDefault().getBundle().getResource("/icons/group.png"));
-					}
-				};
-				_groupDataAction.setText("Grouper");
-				_groupDataAction.setToolTipText("Grouper les données sélectionnées");
-				_groupDataAction.setEnabled(false);
-				toolBarManager.add(_groupDataAction);
-
-				_ungroupDataAction = new Action() {
-
-					@Override
-					public void run() {
-						IStructuredSelection sel = (IStructuredSelection) getViewer().getSelection();
-
-						DataBlock block = (DataBlock) sel.getFirstElement();
-
-						// get parent container of the selected object
-						Object container = block.eContainer();
-
-						Command c;
-
-						// add all children to the parent container (assuming parent
-						// container is DataList of DataBlock)
-						if (container instanceof DataList)
-							c = AddCommand.create(_editingDomain, container, NumericalPackage.eINSTANCE.getDataList_Data(), block.getContents());
-						else
-							c = AddCommand.create(_editingDomain, container, NumericalPackage.eINSTANCE.getDataBlock_Contents(), block.getContents());
-
-						_editingDomain.getCommandStack().execute(c);
-
-						getViewer().refresh();
-						getViewer().setSelection(new StructuredSelection(container), true);
-
-					}
-
-					@Override
-					public ImageDescriptor getImageDescriptor() {
-						return ImageDescriptor.createFromURL(Activator.getDefault().getBundle().getResource("/icons/ungroup.png"));
-					}
-
-				};
-			
-				_ungroupDataAction.setText("Degrouper");
-				_ungroupDataAction.setToolTipText("Dégrouper le bloc");
-				_ungroupDataAction.setEnabled(false);
-				toolBarManager.add(_ungroupDataAction);
-				*/
-
-		toolBarManager.update(true);
-		section.setTextClient(toolbar);
-
-	}
-
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		sashForm.setWeights(new int[] {40, 60});
-
 	}
 
 	@Override
@@ -323,7 +205,6 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		detailsPart.registerPage(Property.class, new PropertyDetailsPart(_managedForm, _editingDomain, _databindingContext));
 
 		detailsPart.setPageProvider(this);
-
 	}
 
 	public IDetailsPage getPage(Object key) {
