@@ -8,15 +8,12 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Activator.java,v 1.2 2009/02/15 00:42:33 bcabe Exp $
+ * $Id: Activator.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal;
 
 import java.lang.reflect.InvocationTargetException;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesDetailsPart.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: PropertiesDetailsPart.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart;
 
@@ -29,9 +29,7 @@ import org.eclipse.pde.ds.ui.internal.editor.composites.PropertiesComposite2;
 import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IDetailsPage;
-import org.eclipse.ui.forms.IFormPart;
-import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 

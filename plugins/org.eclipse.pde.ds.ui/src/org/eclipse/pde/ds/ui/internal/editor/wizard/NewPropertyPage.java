@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertyPage.java,v 1.3 2009/04/24 21:18:27 bcabe Exp $
+ * $Id: NewPropertyPage.java,v 1.4 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
@@ -26,9 +26,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.pde.ds.scr.Property;
-import org.eclipse.pde.ds.scr.ScrFactory;
-import org.eclipse.pde.ds.scr.ScrPackage;
+import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.composites.PropertyComposite;
 import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.swt.SWT;

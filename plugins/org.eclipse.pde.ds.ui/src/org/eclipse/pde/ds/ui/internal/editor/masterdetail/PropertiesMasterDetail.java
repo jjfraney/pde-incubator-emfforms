@@ -8,36 +8,23 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.WrapperItemProvider;
+import org.eclipse.emf.edit.provider.*;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
-import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
-import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
+import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.OpenEvent;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.pde.ds.scr.Component;
-import org.eclipse.pde.ds.scr.Properties;
-import org.eclipse.pde.ds.scr.Property;
+import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.scr.provider.ScrItemProviderAdapterFactory;
 import org.eclipse.pde.ds.ui.internal.editor.Messages;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.PropertiesDetailsPart;
@@ -49,19 +36,11 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
-import org.eclipse.ui.forms.DetailsPart;
-import org.eclipse.ui.forms.IDetailsPage;
-import org.eclipse.ui.forms.IDetailsPageProvider;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.MasterDetailsBlock;
-import org.eclipse.ui.forms.SectionPart;
+import org.eclipse.ui.forms.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -81,17 +60,6 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 
 	public PropertiesMasterDetail() {
 		super();
-	}
-
-	public void createContent(IManagedForm managedForm) {
-		super.createContent(managedForm);
-		sashForm.setLayout(new FillLayout(SWT.FILL));
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(sashForm);
-
-		Composite actualContent = managedForm.getToolkit().createComposite(sashForm, SWT.NONE);
-		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(actualContent);
-		actualContent.setLayout(new FillLayout());
-
 	}
 
 	public StructuredViewer getViewer() {
@@ -136,7 +104,7 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 
 		Section section = toolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText(Messages.PropertyPage_Title);
-		section.setDescription("Sélectionnez ci-dessous la donnée à éditer."); //$NON-NLS-1$
+		//section.setDescription("Sélectionnez ci-dessous la donnée à éditer."); //$NON-NLS-1$
 		section.marginWidth = 10;
 		section.setLayout(new FillLayout());
 		section.marginHeight = 5;
@@ -150,7 +118,7 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		FilteredTree ft = new FilteredTree(browseComposite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL, new PatternFilter(), true);
 		_viewer = ft.getViewer();
 
-		GridDataFactory.fillDefaults().grab(true, false).span(1, 2).applyTo(_viewer.getControl());
+		GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(_viewer.getControl());
 
 		Composite buttonComposite = new Composite(browseComposite, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(buttonComposite);

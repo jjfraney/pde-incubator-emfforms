@@ -8,21 +8,17 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: TypeSelectionPage.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: TypeSelectionPage.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.pde.emfforms.editor.PDEFormToolkit;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.*;
 
 public class TypeSelectionPage extends WizardPage implements Listener {
 

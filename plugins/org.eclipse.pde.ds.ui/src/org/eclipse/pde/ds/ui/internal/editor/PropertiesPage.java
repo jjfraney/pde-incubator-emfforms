@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -17,19 +17,11 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.*;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.WrapperItemProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.pde.ds.scr.Component;
-import org.eclipse.pde.ds.scr.Properties;
-import org.eclipse.pde.ds.scr.Property;
-import org.eclipse.pde.ds.scr.ScrFactory;
-import org.eclipse.pde.ds.scr.ScrPackage;
+import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.action.newPropertiesAction;
 import org.eclipse.pde.ds.ui.internal.editor.masterdetail.PropertiesMasterDetail;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;

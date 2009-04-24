@@ -8,44 +8,29 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.5 2009/04/24 21:33:47 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.6 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.ChangeEvent;
-import org.eclipse.core.databinding.observable.IChangeListener;
-import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.observable.*;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.*;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.WrapperItemProvider;
-import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
-import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
-import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
+import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.pde.ds.scr.Component;
-import org.eclipse.pde.ds.scr.Properties;
-import org.eclipse.pde.ds.scr.Property;
-import org.eclipse.pde.ds.scr.ScrFactory;
-import org.eclipse.pde.ds.scr.ScrPackage;
-import org.eclipse.pde.ds.ui.internal.editor.composites.ComponentComposite;
-import org.eclipse.pde.ds.ui.internal.editor.composites.OptionsComposite;
-import org.eclipse.pde.ds.ui.internal.editor.composites.PropertiesComposite;
+import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.ds.scr.*;
+import org.eclipse.pde.ds.ui.internal.editor.composites.*;
 import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;

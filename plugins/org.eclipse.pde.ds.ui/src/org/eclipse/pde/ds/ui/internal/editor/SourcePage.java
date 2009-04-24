@@ -8,16 +8,13 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: SourcePage.java,v 1.2 2009/04/24 11:52:12 bcabe Exp $
+ * $Id: SourcePage.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Collections;
 import java.util.EventObject;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -28,17 +25,9 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextListener;
-import org.eclipse.jface.text.TextEvent;
+import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
-import org.eclipse.jface.text.source.IOverviewRuler;
-import org.eclipse.jface.text.source.ISharedTextColors;
-import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.OverviewRuler;
-import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.jface.text.source.VerticalRuler;
+import org.eclipse.jface.text.source.*;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.pde.ds.scr.util.ScrResourceFactoryImpl;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;

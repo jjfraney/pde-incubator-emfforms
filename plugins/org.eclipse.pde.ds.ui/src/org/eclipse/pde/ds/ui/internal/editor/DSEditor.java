@@ -8,21 +8,13 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditor.java,v 1.5 2009/04/24 12:04:33 bcabe Exp $
+ * $Id: DSEditor.java,v 1.6 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.util.*;
+import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -33,9 +25,7 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.pde.ds.scr.Component;
 import org.eclipse.pde.ds.scr.provider.ScrItemProviderAdapterFactory;
 import org.eclipse.pde.ds.ui.internal.Activator;
-import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
-import org.eclipse.pde.emfforms.editor.DefaultEmfFormEditorConfig;
-import org.eclipse.pde.emfforms.editor.EmfFormEditor;
+import org.eclipse.pde.emfforms.editor.*;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OptionsComposite.java,v 1.2 2009/02/15 00:42:33 bcabe Exp $
+ * $Id: OptionsComposite.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
@@ -16,9 +16,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.pde.ds.scr.ConfigurationPolicy;
 import org.eclipse.pde.ds.ui.internal.editor.Messages;
 import org.eclipse.pde.emfforms.editor.PDEFormToolkit;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.*;
 
 public class OptionsComposite extends Composite {
 
