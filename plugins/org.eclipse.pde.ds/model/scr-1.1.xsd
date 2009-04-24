@@ -22,6 +22,7 @@
     <xsd:attribute name="name" type="ecore:EString"/>
     <xsd:attribute name="activate" type="ecore:EString"/>
     <xsd:attribute name="deactivate" type="ecore:EString"/>
+    <xsd:attribute name="modified" type="ecore:EString"/>
     <xsd:attribute default="optional" ecore:name="configurationPolicy" ecore:unsettable="false" name="configuration-policy" type="scr:ConfigurationPolicy"/>
   </xsd:complexType>
   <xsd:complexType name="Implementation">

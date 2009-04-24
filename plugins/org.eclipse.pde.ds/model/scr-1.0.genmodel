@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.pde.ds.1.0/src"
+    modelPluginID="org.eclipse.pde.ds" modelName="Scr-1" importerID="org.eclipse.xsd.ecore.importer"
+    complianceLevel="5.0" copyrightFields="false">
+  <foreignModel>scr-1.0.xsd</foreignModel>
+  <genPackages prefix="_0" basePackage="org.osgi.xmlns.scr.v1" resource="XML" disposableProviderFactory="true"
+      ecorePackage="_0.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="_0.ecore#//Tcardinality">
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//Tcardinality/_01"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//Tcardinality/_0N"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//Tcardinality/_11"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//Tcardinality/_1N"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="_0.ecore#//TjavaTypes">
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/String"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Long"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Double"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Float"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Integer"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Byte"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Character"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Boolean"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//TjavaTypes/Short"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="_0.ecore#//Tpolicy">
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//Tpolicy/static"/>
+      <genEnumLiterals ecoreEnumLiteral="_0.ecore#//Tpolicy/dynamic"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="_0.ecore#//TcardinalityObject"/>
+    <genDataTypes ecoreDataType="_0.ecore#//TjavaTypesObject"/>
+    <genDataTypes ecoreDataType="_0.ecore#//TpolicyObject"/>
+    <genClasses ecoreClass="_0.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference _0.ecore#//DocumentRoot/component"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Tcomponent">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute _0.ecore#//Tcomponent/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//Tcomponent/implementation"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tcomponent/group"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//Tcomponent/property"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//Tcomponent/properties"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//Tcomponent/service"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference _0.ecore#//Tcomponent/reference"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tcomponent/enabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tcomponent/factory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tcomponent/immediate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tcomponent/name"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Timplementation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Timplementation/class"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Tproperties">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tproperties/entry"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Tproperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tproperty/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tproperty/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tproperty/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tproperty/value1"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Tprovide">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tprovide/interface"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Treference">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/bind"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/cardinality"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/interface"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/policy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Treference/unbind"/>
+    </genClasses>
+    <genClasses ecoreClass="_0.ecore#//Tservice">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference _0.ecore#//Tservice/provide"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute _0.ecore#//Tservice/servicefactory"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.4 2009/04/24 11:52:12 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.5 2009/04/24 21:33:47 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -98,6 +98,9 @@ public class OverviewPage extends AbstractEmfFormPage {
 
 		// component deactivate
 		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextDeactivate()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Deactivate()), null, null);
+
+		// component modified
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextModified()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Modified()), null, null);
 
 		/**
 		 * Bind Options composite

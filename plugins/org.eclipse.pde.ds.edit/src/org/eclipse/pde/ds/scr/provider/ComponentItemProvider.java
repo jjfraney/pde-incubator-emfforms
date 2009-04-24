@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentItemProvider.java,v 1.4 2009/02/15 00:42:47 bcabe Exp $
+ * $Id: ComponentItemProvider.java,v 1.5 2009/04/24 21:33:37 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.provider;
 
@@ -89,6 +89,7 @@ public class ComponentItemProvider
 			addNamePropertyDescriptor(object);
 			addActivatePropertyDescriptor(object);
 			addDeactivatePropertyDescriptor(object);
+			addModifiedPropertyDescriptor(object);
 			addConfigurationPolicyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -227,6 +228,28 @@ public class ComponentItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Modified feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addModifiedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Component_modified_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Component_modified_feature", "_UI_Component_type"),
+				 ScrPackage.Literals.COMPONENT__MODIFIED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Configuration Policy feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -347,6 +370,7 @@ public class ComponentItemProvider
 			case ScrPackage.COMPONENT__NAME:
 			case ScrPackage.COMPONENT__ACTIVATE:
 			case ScrPackage.COMPONENT__DEACTIVATE:
+			case ScrPackage.COMPONENT__MODIFIED:
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

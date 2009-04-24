@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Component.java,v 1.4 2009/02/15 20:54:36 bcabe Exp $
+ * $Id: Component.java,v 1.5 2009/04/24 21:33:43 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getActivate <em>Activate</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getDeactivate <em>Deactivate</em>}</li>
+ *   <li>{@link org.eclipse.pde.ds.scr.Component#getModified <em>Modified</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getConfigurationPolicy <em>Configuration Policy</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getImplementation <em>Implementation</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.Component#getAllProperties <em>All Properties</em>}</li>
@@ -257,6 +258,32 @@ public interface Component extends EObject {
 	 * @generated
 	 */
 	void setDeactivate(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Modified</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Modified</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Modified</em>' attribute.
+	 * @see #setModified(String)
+	 * @see org.eclipse.pde.ds.scr.ScrPackage#getComponent_Modified()
+	 * @model
+	 * @generated
+	 */
+	String getModified();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.pde.ds.scr.Component#getModified <em>Modified</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Modified</em>' attribute.
+	 * @see #getModified()
+	 * @generated
+	 */
+	void setModified(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Configuration Policy</b></em>' attribute.

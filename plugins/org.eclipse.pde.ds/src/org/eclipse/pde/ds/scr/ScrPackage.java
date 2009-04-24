@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrPackage.java,v 1.4 2009/02/15 20:54:36 bcabe Exp $
+ * $Id: ScrPackage.java,v 1.5 2009/04/24 21:33:43 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
@@ -148,13 +148,22 @@ public interface ScrPackage extends EPackage {
 	int COMPONENT__DEACTIVATE = 6;
 
 	/**
+	 * The feature id for the '<em><b>Modified</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT__MODIFIED = 7;
+
+	/**
 	 * The feature id for the '<em><b>Configuration Policy</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__CONFIGURATION_POLICY = 7;
+	int COMPONENT__CONFIGURATION_POLICY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Implementation</b></em>' containment reference.
@@ -163,7 +172,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__IMPLEMENTATION = 8;
+	int COMPONENT__IMPLEMENTATION = 9;
 
 	/**
 	 * The feature id for the '<em><b>All Properties</b></em>' attribute list.
@@ -172,7 +181,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__ALL_PROPERTIES = 9;
+	int COMPONENT__ALL_PROPERTIES = 10;
 
 	/**
 	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
@@ -181,7 +190,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__PROPERTY = 10;
+	int COMPONENT__PROPERTY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -190,7 +199,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__PROPERTIES = 11;
+	int COMPONENT__PROPERTIES = 12;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' containment reference.
@@ -199,7 +208,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__SERVICE = 12;
+	int COMPONENT__SERVICE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' containment reference list.
@@ -208,7 +217,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT__REFERENCE = 13;
+	int COMPONENT__REFERENCE = 14;
 
 	/**
 	 * The number of structural features of the '<em>Component</em>' class.
@@ -217,7 +226,7 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_FEATURE_COUNT = 14;
+	int COMPONENT_FEATURE_COUNT = 15;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.pde.ds.scr.impl.ImplementationImpl <em>Implementation</em>}' class.
@@ -604,6 +613,17 @@ public interface ScrPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getComponent_Deactivate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.pde.ds.scr.Component#getModified <em>Modified</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Modified</em>'.
+	 * @see org.eclipse.pde.ds.scr.Component#getModified()
+	 * @see #getComponent()
+	 * @generated
+	 */
+	EAttribute getComponent_Modified();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.pde.ds.scr.Component#getConfigurationPolicy <em>Configuration Policy</em>}'.
@@ -1045,6 +1065,14 @@ public interface ScrPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute COMPONENT__DEACTIVATE = eINSTANCE.getComponent_Deactivate();
+
+		/**
+		 * The meta object literal for the '<em><b>Modified</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPONENT__MODIFIED = eINSTANCE.getComponent_Modified();
 
 		/**
 		 * The meta object literal for the '<em><b>Configuration Policy</b></em>' attribute feature.

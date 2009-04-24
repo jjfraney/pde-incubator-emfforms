@@ -6,11 +6,9 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.pde.ds.ui.internal.editor.messages"; //$NON-NLS-1$
 
 	public static String ComponentComposite_Value;
-
 	public static String ComponentComposite_Activate;
-
 	public static String ComponentComposite_Deactivate;
-
+	public static String ComponentComposite_Modified;
 	public static String ComponentComposite_Implementation;
 	public static String ComponentComposite_Name;
 

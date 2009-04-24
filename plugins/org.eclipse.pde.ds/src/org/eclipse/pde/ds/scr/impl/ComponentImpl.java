@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentImpl.java,v 1.3 2009/02/15 00:42:42 bcabe Exp $
+ * $Id: ComponentImpl.java,v 1.4 2009/04/24 21:33:43 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -47,6 +47,7 @@ import org.eclipse.pde.ds.scr.*;
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getActivate <em>Activate</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getDeactivate <em>Deactivate</em>}</li>
+ *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getModified <em>Modified</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getConfigurationPolicy <em>Configuration Policy</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getImplementation <em>Implementation</em>}</li>
  *   <li>{@link org.eclipse.pde.ds.scr.impl.ComponentImpl#getAllProperties <em>All Properties</em>}</li>
@@ -194,6 +195,26 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	 * @ordered
 	 */
 	protected String deactivate = DEACTIVATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getModified() <em>Modified</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModified()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String MODIFIED_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getModified() <em>Modified</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModified()
+	 * @generated
+	 * @ordered
+	 */
+	protected String modified = MODIFIED_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getConfigurationPolicy() <em>Configuration Policy</em>}' attribute.
@@ -393,6 +414,27 @@ public class ComponentImpl extends EObjectImpl implements Component {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getModified() {
+		return modified;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setModified(String newModified) {
+		String oldModified = modified;
+		modified = newModified;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScrPackage.COMPONENT__MODIFIED, oldModified, modified));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -555,6 +597,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 				return getActivate();
 			case ScrPackage.COMPONENT__DEACTIVATE:
 				return getDeactivate();
+			case ScrPackage.COMPONENT__MODIFIED:
+				return getModified();
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
 				return getConfigurationPolicy();
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
@@ -602,6 +646,9 @@ public class ComponentImpl extends EObjectImpl implements Component {
 				return;
 			case ScrPackage.COMPONENT__DEACTIVATE:
 				setDeactivate((String)newValue);
+				return;
+			case ScrPackage.COMPONENT__MODIFIED:
+				setModified((String)newValue);
 				return;
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
 				setConfigurationPolicy((ConfigurationPolicy)newValue);
@@ -659,6 +706,9 @@ public class ComponentImpl extends EObjectImpl implements Component {
 			case ScrPackage.COMPONENT__DEACTIVATE:
 				setDeactivate(DEACTIVATE_EDEFAULT);
 				return;
+			case ScrPackage.COMPONENT__MODIFIED:
+				setModified(MODIFIED_EDEFAULT);
+				return;
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
 				setConfigurationPolicy(CONFIGURATION_POLICY_EDEFAULT);
 				return;
@@ -705,6 +755,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 				return ACTIVATE_EDEFAULT == null ? activate != null : !ACTIVATE_EDEFAULT.equals(activate);
 			case ScrPackage.COMPONENT__DEACTIVATE:
 				return DEACTIVATE_EDEFAULT == null ? deactivate != null : !DEACTIVATE_EDEFAULT.equals(deactivate);
+			case ScrPackage.COMPONENT__MODIFIED:
+				return MODIFIED_EDEFAULT == null ? modified != null : !MODIFIED_EDEFAULT.equals(modified);
 			case ScrPackage.COMPONENT__CONFIGURATION_POLICY:
 				return configurationPolicy != CONFIGURATION_POLICY_EDEFAULT;
 			case ScrPackage.COMPONENT__IMPLEMENTATION:
@@ -746,6 +798,8 @@ public class ComponentImpl extends EObjectImpl implements Component {
 		result.append(activate);
 		result.append(", deactivate: ");
 		result.append(deactivate);
+		result.append(", modified: ");
+		result.append(modified);
 		result.append(", configurationPolicy: ");
 		result.append(configurationPolicy);
 		result.append(')');

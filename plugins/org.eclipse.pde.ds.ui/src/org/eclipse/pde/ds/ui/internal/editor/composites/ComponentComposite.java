@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentComposite.java,v 1.2 2009/02/15 00:42:33 bcabe Exp $
+ * $Id: ComponentComposite.java,v 1.3 2009/04/24 21:33:47 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
@@ -26,6 +26,8 @@ public class ComponentComposite extends Composite {
 	private Text _textActivate;
 
 	private Text _textDeactivate;
+
+	private Text _textModified;
 
 	/**
 	 * @param parent
@@ -45,6 +47,7 @@ public class ComponentComposite extends Composite {
 		_textImplementation = PDEFormToolkit.createLabelAndText(Messages.ComponentComposite_Implementation, this);
 		_textActivate = PDEFormToolkit.createLabelAndText(Messages.ComponentComposite_Activate, this);
 		_textDeactivate = PDEFormToolkit.createLabelAndText(Messages.ComponentComposite_Deactivate, this);
+		_textModified = PDEFormToolkit.createLabelAndText(Messages.ComponentComposite_Modified, this);
 	}
 
 	public Text getTextName() {
@@ -61,5 +64,9 @@ public class ComponentComposite extends Composite {
 
 	public Text getTextDeactivate() {
 		return _textDeactivate;
+	}
+
+	public Text getTextModified() {
+		return _textModified;
 	}
 }

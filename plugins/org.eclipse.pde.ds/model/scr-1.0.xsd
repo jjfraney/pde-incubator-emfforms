@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /*
- * $Date: 2009/02/12 17:06:39 $
+ * $Date: 2009/04/24 21:33:43 $
  * 
  * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
  * 
@@ -31,9 +31,9 @@ case, the scr namespace is assumed. Otherwise the namespace must be used.
 		</documentation>
 	</annotation>
 
-	<element name="component" type="scr:Tcomponent"/>
+	<element name="component" type="scr:Tcomponent" />
 
-	<complexType name="Tcomponent">
+	<complexType name="Tcomponent" mixed="true">
 		<annotation>
 			<documentation xml:lang="en">
 			Implementations of SCR must not require component descriptions to specify the subelements 
