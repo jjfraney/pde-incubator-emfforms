@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PDEFormToolkit.java,v 1.1 2009/02/12 22:20:32 bcabe Exp $
+ * $Id: PDEFormToolkit.java,v 1.2 2009/04/24 11:52:09 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -25,6 +25,9 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.forms.ManagedForm;
 import org.eclipse.ui.forms.widgets.*;
 
+/**
+ * TODO remove crap in this class (static widget factories is definitely not a good idea) 
+ */
 public class PDEFormToolkit extends FormToolkit {
 	public static class Pair<U, V> {
 		public U left;

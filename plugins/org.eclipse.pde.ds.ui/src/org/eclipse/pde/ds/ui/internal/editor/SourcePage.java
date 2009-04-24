@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: SourcePage.java,v 1.1 2009/02/15 20:48:20 bcabe Exp $
+ * $Id: SourcePage.java,v 1.2 2009/04/24 11:52:12 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -64,12 +64,7 @@ public class SourcePage extends AbstractEmfFormPage {
 		super(editor);
 	}
 
-	@Override
-	protected void adaptComposites() {
-	}
-
-	@Override
-	protected void bind(DataBindingContext bindingContext) {
+	public void bind(DataBindingContext bindingContext) {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
 
 		editingDomain.getCommandStack().addCommandStackListener(new CommandStackListener() {
@@ -98,8 +93,7 @@ public class SourcePage extends AbstractEmfFormPage {
 			_sourceStructuredTextViewer.getDocument().set(result);
 	}
 
-	@Override
-	protected void createContents(Composite parent) {
+	public void createContents(Composite parent) {
 		int VERTICAL_RULER_WIDTH = 12;
 
 		GridLayout gl = new GridLayout(getNumColumns(), true);
@@ -131,6 +125,7 @@ public class SourcePage extends AbstractEmfFormPage {
 			}
 		});
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(_sourceStructuredTextViewer.getControl());
+
 	}
 
 	@Override
@@ -139,18 +134,8 @@ public class SourcePage extends AbstractEmfFormPage {
 	}
 
 	@Override
-	protected int getNumColumns() {
-		return 1;
-	}
-
-	@Override
-	protected String getPageName() {
+	public String getPartName() {
 		return "Source";
-	}
-
-	@Override
-	protected boolean isMasterDetail() {
-		return false;
 	}
 
 	@Override

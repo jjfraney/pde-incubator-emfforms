@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.3 2009/02/15 20:48:20 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.4 2009/04/24 11:52:12 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -71,18 +71,10 @@ public class OverviewPage extends AbstractEmfFormPage {
 	 * @param editor
 	 */
 	public OverviewPage(FormEditor editor) {
-		super(editor);
+		super(editor, 2, false);
 	}
 
-	@Override
-	protected void adaptComposites() {
-		getFormToolkit().adapt(_componentComposite);
-		getFormToolkit().adapt(_optionsComposite);
-		getFormToolkit().adapt(_propertiesComposite);
-	}
-
-	@Override
-	protected void bind(DataBindingContext bindingContext) {
+	public void bind(DataBindingContext bindingContext) {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
 
 		/**
@@ -196,8 +188,7 @@ public class OverviewPage extends AbstractEmfFormPage {
 		editingDomain.getCommandStack().flush();
 	}
 
-	@Override
-	protected void createContents(Composite parent) {
+	public void createContents(Composite parent) {
 		createComponentSection(parent);
 		createOptionsSection(parent);
 		createPropertiesSection(parent);
@@ -236,7 +227,7 @@ public class OverviewPage extends AbstractEmfFormPage {
 	private void createPropertiesSection(Composite parent) {
 		Section s = getFormToolkit().createSection(parent, Section.TITLE_BAR | Section.DESCRIPTION | Section.TWISTIE);
 		s.setDescription(Messages.OverviewPage_Properties_Section_desc);
-		GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(s);
+		GridDataFactory.fillDefaults().grab(true, false).span(2, 2).applyTo(s);
 
 		s.setText(Messages.OverviewPage_Properties_Section);
 		_propertiesComposite = new PropertiesComposite(s, SWT.NONE);
@@ -250,18 +241,8 @@ public class OverviewPage extends AbstractEmfFormPage {
 	}
 
 	@Override
-	protected int getNumColumns() {
-		return 2;
-	}
-
-	@Override
-	protected String getPageName() {
+	public String getPartName() {
 		return Messages.OverviewPage_Title;
-	}
-
-	@Override
-	protected boolean isMasterDetail() {
-		return false;
 	}
 
 	@Override

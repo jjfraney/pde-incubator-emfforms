@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditor.java,v 1.3 2009/02/15 20:48:20 bcabe Exp $
+ * $Id: DSEditor.java,v 1.4 2009/04/24 11:52:12 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -34,6 +34,7 @@ import org.eclipse.pde.ds.scr.Component;
 import org.eclipse.pde.ds.scr.provider.ScrItemProviderAdapterFactory;
 import org.eclipse.pde.ds.ui.internal.Activator;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
+import org.eclipse.pde.emfforms.editor.DefaultEmfFormEditorConfig;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -113,8 +114,14 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 
 	private boolean isSaving = false;
 
-	public DSEditor() {
-		super();
+	@Override
+	protected DefaultEmfFormEditorConfig getFormEditorConfig() {
+		return new DSEditorConfig();
+	}
+
+	@Override
+	public String getPartName() {
+		return getEditorInput().getName() + " (experimental)"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -136,22 +143,13 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 	}
 
 	@Override
-	public String getPartName() {
-		return getEditorInput().getName() + " (experimental)"; //$NON-NLS-1$
-	}
-
-	@Override
-	protected AdapterFactory getSpecificAdapterFactory() {
-		return new ScrItemProviderAdapterFactory();
-	}
-
-	@Override
 	protected List<AbstractEmfFormPage> getPagesToAdd() throws PartInitException {
 		List<AbstractEmfFormPage> pages = new ArrayList<AbstractEmfFormPage>(1);
 
 		pages.add(new OverviewPage(this));
+		pages.add(new PropertiesPage(this));
 		try {
-			pages.add(new SourcePage(this));
+			//pages.add(new SourcePage(this));
 		} catch (NoClassDefFoundError ex) {
 			Activator.logErrorMessage("WTP SSE not available... No source page at the moment"); //$NON-NLS-1$
 		}
@@ -162,20 +160,8 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 	@Override
 	protected List<Image> getPagesImages() {
 		ArrayList<Image> list = new ArrayList<Image>(1);
-
 		list.add(null);
-
 		return list;
-	}
-
-	@Override
-	protected VALIDATE_ON_SAVE validateOnSave() {
-		return VALIDATE_ON_SAVE.VALIDATE_AND_WARN;
-	}
-
-	@Override
-	public boolean isUsingSharedClipboard() {
-		return true;
 	}
 
 	@Override
@@ -189,5 +175,10 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 		isSaving = true;
 		super.doSave(monitor);
 		isSaving = false;
+	}
+
+	@Override
+	protected AdapterFactory getSpecificAdapterFactory() {
+		return new ScrItemProviderAdapterFactory();
 	}
 }

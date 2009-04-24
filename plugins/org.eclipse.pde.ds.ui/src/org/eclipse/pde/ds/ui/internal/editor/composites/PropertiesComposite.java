@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesComposite.java,v 1.1 2009/02/15 00:42:33 bcabe Exp $
+ * $Id: PropertiesComposite.java,v 1.2 2009/04/24 11:52:12 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
@@ -40,14 +40,18 @@ public class PropertiesComposite extends Composite {
 
 		Composite browseComposite = new Composite(composite, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(browseComposite);
+
 		TreeViewer listViewer = new TreeViewer(browseComposite, SWT.BORDER);
-		GridDataFactory.fillDefaults().grab(true, false).span(1, 2).hint(SWT.DEFAULT, 80).applyTo(listViewer.getControl());
+		GridDataFactory.fillDefaults().grab(true, false).span(1, 2).applyTo(listViewer.getControl());
+
 		Button addButton = new Button(browseComposite, SWT.FLAT | SWT.PUSH);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).applyTo(addButton);
 		addButton.setText("Add..."); //$NON-NLS-1$
+
 		Button removeButton = new Button(browseComposite, SWT.FLAT | SWT.PUSH);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).applyTo(removeButton);
 		removeButton.setText("Remove"); //$NON-NLS-1$
+
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(browseComposite);
 		_propertiesViewer = new Pair<TreeViewer, Pair<Button, Button>>(listViewer, new Pair<Button, Button>(addButton, removeButton));
 	}

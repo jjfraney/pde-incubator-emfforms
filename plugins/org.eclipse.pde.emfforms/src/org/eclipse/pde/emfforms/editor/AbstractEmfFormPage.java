@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.1 2009/02/12 22:20:32 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.2 2009/04/24 11:52:09 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -30,21 +30,39 @@ import org.eclipse.ui.forms.widgets.Form;
  * Generic page for {@link EObject} edition
  * 
  */
-public abstract class AbstractEmfFormPage extends FormPage {
+public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPage {
 	public static String ID;
 
 	protected DataBindingContext _bindingContext;
 
+	private int numColumns = 1;
+
+	private boolean isMasterDetail = false;
+
 	/**
 	 * Constructor that creates the page and initializes it with the editor.
+	 * By default the page contains only one column.
 	 * 
 	 * @param editor
 	 *            the parent editor
 	 */
 	public AbstractEmfFormPage(FormEditor editor) {
 		super(editor, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		this.setPartName(getPartName());
+	}
 
-		this.setPartName(getPageName());
+	/**
+	 * Constructor that creates the page and initializes it with the editor.
+	 * Allows to customize the number of columns, and to indicate that the content will consist in a MasterDetailsBlock 
+	 * 
+	 * @param editor
+	 * @param numColumns
+	 * @param isMasterDetail
+	 */
+	public AbstractEmfFormPage(FormEditor editor, int numColumns, boolean isMasterDetail) {
+		this(editor);
+		this.numColumns = numColumns;
+		this.isMasterDetail = isMasterDetail;
 	}
 
 	@Override
@@ -69,7 +87,7 @@ public abstract class AbstractEmfFormPage extends FormPage {
 
 		body.setLayout(gl);
 
-		adaptComposites();
+		getFormToolkit().adapt(actualContent);
 
 		// TODO probably not the best way to do (i.e. having one DBC per page)
 		_bindingContext = new EMFDataBindingContext();
@@ -79,7 +97,7 @@ public abstract class AbstractEmfFormPage extends FormPage {
 
 	private void createHeader() {
 		Form f = this.getManagedForm().getForm().getForm();
-		f.setText(this.getPageName());
+		f.setText(this.getPartName());
 		this.getEditor().getToolkit().decorateFormHeading(f);
 	}
 
@@ -93,18 +111,16 @@ public abstract class AbstractEmfFormPage extends FormPage {
 	@Override
 	public abstract String getId();
 
-	protected abstract int getNumColumns();
+	public int getNumColumns() {
+		return numColumns;
+	}
 
-	protected abstract String getPageName();
+	public boolean isMasterDetail() {
+		return isMasterDetail;
+	}
 
-	protected abstract void createContents(Composite parent);
-
-	protected abstract void adaptComposites();
-
-	protected abstract void bind(DataBindingContext bindingContext);
-
-	protected abstract boolean isMasterDetail();
-
-	protected abstract Viewer getViewer();
+	public Viewer getViewer() {
+		return null;
+	}
 
 }

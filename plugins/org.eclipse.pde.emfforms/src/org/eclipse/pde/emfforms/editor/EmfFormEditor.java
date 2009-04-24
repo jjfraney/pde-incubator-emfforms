@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.4 2009/02/27 09:26:33 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.5 2009/04/24 11:52:09 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -44,6 +44,7 @@ import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
+import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.pde.emfforms.internal.editor.Messages;
 import org.eclipse.swt.graphics.Image;
@@ -71,6 +72,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 * to the model.
 	 */
 	private EditingDomain _editingDomain;
+
+	/**
+	 */
+	private IEmfFormEditorConfig _editorConfig;
 
 	/**
 	 * This is the one adapter factory used for providing views of the model.
@@ -108,12 +113,26 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	protected MarkerHelper markerHelper = new EditUIMarkerHelper();
 
 	public EmfFormEditor() {
+		this._editorConfig = getFormEditorConfig();
+		init();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	protected DefaultEmfFormEditorConfig getFormEditorConfig() {
+		return new DefaultEmfFormEditorConfig();
+	}
+
+	private void init() {
 		_editingDomain = createEditingDomain();
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
 		//
 		getEditingDomain().getCommandStack().addCommandStackListener(_commandStackListener);
+
 	}
 
 	/**
@@ -128,9 +147,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		// -- To manage Copy/Cut/Paste
 		site.setSelectionProvider(this);
 	}
-
-	@Override
-	public abstract String getPartName();
 
 	@Override
 	public void dispose() {
@@ -149,7 +165,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		_adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 		_adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		_adapterFactory.addAdapterFactory(getSpecificAdapterFactory());
+		_adapterFactory.addAdapterFactory(this.getSpecificAdapterFactory());
 		_adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are
@@ -164,9 +180,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		return new AdapterFactoryEditingDomain(_adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 	}
 
-	/**
-	 * @return
-	 */
 	protected abstract AdapterFactory getSpecificAdapterFactory();
 
 	@Override
@@ -175,7 +188,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		createModel();
 
 		try {
-			for (AbstractEmfFormPage page : getPagesToAdd())
+			for (IEmfFormPage page : getPagesToAdd())
 				addPage(page);
 
 			int i = 0;
@@ -183,14 +196,14 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				setPageImage(i++, img);
 
 		} catch (PartInitException e) {
-			org.eclipse.pde.emfforms.internal.Activator.logException(e, Messages.EmfFormEditor_InitError);
+			Activator.logException(e, Messages.EmfFormEditor_InitError);
 		}
 	}
 
 	/**
 	 * @throws PartInitException
 	 */
-	protected abstract List<? extends AbstractEmfFormPage> getPagesToAdd() throws PartInitException;
+	protected abstract List<? extends IEmfFormPage> getPagesToAdd() throws PartInitException;
 
 	protected abstract List<Image> getPagesImages();
 
@@ -334,12 +347,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 * 
 	 * @return {@link VALIDATE_ON_SAVE}
 	 */
-	protected VALIDATE_ON_SAVE validateOnSave() {
-		return VALIDATE_ON_SAVE.NO_VALIDATION;
-	}
-
-	public enum VALIDATE_ON_SAVE {
-		NO_VALIDATION, VALIDATE_AND_WARN, VALIDATE_AND_ABORT
+	protected final VALIDATE_ON_SAVE validateOnSave() {
+		return _editorConfig.getValidateOnSave();
 	}
 
 	/**
@@ -395,13 +404,13 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	@Override
-	public boolean isSaveAsAllowed() {
-		return true;
+	public final boolean isSaveAsAllowed() {
+		return this._editorConfig.isSaveAsAllowed();
 	}
 
 	@Override
 	protected PDEFormToolkit createToolkit(Display display) {
-		return new PDEFormToolkit(display);
+		return this._editorConfig.createPDEFormToolkit(display);
 	}
 
 	/**
@@ -447,7 +456,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	/**
 	 * @return The {@link T} currently edited
 	 */
-	protected T getCurrentEObject() {
+	public T getCurrentEObject() {
 		return _currentEObject;
 	}
 
@@ -501,8 +510,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 *         which will allow copy/paste actions between different instance of
 	 *         the same editor. The default return value is <code>false</code>
 	 */
-	public boolean isUsingSharedClipboard() {
-		return false;
+	public final boolean isUsingSharedClipboard() {
+		return this._editorConfig.isUsingSharedClipboard();
 	}
 
 	/**
