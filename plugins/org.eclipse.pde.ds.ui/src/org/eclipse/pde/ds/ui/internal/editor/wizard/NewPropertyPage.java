@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertyPage.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: NewPropertyPage.java,v 1.3 2009/04/24 21:18:27 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
@@ -62,7 +62,7 @@ public class NewPropertyPage extends WizardPage {
 		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextName(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperty_Name()), new EMFValidatingUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
-				if (!((String) value).trim().isEmpty())
+				if (value != null && !"".equals((String) value))
 					setPageComplete(true);
 				return super.convert(value);
 			}
