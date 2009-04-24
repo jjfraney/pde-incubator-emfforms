@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2009 Anyware Technologies and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Anyware Technologies - initial API and implementation
+ *
+ * $Id: AddPropertiesWizard.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -20,7 +32,6 @@ public class AddPropertiesWizard extends Wizard {
 
 	public AddPropertiesWizard(IWorkbenchPage workbenchPage) {
 		super();
-		System.out.println("Wizard Launch");
 		this.setWindowTitle("Add Properties Wizard");
 
 		this.editingDomain = ((DSEditor) workbenchPage.getActiveEditor()).getEditingDomain();
@@ -30,7 +41,6 @@ public class AddPropertiesWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		System.out.println("Wiz Fini"); //$NON-NLS-1$
 		if (this.typeSelectionPage.getType().getCombo().getSelectionIndex() == 0)
 			this.newPropertyPage.createProperty();
 		else if (this.typeSelectionPage.getType().getCombo().getSelectionIndex() == 1)

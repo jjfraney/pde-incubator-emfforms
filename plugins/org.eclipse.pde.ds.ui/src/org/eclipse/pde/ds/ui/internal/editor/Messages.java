@@ -29,7 +29,11 @@ public class Messages extends NLS {
 	public static String OptionsComposite_Enabled;
 	public static String OptionsComposite_Immediate;
 
+	public static String PropertiesComposite_Name;
+
 	public static String PropertyPage_Title;
+	public static String PropertyComposite_Name;
+	public static String PropertyComposite_Value;
 
 	public static String PropertiePage_desc;
 

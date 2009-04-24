@@ -8,20 +8,12 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditorConfig.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: ExperimentalSourcePage.java,v 1.1 2009/04/24 12:16:23 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
-import org.eclipse.pde.emfforms.editor.DefaultEmfFormEditorConfig;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
-public class DSEditorConfig extends DefaultEmfFormEditorConfig {
-	@Override
-	public boolean isUsingSharedClipboard() {
-		return true;
-	}
+public class ExperimentalSourcePage extends StructuredTextEditor {
 
-	@Override
-	public VALIDATE_ON_SAVE getValidateOnSave() {
-		return VALIDATE_ON_SAVE.VALIDATE_AND_WARN;
-	}
 }

@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2009 Anyware Technologies and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Anyware Technologies - initial API and implementation
+ *
+ * $Id: PropertyComposite.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
 import org.eclipse.pde.ds.ui.internal.editor.Messages;
@@ -17,8 +29,8 @@ public class PropertyComposite extends Composite {
 	}
 
 	private void createContents() {
-		_textName = PDEFormToolkit.createLabelAndText(Messages.ComponentComposite_Name, this);
-		_textValue = PDEFormToolkit.createLabelAndText(Messages.ComponentComposite_Value, this);
+		_textName = PDEFormToolkit.createLabelAndText(Messages.PropertyComposite_Name, this);
+		_textValue = PDEFormToolkit.createLabelAndText(Messages.PropertyComposite_Value, this);
 	}
 
 	public Text getTextName() {
