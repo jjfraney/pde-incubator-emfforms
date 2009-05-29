@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesComposite2.java,v 1.2 2009/04/24 12:16:23 bcabe Exp $
+ * $Id: PropertiesComposite2.java,v 1.3 2009/05/29 23:52:32 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
@@ -19,19 +19,19 @@ import org.eclipse.swt.widgets.Text;
 
 public class PropertiesComposite2 extends Composite {
 
-	private Text _textName;
+	private Text _textEntry;
 
 	public PropertiesComposite2(Composite parent, int style) {
 		super(parent, style);
-		_textName = PDEFormToolkit.createLabelAndText(Messages.PropertiesComposite_Name, this);
+		_textEntry = PDEFormToolkit.createLabelAndText(Messages.PropertiesComposite_Entry, this);
 	}
 
-	public Text get_textName() {
-		return _textName;
+	public Text getTextEntry() {
+		return _textEntry;
 	}
 
-	public void set_textName(Text textName) {
-		_textName = textName;
+	public void setTextName(Text textName) {
+		_textEntry = textName;
 	}
 
 }

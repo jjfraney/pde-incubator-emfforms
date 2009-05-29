@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertiesPage.java,v 1.4 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: NewPropertiesPage.java,v 1.5 2009/05/29 23:52:32 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
@@ -58,7 +58,7 @@ public class NewPropertiesPage extends WizardPage {
 		IObservableValue iov = new WritableValue();
 		iov.setValue(p);
 		//Name
-		bindingContext.bindValue(SWTObservables.observeText(propertiesComposite.get_textName(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperties_Entry()), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(SWTObservables.observeText(propertiesComposite.getTextEntry(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperties_Entry()), new EMFValidatingUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (value != null && !"".equals((String) value))

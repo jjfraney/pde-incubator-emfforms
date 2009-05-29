@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesDetailsPart.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: PropertiesDetailsPart.java,v 1.4 2009/05/29 23:52:32 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart;
 
@@ -54,7 +54,7 @@ public class PropertiesDetailsPart implements IDetailsPage {
 
 		FormToolkit toolkit = managedForm.getToolkit();
 		Section section = toolkit.createSection(parent, Section.TITLE_BAR);
-		section.setText("Détails");
+		section.setText("Details");
 		section.marginWidth = 10;
 		section.marginHeight = 5;
 
@@ -75,7 +75,7 @@ public class PropertiesDetailsPart implements IDetailsPage {
 	private void bind(DataBindingContext bindingContext) {
 
 		// Entry
-		bindingContext.bindValue(SWTObservables.observeText(propertiesComposite.get_textName(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, currentProperties, ScrPackage.eINSTANCE.getProperties_Entry()), new EMFValidatingUpdateValueStrategy(), null);
+		bindingContext.bindValue(SWTObservables.observeText(propertiesComposite.getTextEntry(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, currentProperties, ScrPackage.eINSTANCE.getProperties_Entry()), new EMFValidatingUpdateValueStrategy(), null);
 	}
 
 	public void commit(boolean onSave) {
@@ -101,8 +101,8 @@ public class PropertiesDetailsPart implements IDetailsPage {
 	}
 
 	public void setFocus() {
-		propertiesComposite.get_textName().setFocus();
-		propertiesComposite.get_textName().selectAll();
+		propertiesComposite.getTextEntry().setFocus();
+		propertiesComposite.getTextEntry().selectAll();
 	}
 
 	public boolean setFormInput(Object input) {

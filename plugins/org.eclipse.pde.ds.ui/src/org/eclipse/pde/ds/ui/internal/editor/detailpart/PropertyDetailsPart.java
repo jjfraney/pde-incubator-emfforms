@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertyDetailsPart.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: PropertyDetailsPart.java,v 1.4 2009/05/29 23:52:32 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart;
 
@@ -20,10 +20,12 @@ import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.WrapperItemProvider;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.pde.ds.scr.JavaType;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.ui.internal.editor.composites.PropertyComposite;
 import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
@@ -54,7 +56,7 @@ public class PropertyDetailsPart implements IDetailsPage {
 
 		FormToolkit toolkit = managedForm.getToolkit();
 		Section section = toolkit.createSection(parent, Section.TITLE_BAR);
-		section.setText("Détails");
+		section.setText("Details");
 		section.marginWidth = 10;
 		section.marginHeight = 5;
 
@@ -69,14 +71,17 @@ public class PropertyDetailsPart implements IDetailsPage {
 		section.setClient(propertyComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 
+		propertyComposite.getComboType().setInput(JavaType.values());
 		bind(dataBindingContext);
 
 	}
 
 	protected void bind(DataBindingContext bindingContext) {
-
 		// Name
 		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextName(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, currentProperty, ScrPackage.eINSTANCE.getProperty_Name()), new EMFValidatingUpdateValueStrategy(), null);
+
+		// Type
+		bindingContext.bindValue(ViewersObservables.observeSingleSelection(propertyComposite.getComboType()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, currentProperty, ScrPackage.eINSTANCE.getProperty_Type()), new EMFValidatingUpdateValueStrategy(), null);
 
 		//Value
 		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextValue(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, currentProperty, ScrPackage.eINSTANCE.getProperty_Value()), new EMFValidatingUpdateValueStrategy(), null);

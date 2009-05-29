@@ -8,37 +8,26 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.6 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.7 2009/05/29 23:52:32 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.*;
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.databinding.edit.EMFEditObservables;
-import org.eclipse.emf.ecore.util.FeatureMapUtil;
-import org.eclipse.emf.edit.command.*;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.WrapperItemProvider;
-import org.eclipse.emf.edit.ui.dnd.*;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.pde.ds.scr.*;
-import org.eclipse.pde.ds.ui.internal.editor.composites.*;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.pde.ds.scr.ScrPackage;
+import org.eclipse.pde.ds.ui.internal.editor.composites.ComponentComposite;
+import org.eclipse.pde.ds.ui.internal.editor.composites.OptionsComposite;
 import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
-import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.Section;
@@ -50,7 +39,6 @@ public class OverviewPage extends AbstractEmfFormPage {
 	// Composites
 	private ComponentComposite _componentComposite;
 	private OptionsComposite _optionsComposite;
-	private PropertiesComposite _propertiesComposite;
 
 	/**
 	 * @param editor
@@ -99,77 +87,6 @@ public class OverviewPage extends AbstractEmfFormPage {
 		// component immediacy
 		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonImmediate()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Immediate()), null, null);
 
-		/**
-		 * Bind Properties composite
-		 */
-		final StructuredViewer listViewer = _propertiesComposite.getPropertiesViewer().left;
-		((EmfFormEditor<Component>) getEditor()).addViewerToListenTo(listViewer);
-		listViewer.setContentProvider(new AdapterFactoryContentProvider(((EmfFormEditor<?>) getEditor()).getAdapterFactory()));
-		listViewer.setLabelProvider(new AdapterFactoryLabelProvider(((EmfFormEditor<?>) getEditor()).getAdapterFactory()));
-		listViewer.setInput(getObservedValue().getValue());
-		// FIXME this is not very clean to need to observe the observable...
-		getObservedValue().addChangeListener(new IChangeListener() {
-			public void handleChange(ChangeEvent event) {
-				listViewer.setInput(getObservedValue().getValue());
-			}
-		});
-
-		// install D&D support
-		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
-		listViewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(listViewer));
-		listViewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(editingDomain, listViewer));
-		// only display properties...
-		listViewer.addFilter(new ViewerFilter() {
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (element instanceof WrapperItemProvider) {
-					WrapperItemProvider wip = (WrapperItemProvider) element;
-					Object o = wip.getEditableValue(element);
-					return (o instanceof Property || o instanceof Properties);
-				}
-				return false;
-			}
-		});
-
-		_propertiesComposite.getPropertiesViewer().right.left.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Object sel = ((IStructuredSelection) listViewer.getSelection()).getFirstElement();
-				int idx = CommandParameter.NO_INDEX;
-				if (sel != null) {
-					if (sel instanceof WrapperItemProvider) {
-						WrapperItemProvider wip = (WrapperItemProvider) sel;
-						idx = ((Component) getObservedValue().getValue()).getAllProperties().indexOf(wip.getValue());
-					}
-				}
-				Command c = null;
-				if (System.currentTimeMillis() % 2 == 0) {
-					Property p = ScrFactory.eINSTANCE.createProperty();
-					p.setName("property" + System.currentTimeMillis()); //$NON-NLS-1$
-					c = AddCommand.create(editingDomain, getObservedValue().getValue(), null, FeatureMapUtil.createEntry(ScrPackage.Literals.COMPONENT__PROPERTY, p), idx);
-				} else {
-					Properties p = ScrFactory.eINSTANCE.createProperties();
-					p.setEntry("/foo/bar/" + System.currentTimeMillis()); //$NON-NLS-1$
-					c = AddCommand.create(editingDomain, getObservedValue().getValue(), null, FeatureMapUtil.createEntry(ScrPackage.Literals.COMPONENT__PROPERTIES, p), idx);
-				}
-				editingDomain.getCommandStack().execute(c);
-			}
-
-		});
-
-		_propertiesComposite.getPropertiesViewer().right.right.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Object sel = ((IStructuredSelection) listViewer.getSelection()).getFirstElement();
-				if (sel != null) {
-					Command c = DeleteCommand.create(editingDomain, sel);
-					editingDomain.getCommandStack().execute(c);
-				}
-			}
-
-		});
-
 		// perform bindings to get a message manager up to date
 		// FIXME this is just not good to do such a thing :)
 		bindingContext.updateModels();
@@ -179,7 +96,6 @@ public class OverviewPage extends AbstractEmfFormPage {
 	public void createContents(Composite parent) {
 		createComponentSection(parent);
 		createOptionsSection(parent);
-		createPropertiesSection(parent);
 
 		addToolbarActions();
 	}
@@ -210,17 +126,6 @@ public class OverviewPage extends AbstractEmfFormPage {
 		s.setText(Messages.OverviewPage_Options_Section);
 		_optionsComposite = new OptionsComposite(s, SWT.NONE);
 		s.setClient(_optionsComposite);
-	}
-
-	private void createPropertiesSection(Composite parent) {
-		Section s = getFormToolkit().createSection(parent, Section.TITLE_BAR | Section.DESCRIPTION | Section.TWISTIE);
-		s.setDescription(Messages.OverviewPage_Properties_Section_desc);
-		GridDataFactory.fillDefaults().grab(true, false).span(2, 2).applyTo(s);
-
-		s.setText(Messages.OverviewPage_Properties_Section);
-		_propertiesComposite = new PropertiesComposite(s, SWT.NONE);
-		s.setClient(_propertiesComposite);
-		s.setExpanded(false);
 	}
 
 	@Override
