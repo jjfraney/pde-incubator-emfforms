@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.4 2009/06/02 09:08:26 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -25,19 +25,18 @@ import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.action.newPropertiesAction;
 import org.eclipse.pde.ds.ui.internal.editor.masterdetail.PropertiesMasterDetail;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
+import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.editor.FormEditor;
 
 public class PropertiesPage extends AbstractEmfFormPage {
 
-	//MasterDetail
 	private PropertiesMasterDetail _propertiesMasterDetail;
 
 	public final static String ID = "ds.propertie"; //$NON-NLS-1$
 
-	public PropertiesPage(FormEditor editor) {
+	public PropertiesPage(EmfFormEditor<?> editor) {
 		super(editor, 1, true);
 	}
 

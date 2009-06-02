@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: SourcePage.java,v 1.3 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: SourcePage.java,v 1.4 2009/06/02 09:08:44 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -31,10 +31,10 @@ import org.eclipse.jface.text.source.*;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.pde.ds.scr.util.ScrResourceFactoryImpl;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
+import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.internal.editors.text.EditorsPlugin;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -49,7 +49,7 @@ public class SourcePage extends AbstractEmfFormPage {
 	/**
 	 * @param editor
 	 */
-	public SourcePage(FormEditor editor) {
+	public SourcePage(EmfFormEditor<?> editor) {
 		super(editor);
 	}
 
