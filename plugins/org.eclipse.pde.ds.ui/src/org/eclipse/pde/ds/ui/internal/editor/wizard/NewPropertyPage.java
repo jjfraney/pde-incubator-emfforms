@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertyPage.java,v 1.4 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: NewPropertyPage.java,v 1.5 2009/06/02 08:55:38 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.pde.ds.scr.*;
@@ -53,11 +54,12 @@ public class NewPropertyPage extends WizardPage {
 
 		//binding
 		DataBindingContext bindingContext = new DataBindingContext();
+		WizardPageSupport.create(this, bindingContext);
 
 		IObservableValue iov = new WritableValue();
 		iov.setValue(p);
 		//Name
-		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextName(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperty_Name()), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextName(), SWT.Modify), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperty_Name()), new EMFValidatingUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (value != null && !"".equals((String) value))
