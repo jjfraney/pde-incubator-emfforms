@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditor.java,v 1.6 2009/04/24 21:52:48 bcabe Exp $
+ * $Id: DSEditor.java,v 1.7 2009/06/02 09:09:08 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -36,6 +36,8 @@ import org.eclipse.ui.PlatformUI;
  * The FormEditor defining the pages allowing to edit a {@link Component}
  */
 public class DSEditor extends EmfFormEditor<Component> implements IResourceChangeListener {
+
+	public static String ID = "ds.DSEditor";
 
 	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
 		public boolean visit(IResourceDelta delta) throws CoreException {
@@ -170,5 +172,10 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 	@Override
 	protected AdapterFactory getSpecificAdapterFactory() {
 		return new ScrItemProviderAdapterFactory();
+	}
+
+	@Override
+	public String getID() {
+		return ID;
 	}
 }
