@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.7 2009/05/29 23:52:32 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.8 2009/06/02 09:32:17 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -27,9 +27,9 @@ import org.eclipse.pde.ds.ui.internal.editor.composites.ComponentComposite;
 import org.eclipse.pde.ds.ui.internal.editor.composites.OptionsComposite;
 import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
+import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.Section;
 
 public class OverviewPage extends AbstractEmfFormPage {
@@ -43,7 +43,7 @@ public class OverviewPage extends AbstractEmfFormPage {
 	/**
 	 * @param editor
 	 */
-	public OverviewPage(FormEditor editor) {
+	public OverviewPage(EmfFormEditor<?> editor) {
 		super(editor, 2, false);
 	}
 
