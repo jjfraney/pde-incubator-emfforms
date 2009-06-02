@@ -8,22 +8,22 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertiesPage.java,v 1.5 2009/05/29 23:52:32 bcabe Exp $
+ * $Id: NewPropertiesPage.java,v 1.6 2009/06/02 10:48:05 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.pde.ds.scr.*;
@@ -54,14 +54,15 @@ public class NewPropertiesPage extends WizardPage {
 
 		//binding
 		DataBindingContext bindingContext = new DataBindingContext();
+		WizardPageSupport.create(this, bindingContext);
 
 		IObservableValue iov = new WritableValue();
 		iov.setValue(p);
 		//Name
-		bindingContext.bindValue(SWTObservables.observeText(propertiesComposite.getTextEntry(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperties_Entry()), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertiesComposite.getTextEntry()), EMFEditProperties.value(ed, ScrPackage.eINSTANCE.getProperties_Entry()).observeDetail(iov), new EMFValidatingUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
-				if (value != null && !"".equals((String) value))
+				if (value != null && !"".equals((String) value)) //$NON-NLS-1$
 					setPageComplete(true);
 				return super.convert(value);
 			}

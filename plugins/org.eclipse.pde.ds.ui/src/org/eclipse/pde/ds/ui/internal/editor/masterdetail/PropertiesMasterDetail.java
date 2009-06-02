@@ -8,11 +8,12 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.4 2009/04/24 22:01:01 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.5 2009/06/02 10:48:04 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.*;
@@ -20,10 +21,12 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.pde.ds.scr.*;
+import org.eclipse.pde.ds.scr.Properties;
+import org.eclipse.pde.ds.scr.Property;
 import org.eclipse.pde.ds.scr.provider.ScrItemProviderAdapterFactory;
 import org.eclipse.pde.ds.ui.internal.editor.Messages;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.PropertiesDetailsPart;
@@ -44,7 +47,6 @@ import org.eclipse.ui.forms.widgets.Section;
 public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetailsPageProvider {
 
 	private TreeViewer _viewer;
-	private Component _component;
 	private EditingDomain _editingDomain;
 	private DataBindingContext _databindingContext;
 	private IEditorSite _site;
@@ -70,11 +72,10 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		return _viewer;
 	}
 
-	public void setComponentAndEditingDomain(Component c, EditingDomain editingDomain, IEditorSite editorSite, DataBindingContext bindingContext) {
-		_component = c;
+	public void setComponentAndEditingDomain(IObservableValue iObservableValue, EditingDomain editingDomain, IEditorSite editorSite, DataBindingContext bindingContext) {
 		_editingDomain = editingDomain;
 		_databindingContext = bindingContext;
-		_viewer.setInput(_component);
+		_databindingContext.bindValue(ViewerProperties.input().observe(_viewer), iObservableValue);
 		_viewer.expandAll();
 		_site = editorSite;
 

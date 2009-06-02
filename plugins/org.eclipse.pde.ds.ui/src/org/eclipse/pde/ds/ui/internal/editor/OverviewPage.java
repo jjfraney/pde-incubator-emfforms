@@ -8,14 +8,13 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.8 2009/06/02 09:32:17 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.9 2009/06/02 10:48:05 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -54,10 +53,9 @@ public class OverviewPage extends AbstractEmfFormPage {
 		 * Bind Component composite
 		 */
 		// component name
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextName()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Name()), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextName()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Name()).observeDetail(getObservedValue()), null, null);
 		// component impl
-		IObservableValue implementationObservable = EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Implementation());
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextImplementation()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, implementationObservable, ScrPackage.eINSTANCE.getImplementation_Class()), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextImplementation()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Implementation()).value(ScrPackage.eINSTANCE.getImplementation_Class()).observeDetail(getObservedValue()), new EMFValidatingUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (((String) value).trim().equals(""))
@@ -67,25 +65,25 @@ public class OverviewPage extends AbstractEmfFormPage {
 		}, null);
 
 		// component activate
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextActivate()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Activate()), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextActivate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Activate()).observeDetail(getObservedValue()), null, null);
 
 		// component deactivate
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextDeactivate()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Deactivate()), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextDeactivate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Deactivate()).observeDetail(getObservedValue()), null, null);
 
 		// component modified
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextModified()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Modified()), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextModified()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Modified()).observeDetail(getObservedValue()), null, null);
 
 		/**
 		 * Bind Options composite
 		 */
 		// component factory ID
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_optionsComposite.getTextFactory()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Factory()), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_optionsComposite.getTextFactory()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Factory()).observeDetail(getObservedValue()), null, null);
 		// component configuration policy
-		bindingContext.bindValue(ViewerProperties.singleSelection().observe(_optionsComposite.getComboViewerConfigurationPolicy()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_ConfigurationPolicy()), null, null);
+		bindingContext.bindValue(ViewerProperties.singleSelection().observe(_optionsComposite.getComboViewerConfigurationPolicy()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_ConfigurationPolicy()).observeDetail(getObservedValue()), null, null);
 		// component enablement
-		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonEnabled()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Enabled()), null, null);
+		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonEnabled()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Enabled()).observeDetail(getObservedValue()), null, null);
 		// component immediacy
-		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonImmediate()), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, getObservedValue(), ScrPackage.eINSTANCE.getComponent_Immediate()), null, null);
+		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonImmediate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Immediate()).observeDetail(getObservedValue()), null, null);
 
 		// perform bindings to get a message manager up to date
 		// FIXME this is just not good to do such a thing :)

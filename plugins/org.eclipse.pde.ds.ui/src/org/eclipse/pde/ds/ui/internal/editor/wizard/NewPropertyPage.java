@@ -8,16 +8,15 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertyPage.java,v 1.6 2009/06/02 09:34:14 bcabe Exp $
+ * $Id: NewPropertyPage.java,v 1.7 2009/06/02 10:48:05 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -59,7 +58,7 @@ public class NewPropertyPage extends WizardPage {
 		IObservableValue iov = new WritableValue();
 		iov.setValue(p);
 		//Name
-		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextName(), SWT.Modify), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperty_Name()), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextName(), SWT.Modify), EMFEditProperties.value(ed, ScrPackage.eINSTANCE.getProperty_Name()).observeDetail(iov), new EMFValidatingUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (value != null && !"".equals((String) value)) //$NON-NLS-1$
@@ -69,7 +68,7 @@ public class NewPropertyPage extends WizardPage {
 		}, null);
 
 		//Value
-		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextValue(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), ed, iov, ScrPackage.eINSTANCE.getProperty_Value()), new EMFValidatingUpdateValueStrategy(), null);
+		bindingContext.bindValue(SWTObservables.observeText(propertyComposite.getTextValue(), SWT.FocusOut), EMFEditProperties.value(ed, ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(iov), new EMFValidatingUpdateValueStrategy(), null);
 	}
 
 	public void createProperty() {

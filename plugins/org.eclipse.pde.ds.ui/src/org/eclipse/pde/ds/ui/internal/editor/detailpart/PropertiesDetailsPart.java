@@ -8,25 +8,23 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesDetailsPart.java,v 1.4 2009/05/29 23:52:32 bcabe Exp $
+ * $Id: PropertiesDetailsPart.java,v 1.5 2009/06/02 10:48:03 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.WrapperItemProvider;
-import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.ui.internal.editor.composites.PropertiesComposite2;
-import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.*;
@@ -75,7 +73,7 @@ public class PropertiesDetailsPart implements IDetailsPage {
 	private void bind(DataBindingContext bindingContext) {
 
 		// Entry
-		bindingContext.bindValue(SWTObservables.observeText(propertiesComposite.getTextEntry(), SWT.FocusOut), EMFEditObservables.observeDetailValue(Realm.getDefault(), editingDomain, currentProperties, ScrPackage.eINSTANCE.getProperties_Entry()), new EMFValidatingUpdateValueStrategy(), null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertiesComposite.getTextEntry()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getProperties_Entry()).observeDetail(currentProperties), null, null);
 	}
 
 	public void commit(boolean onSave) {

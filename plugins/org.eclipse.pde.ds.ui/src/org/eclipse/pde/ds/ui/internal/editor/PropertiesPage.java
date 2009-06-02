@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.4 2009/06/02 09:08:26 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.5 2009/06/02 10:48:04 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -43,9 +43,7 @@ public class PropertiesPage extends AbstractEmfFormPage {
 	public void bind(DataBindingContext bindingContext) {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
 
-		Component c = ((DSEditor) getEditor()).getCurrentEObject();
-
-		_propertiesMasterDetail.setComponentAndEditingDomain(c, editingDomain, getEditorSite(), bindingContext);
+		_propertiesMasterDetail.setComponentAndEditingDomain(getEditor().getInputObservable(), editingDomain, getEditorSite(), bindingContext);
 		// the following has to be done after setting the editing domain
 		_propertiesMasterDetail.registerContextMenu();
 
