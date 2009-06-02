@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.6 2009/05/29 22:13:27 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.7 2009/06/02 09:03:18 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -16,10 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.List;
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.command.*;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -28,6 +28,7 @@ import org.eclipse.emf.common.ui.dialogs.DiagnosticDialog;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
@@ -41,6 +42,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
@@ -65,7 +67,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @param <T>
  *            The type of the {@link EObject} to edit.
  */
-public abstract class EmfFormEditor<T extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider {
+public abstract class EmfFormEditor<T extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener {
 
 	/**
 	 * This keeps track of the editing domain that is used to track all changes
@@ -112,6 +114,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 */
 	protected MarkerHelper markerHelper = new EditUIMarkerHelper();
 
+	private EMFDataBindingContext _bindingContext;
+
 	public EmfFormEditor() {
 		this._editorConfig = getFormEditorConfig();
 		init();
@@ -126,6 +130,9 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private void init() {
 		_editingDomain = createEditingDomain();
+		EnvironementProvider.getNewInstance().registerEditingDomain(getID(), _editingDomain);
+
+		_bindingContext = new EMFDataBindingContext();
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
@@ -427,6 +434,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		}
 
 		setMainResource(resource);
+
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	protected void setMainResource(Resource resource) {
@@ -564,6 +573,89 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		}
 	}
 
+	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+		public boolean visit(IResourceDelta delta) throws CoreException {
+			if (delta.getResource().getType() == IResource.FILE) {
+				if (delta.getKind() == IResourceDelta.REMOVED) {
+					String fullPath = delta.getFullPath().toString();
+					final URI changedURI = URI.createPlatformResourceURI(fullPath, false);
+
+					Resource currentResource = getCurrentEObject().eResource();
+					if (currentResource.getURI().equals(changedURI)) {
+						Shell currentShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+
+						currentShell.getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								getSite().getPage().closeEditor(getCurrentInstance(), false);
+							}
+						});
+					}
+				} else if (delta.getKind() == IResourceDelta.CHANGED) {
+					String fullPath = delta.getFullPath().toString();
+					final URI changedURI = URI.createPlatformResourceURI(fullPath, false);
+
+					SWTObservables.getRealm(Display.getDefault()).asyncExec(new Runnable() {
+						private boolean isSaving = false;
+
+						public void run() {
+							EObject currentEObject = (EObject) getInputObservable().getValue();
+							Resource currentResource = currentEObject.eResource();
+							boolean isMainResource = currentResource.getURI().equals(changedURI);
+							Resource changedResource = currentResource.getResourceSet().getResource(changedURI, false);
+
+							// The changed resource is contained in the
+							// resourceset, it must be reloaded
+							if (changedResource != null && changedResource.isLoaded() && !isSaving) {
+
+								// The editor has pending changes, we
+								// must
+								// inform the user, the content is going
+								// to be
+								// reloaded
+								if (isMainResource && isDirty()) {
+									getEditingDomain().getCommandStack().flush();
+								}
+
+								try {
+									changedResource.unload();
+									changedResource.load(Collections.EMPTY_MAP);
+
+									// If the modified resource is the
+									// main resource, we update the
+									// current object
+									if (isMainResource) {
+										setMainResource(changedResource);
+									}
+								} catch (IOException ioe) {
+									ioe.printStackTrace();
+									//Activator.log(ioe);
+								}
+							}
+						}
+					});
+				}
+
+			}
+
+			return true;
+		}
+	}
+
+	private EmfFormEditor<T> getCurrentInstance() {
+		return this;
+	}
+
+	public void resourceChanged(IResourceChangeEvent event) {
+		IResourceDelta delta = event.getDelta();
+		try {
+			ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
+			delta.accept(visitor);
+		} catch (CoreException ce) {
+			ce.printStackTrace();
+			//Activator.log(ce);
+		}
+	}
+
 	public ComposedAdapterFactory getAdapterFactory() {
 		return _adapterFactory;
 	}
@@ -572,9 +664,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	public Object getAdapter(Class key) {
 		if (key.equals(IPropertySheetPage.class)) {
 			return getPropertySheetPage();
-		} else {
-			return super.getAdapter(key);
 		}
+		return super.getAdapter(key);
 	}
 
 	public IPropertySheetPage getPropertySheetPage() {
@@ -598,4 +689,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 		return propertySheetPage;
 	}
+
+	public DataBindingContext getDataBindingContext() {
+		return _bindingContext;
+	}
+
+	public abstract String getID();
 }
