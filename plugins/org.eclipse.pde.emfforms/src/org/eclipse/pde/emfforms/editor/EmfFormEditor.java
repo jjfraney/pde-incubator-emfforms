@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.7 2009/06/02 09:03:18 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.8 2009/06/02 09:06:17 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -130,8 +130,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private void init() {
 		_editingDomain = createEditingDomain();
-		EnvironementProvider.getNewInstance().registerEditingDomain(getID(), _editingDomain);
-
 		_bindingContext = new EMFDataBindingContext();
 
 		// Add a listener to set the most recent command's affected objects to
