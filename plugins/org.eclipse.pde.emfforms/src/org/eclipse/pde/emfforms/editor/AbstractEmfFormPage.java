@@ -8,12 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.3 2009/04/24 12:16:08 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.4 2009/06/02 09:06:35 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,7 +21,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.Form;
 
@@ -31,9 +29,6 @@ import org.eclipse.ui.forms.widgets.Form;
  * 
  */
 public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPage {
-	public static String ID;
-
-	protected DataBindingContext _bindingContext;
 
 	private int numColumns = 1;
 
@@ -46,7 +41,7 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	 * @param editor
 	 *            the parent editor
 	 */
-	public AbstractEmfFormPage(FormEditor editor) {
+	public AbstractEmfFormPage(EmfFormEditor<?> editor) {
 		super(editor, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		this.setPartName(getPartName());
 	}
@@ -59,10 +54,16 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	 * @param numColumns
 	 * @param isMasterDetail
 	 */
-	public AbstractEmfFormPage(FormEditor editor, int numColumns, boolean isMasterDetail) {
+	public AbstractEmfFormPage(EmfFormEditor<?> editor, int numColumns, boolean isMasterDetail) {
+		this(editor, numColumns, isMasterDetail, "");
+		this.setPartName(getPartName());
+	}
+
+	public AbstractEmfFormPage(EmfFormEditor<?> editor, int numColumns, boolean isMasterDetail, String pageName) {
 		this(editor);
 		this.numColumns = numColumns;
 		this.isMasterDetail = isMasterDetail;
+		setPartName(pageName);
 	}
 
 	@Override
@@ -89,10 +90,9 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 
 		getFormToolkit().adapt(actualContent);
 
-		// TODO probably not the best way to do (i.e. having one DBC per page)
-		_bindingContext = new EMFDataBindingContext();
-		_bindingContext.getValidationStatusProviders().addListChangeListener(new MessageManagerListener(managedForm.getMessageManager()));
-		bind(_bindingContext);
+		DataBindingContext bindingContext = ((EmfFormEditor<?>) getEditor()).getDataBindingContext();
+		bindingContext.getValidationStatusProviders().addListChangeListener(new MessageManagerListener(managedForm.getMessageManager()));
+		bind(bindingContext);
 	}
 
 	private void createHeader() {
@@ -106,6 +106,10 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	 */
 	protected PDEFormToolkit getFormToolkit() {
 		return (PDEFormToolkit) getEditor().getToolkit();
+	}
+
+	public EmfFormEditor<?> getEditor() {
+		return (EmfFormEditor<?>) super.getEditor();
 	}
 
 	@Override
@@ -131,4 +135,7 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 		return null;
 	}
 
+	public abstract void bind(DataBindingContext bindingContext);
+
+	public abstract void createContents(Composite parent);
 }
