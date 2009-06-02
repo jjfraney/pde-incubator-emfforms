@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PDEFormToolkit.java,v 1.2 2009/04/24 11:52:09 bcabe Exp $
+ * $Id: PDEFormToolkit.java,v 1.3 2009/06/02 09:05:03 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -70,7 +70,7 @@ public class PDEFormToolkit extends FormToolkit {
 		for (int i = 0; i < children.length; i++) {
 			if (children[i] instanceof Composite) {
 				adapt((Composite) children[i]);
-			} else {
+			} else if (!(composite instanceof Section)) {
 				Boolean keepForeground = (Boolean) children[i].getData(KEEP_CONTROL_FOREGROUND);
 				Boolean keepBackground = (Boolean) children[i].getData(KEEP_CONTROL_BACKGROUND);
 
@@ -287,6 +287,24 @@ public class PDEFormToolkit extends FormToolkit {
 	}
 
 	/**
+	 * @param label
+	 * @param generalInfoComposite
+	 * @return
+	 */
+	public static DateTime createLabelAndCalendar(String label, Composite composite) {
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+
+		Label labelName = new Label(composite, SWT.NONE);
+		labelName.setText(label);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).applyTo(labelName);
+		labelName.setAlignment(SWT.LEFT);
+
+		DateTime dateTime = new DateTime(composite, SWT.CALENDAR);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(dateTime);
+		return dateTime;
+	}
+
+	/**
 	 * @param string
 	 * @param composite
 	 * @return a checkBox
@@ -404,5 +422,15 @@ public class PDEFormToolkit extends FormToolkit {
 			}
 		});
 		return toolBarManager;
+	}
+
+	public static Link createLink(String label, Composite composite) {
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+
+		Link link = new Link(composite, SWT.NONE);
+		link.setText(label);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).span(2, 1).applyTo(link);
+
+		return link;
 	}
 }
