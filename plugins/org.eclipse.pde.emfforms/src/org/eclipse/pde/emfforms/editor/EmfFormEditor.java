@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.8 2009/06/02 09:06:17 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.9 2009/06/19 10:54:53 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -690,6 +690,15 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	public DataBindingContext getDataBindingContext() {
 		return _bindingContext;
+	}
+
+	@Override
+	public void setFocus() {
+		super.setFocus();
+		// for some reason, the code below is needed to workaround a bug on GTK where the actual
+		// content of the first page of the editor doesn't correctly get focus when the editor is opened :-/)
+		if (getActivePageInstance() != null)
+			getActivePageInstance().setFocus();
 	}
 
 	public abstract String getID();
