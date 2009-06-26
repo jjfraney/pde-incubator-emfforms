@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrValidator.java,v 1.1 2009/02/15 20:54:36 bcabe Exp $
+ * $Id: ScrValidator.java,v 1.2 2009/06/26 10:49:33 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.util;
 
@@ -205,7 +205,7 @@ public class ScrValidator extends EObjectValidator {
 						 0,
 						 "_UI_GenericConstraint_diagnostic",
 						 new Object[] { "isValueConsistent", getObjectLabel(property, context) },
-						 new Object[] { property },
+						 new Object[] { property, ScrPackage.Literals.PROPERTY__VALUE },
 						 context));
 			}
 			return false;

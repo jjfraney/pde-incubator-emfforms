@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertyDetailsPart.java,v 1.5 2009/06/02 10:48:02 bcabe Exp $
+ * $Id: PropertyDetailsPart.java,v 1.6 2009/06/26 10:49:34 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart;
 
@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.pde.ds.scr.JavaType;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.ui.internal.editor.composites.PropertyComposite;
+import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.*;
@@ -82,7 +83,7 @@ public class PropertyDetailsPart implements IDetailsPage {
 		bindingContext.bindValue(ViewersObservables.observeSingleSelection(propertyComposite.getComboType()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getProperty_Type()).observeDetail(currentProperty), null, null);
 
 		//Value
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextValue()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(currentProperty), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextValue()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(currentProperty), new EMFValidatingUpdateValueStrategy(), null);
 
 	}
 
