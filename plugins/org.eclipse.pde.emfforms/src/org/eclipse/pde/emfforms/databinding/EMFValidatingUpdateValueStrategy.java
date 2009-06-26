@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EMFValidatingUpdateValueStrategy.java,v 1.2 2009/02/15 00:42:36 bcabe Exp $
+ * $Id: EMFValidatingUpdateValueStrategy.java,v 1.3 2009/06/26 12:37:01 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.databinding;
 
@@ -22,6 +22,8 @@ import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 
 /**
  * {@link UpdateValueStrategy} derived from {@link EMFUpdateValueStrategy}
@@ -29,6 +31,13 @@ import org.eclipse.emf.ecore.util.Diagnostician;
  * 
  */
 public class EMFValidatingUpdateValueStrategy extends EMFUpdateValueStrategy {
+
+	public EMFValidatingUpdateValueStrategy() {
+		super();
+		_adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+	}
+
+	private ComposedAdapterFactory _adapterFactory;
 
 	@Override
 	protected IStatus doSet(IObservableValue observableValue, Object value) {
@@ -45,8 +54,7 @@ public class EMFValidatingUpdateValueStrategy extends EMFUpdateValueStrategy {
 				eobject = (EObject) observing.getObserved();
 				eStructuralFeature = (EStructuralFeature) observable.getValueType();
 
-				BasicDiagnostic dc = new BasicDiagnostic();
-				Diagnostician.INSTANCE.validate(eobject, dc);
+				BasicDiagnostic dc = validate(eobject);
 				IStatus ret = getMultiStatusForFeature(dc, eobject, eStructuralFeature, currentstatus);
 				return ret;
 			}
@@ -54,6 +62,28 @@ public class EMFValidatingUpdateValueStrategy extends EMFUpdateValueStrategy {
 		// else
 		return currentstatus;
 
+	}
+
+	private BasicDiagnostic validate(EObject eobject) {
+		// Subclass the default Diagnostician to customize the String
+		// representation of each validated EObject
+		Diagnostician diagnostician = new Diagnostician() {
+			@Override
+			public String getObjectLabel(EObject eObject) {
+				if (!eObject.eIsProxy()) {
+					IItemLabelProvider itemLabelProvider = (IItemLabelProvider) _adapterFactory.adapt(eObject, IItemLabelProvider.class);
+					if (itemLabelProvider != null) {
+						return itemLabelProvider.getText(eObject);
+					}
+				}
+
+				return super.getObjectLabel(eObject);
+			}
+		};
+
+		BasicDiagnostic dc = new BasicDiagnostic();
+		diagnostician.validate(eobject, dc);
+		return dc;
 	}
 
 	private IStatus getMultiStatusForFeature(BasicDiagnostic dc, EObject eobject, EStructuralFeature eStructuralFeature, IStatus currentstatus) {
