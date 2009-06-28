@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EMFValidatingUpdateValueStrategy.java,v 1.3 2009/06/26 12:37:01 bcabe Exp $
+ * $Id: EMFValidatingUpdateValueStrategy.java,v 1.4 2009/06/28 09:18:59 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.databinding;
 
@@ -46,13 +46,12 @@ public class EMFValidatingUpdateValueStrategy extends EMFUpdateValueStrategy {
 
 		IStatus currentstatus = super.doSet(observableValue, value);
 
-		if (observableValue instanceof IObserving && observableValue instanceof IObservableValue) {
-			IObservableValue observable = (IObservableValue) observableValue;
+		if (observableValue instanceof IObserving) {
 			IObserving observing = (IObserving) observableValue;
 
 			if (observing.getObserved() instanceof EObject) {
 				eobject = (EObject) observing.getObserved();
-				eStructuralFeature = (EStructuralFeature) observable.getValueType();
+				eStructuralFeature = (EStructuralFeature) observableValue.getValueType();
 
 				BasicDiagnostic dc = validate(eobject);
 				IStatus ret = getMultiStatusForFeature(dc, eobject, eStructuralFeature, currentstatus);
