@@ -31,7 +31,7 @@
                   class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentImplementationTypeIsOnClasspath"
                   id="org.eclipse.pde.ds.builder.constraintComponentMethodsAreValidAndAccessible"
                   lang="Java"
-                  mode="Batch"
+                  mode="Live"
                   name="Components methods validation"
                   severity="ERROR"
                   statusCode="2">
@@ -40,14 +40,50 @@
                </message>
                <target
                      class="Component">
+                  <event
+                        name="Set">
+                     <feature
+                           name="activate">
+                     </feature>
+                  </event>
+                  <event
+                        name="Set">
+                     <feature
+                           name="deactivate">
+                     </feature>
+                  </event>
+                  <event
+                        name="Set">
+                     <feature
+                           name="modified">
+                     </feature>
+                  </event>
+                  <event
+                        name="Unset">
+                     <feature
+                           name="activate">
+                     </feature>
+                  </event>
+                  <event
+                        name="Unset">
+                     <feature
+                           name="deactivate">
+                     </feature>
+                  </event>
+                  <event
+                        name="Unset">
+                     <feature
+                           name="modified">
+                     </feature>
+                  </event>
                </target>
             </constraint>
             <constraint
                   class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentImplementationTypeIsOnClasspath"
                   id="org.eclipse.pde.ds.builder.constraintComponentImplementationTypeIsOnClasspath"
                   lang="Java"
-                  mode="Batch"
-                  name="Java types validation"
+                  mode="Live"
+                  name="Implementation class is a valid Java type"
                   severity="ERROR"
                   statusCode="1">
                <message>
