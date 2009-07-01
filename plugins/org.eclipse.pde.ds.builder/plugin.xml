@@ -20,8 +20,7 @@
             name="Declarative Services Validation">
       </category>
       <constraintProvider
-            cache="true"
-            mode="Batch">
+            cache="true">
          <package
                namespaceUri="http://www.osgi.org/xmlns/scr/v1.1.0">
          </package>
@@ -29,6 +28,21 @@
                categories="org.eclipse.pde.ds.builder.validation">
             <constraint
                   class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentImplementationTypeIsOnClasspath"
+                  id="org.eclipse.pde.ds.builder.constraintComponentImplementationTypeIsOnClasspath"
+                  lang="Java"
+                  mode="Live"
+                  name="Implementation class is a valid Java type"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0} is not in the plug-in's classpath
+               </message>
+               <target
+                     class="Implementation">
+               </target>
+            </constraint>
+            <constraint
+                  class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentMethodsAreValidAndAccessible"
                   id="org.eclipse.pde.ds.builder.constraintComponentMethodsAreValidAndAccessible"
                   lang="Java"
                   mode="Live"
@@ -76,21 +90,6 @@
                            name="modified">
                      </feature>
                   </event>
-               </target>
-            </constraint>
-            <constraint
-                  class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentImplementationTypeIsOnClasspath"
-                  id="org.eclipse.pde.ds.builder.constraintComponentImplementationTypeIsOnClasspath"
-                  lang="Java"
-                  mode="Live"
-                  name="Implementation class is a valid Java type"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0} is not in the plug-in&apos;s classpath
-               </message>
-               <target
-                     class="Implementation">
                </target>
             </constraint>
          </constraints>
