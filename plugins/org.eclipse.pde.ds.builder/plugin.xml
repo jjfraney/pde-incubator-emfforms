@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="scrBuilder"
+         name="Scr Model Validator"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            isConfigurable="true">
+         <run
+               class="org.eclipse.pde.ds.builder.internal.validation.ScrBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="org.eclipse.pde.ds.builder.validation"
+            mandatory="true"
+            name="Declarative Services Validation">
+      </category>
+      <constraintProvider
+            cache="true"
+            mode="Batch">
+         <package
+               namespaceUri="http://www.osgi.org/xmlns/scr/v1.1.0">
+         </package>
+         <constraints
+               categories="org.eclipse.pde.ds.builder.validation">
+            <constraint
+                  class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentImplementationTypeIsOnClasspath"
+                  id="org.eclipse.pde.ds.builder.constraintComponentMethodsAreValidAndAccessible"
+                  lang="Java"
+                  mode="Batch"
+                  name="Components methods validation"
+                  severity="ERROR"
+                  statusCode="2">
+               <message>
+                  {0} method can't be found
+               </message>
+               <target
+                     class="Component">
+               </target>
+            </constraint>
+            <constraint
+                  class="org.eclipse.pde.ds.builder.internal.validation.constraints.ComponentImplementationTypeIsOnClasspath"
+                  id="org.eclipse.pde.ds.builder.constraintComponentImplementationTypeIsOnClasspath"
+                  lang="Java"
+                  mode="Batch"
+                  name="Java types validation"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0} is not in the plug-in&apos;s classpath
+               </message>
+               <target
+                     class="Implementation">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+   </extension>
+   <extension
+         point="org.eclipse.emf.validation.constraintBindings">
+      <clientContext
+            default="false"
+            id="org.eclipse.pde.ds.builder.validationContext">
+         <enablement>
+            <instanceof
+                  value="java.lang.Object">
+            </instanceof></enablement>
+      </clientContext>
+      <binding
+            context="org.eclipse.pde.ds.builder.validationContext"
+            category="org.eclipse.pde.ds.builder.validation"/>
+   </extension>    >
+</plugin>
