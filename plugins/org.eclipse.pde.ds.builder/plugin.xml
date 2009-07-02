@@ -50,7 +50,7 @@
                   severity="ERROR"
                   statusCode="2">
                <message>
-                  {0} method can't be found
+                  Method {0}: {1}
                </message>
                <target
                      class="Component">

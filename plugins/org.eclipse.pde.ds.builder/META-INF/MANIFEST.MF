@@ -12,4 +12,6 @@ Bundle-Localization: plugin
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.pde.core.plugin,
  org.eclipse.pde.ds.scr,
- org.eclipse.pde.ds.scr.util
+ org.eclipse.pde.ds.scr.util,
+ org.eclipse.pde.internal.core,
+ org.eclipse.pde.internal.core.natures
