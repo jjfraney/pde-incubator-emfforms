@@ -1,36 +1,32 @@
+/**
+ * Copyright (c) 2009 Anyware Technologies and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Anyware Technologies - initial API and implementation
+ *
+ * $Id: IncrementalModelBuilder.java,v 1.2 2009/07/02 21:54:54 bcabe Exp $
+ */
 package org.eclipse.pde.ds.builder.internal.validation;
 
-import org.eclipse.pde.core.plugin.IPluginModelBase;
-
-import org.eclipse.pde.internal.core.PDECore;
-
-import org.eclipse.pde.internal.core.PluginModelManager;
-
-import org.eclipse.pde.internal.core.text.bundle.BundleModel;
-
-import org.eclipse.core.runtime.URIUtil;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import java.util.*;
+import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.pde.internal.core.ICoreConstants;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.PluginRegistry;
+import org.eclipse.pde.internal.core.ibundle.IBundleModel;
+import org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase;
 import org.eclipse.pde.internal.core.natures.PDE;
+import org.osgi.service.component.ComponentConstants;
 
 /**
  * An abstract class to subclass to launch background jobs on the modified model
@@ -59,13 +55,16 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 				// Do nothing
 				break;
 			case IResourceDelta.CHANGED:
-				if(resource instanceof IProject)
+				if (resource instanceof IProject)
 					return true;
 				// handle changed resource
 				URI resourceURI = URI.createPlatformResourceURI(resource
 						.getFullPath().toString(), true);
-				Resource modelResource = new AdapterFactoryEditingDomain(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE),new BasicCommandStack())
-						.getResourceSet().getResource(resourceURI, true);
+				Resource modelResource = new AdapterFactoryEditingDomain(
+						new ComposedAdapterFactory(
+								ComposedAdapterFactory.Descriptor.Registry.INSTANCE),
+						new BasicCommandStack()).getResourceSet().getResource(
+						resourceURI, true);
 				if (modelResource != null && modelResource.isLoaded()
 						&& !modifiedResources.containsKey(modelResource)) {
 					modifiedResources.put(modelResource, resource);
@@ -134,24 +133,44 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 
 	}
 
+	@SuppressWarnings("restriction")
 	protected void fullBuild(IProgressMonitor monitor) throws CoreException {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
 
 		if (PDE.hasPluginNature(getProject())) {
-			IFile manifestFile = getProject().getFile(ICoreConstants.BUNDLE_FILENAME_DESCRIPTOR);
+			IPluginModelBase bundle = PluginRegistry.findModel(getProject());
+			if (bundle instanceof IBundlePluginModelBase) {
+				IBundleModel bundleModel = ((IBundlePluginModelBase) bundle)
+						.getBundleModel();
+				String serviceComponents = bundleModel.getBundle().getHeader(
+						ComponentConstants.SERVICE_COMPONENT);
+				StringTokenizer tok = new StringTokenizer(serviceComponents,
+						","); //$NON-NLS-1$
+				// process all definition file
+				while (tok.hasMoreElements()) {
+					String definitionFile = tok.nextToken().trim();
+					int ind = definitionFile.lastIndexOf('/');
+					String path = ind != -1 ? definitionFile.substring(0, ind)
+							: "/"; //$NON-NLS-1$
+					// TODO we need to support pattern (path may be equal to
+					// something like "/OSGI-INF/comp-*.xml"...)
+					IFile componentFile = getProject().getFile(
+							path + definitionFile);
+					URI res = URI.createPlatformResourceURI(componentFile
+							.getFullPath().toString(), true);
+					Resource modelResource = new AdapterFactoryEditingDomain(
+							new ComposedAdapterFactory(
+									ComposedAdapterFactory.Descriptor.Registry.INSTANCE),
+							new BasicCommandStack()).getResourceSet()
+							.getResource(res, true);
+					build(modelResource.getContents().get(0), componentFile,
+							true, new SubProgressMonitor(monitor, 1));
+				} // end while
 
-			IPluginModelBase bundle = PDECore.getDefault().getModelManager().findModel(getProject());
-			
-			// TODO analyze every component referenced in the Service-Component header
-			// build(project, getProject(), true, new SubProgressMonitor(monitor,1));
-			URI res = URI.createPlatformResourceURI(getProject().getFile("component.xml").getFullPath().toString());
-			Resource modelResource = new AdapterFactoryEditingDomain(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE),new BasicCommandStack())
-			.getResourceSet().getResource(res, true);
-			build(modelResource.getContents().get(0), getProject().getFile("component.xml"), true, new SubProgressMonitor(monitor,1));
-			
-			
+			}
+
 		}
 	}
 
