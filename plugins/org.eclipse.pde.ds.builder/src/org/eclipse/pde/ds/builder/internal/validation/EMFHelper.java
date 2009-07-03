@@ -1,9 +1,9 @@
 package org.eclipse.pde.ds.builder.internal.validation;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 
 /**
  * A set of helper methods for EMF
@@ -40,5 +40,30 @@ public final class EMFHelper {
 		}
 
 		return file;
+	}
+
+	/**
+	 * Return the IProject corresponding to the given Resource
+	 * 
+	 * @param resource
+	 *            Resource
+	 * 
+	 * @return IProject
+	 */
+	public static IProject getIProject(Resource resource) {
+		IProject result = null;
+		// Using its URI
+		org.eclipse.emf.common.util.URI uri = resource.getURI();
+		if (resource.getResourceSet().getURIConverter().exists(uri, null)) {
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+
+			// Retrieve the corresponding Platform IResource
+			IResource findMember = root.findMember(new Path(uri
+					.toPlatformString(true)));
+
+			// And finally returning the corresponding IProject
+			result = findMember.getProject();
+		}
+		return result;
 	}
 }
