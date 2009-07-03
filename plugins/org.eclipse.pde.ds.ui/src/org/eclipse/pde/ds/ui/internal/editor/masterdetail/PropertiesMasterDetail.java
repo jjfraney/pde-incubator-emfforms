@@ -8,13 +8,14 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.5 2009/06/02 10:48:04 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.6 2009/07/03 15:24:54 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.*;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
@@ -49,9 +50,7 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 	private TreeViewer _viewer;
 	private EditingDomain _editingDomain;
 	private DataBindingContext _databindingContext;
-	private IEditorSite _site;
 	private IManagedForm _managedForm;
-	private Object groupDataAction;
 	private Button addButtonProperty;
 	private Button addButtonProperties;
 	private Button removeButton;
@@ -77,7 +76,6 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		_databindingContext = bindingContext;
 		_databindingContext.bindValue(ViewerProperties.input().observe(_viewer), iObservableValue);
 		_viewer.expandAll();
-		_site = editorSite;
 
 		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
@@ -158,12 +156,8 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		getViewer().addFilter(new ViewerFilter() {
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (element instanceof WrapperItemProvider) {
-					WrapperItemProvider wip = (WrapperItemProvider) element;
-					Object o = wip.getEditableValue(element);
-					return (o instanceof Properties || o instanceof Property);
-				}
-				return false;
+				Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(element);
+				return (unwrappedElement instanceof Properties || unwrappedElement instanceof Property);
 			}
 		});
 
