@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesDetailsPart.java,v 1.5 2009/06/02 10:48:03 bcabe Exp $
+ * $Id: PropertiesDetailsPart.java,v 1.6 2009/07/03 16:07:03 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart;
 
@@ -16,8 +16,8 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.WrapperItemProvider;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -109,11 +109,8 @@ public class PropertiesDetailsPart implements IDetailsPage {
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection sel = (IStructuredSelection) selection;
-		if (sel.getFirstElement() instanceof WrapperItemProvider) {
-			WrapperItemProvider wip = (WrapperItemProvider) sel.getFirstElement();
-			Object o = wip.getEditableValue(sel.getFirstElement());
-			currentProperties.setValue(o);
-		}
+		Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(sel.getFirstElement());
+		currentProperties.setValue(unwrappedElement);
 	}
 
 }

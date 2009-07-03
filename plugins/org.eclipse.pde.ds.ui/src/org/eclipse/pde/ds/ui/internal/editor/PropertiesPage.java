@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.5 2009/06/02 10:48:04 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.6 2009/07/03 16:06:44 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -18,8 +18,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.edit.command.*;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.WrapperItemProvider;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.action.newPropertiesAction;
@@ -52,10 +52,8 @@ public class PropertiesPage extends AbstractEmfFormPage {
 				Object sel = ((IStructuredSelection) _propertiesMasterDetail.getViewer().getSelection()).getFirstElement();
 				int idx = CommandParameter.NO_INDEX;
 				if (sel != null) {
-					if (sel instanceof WrapperItemProvider) {
-						WrapperItemProvider wip = (WrapperItemProvider) sel;
-						idx = ((Component) getObservedValue().getValue()).getAllProperties().indexOf(wip.getValue());
-					}
+					Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(sel);
+					idx = ((Component) getObservedValue().getValue()).getAllProperties().indexOf(unwrappedElement);
 				}
 
 				Property p = ScrFactory.eINSTANCE.createProperty();
