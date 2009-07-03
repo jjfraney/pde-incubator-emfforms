@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IncrementalModelBuilder.java,v 1.2 2009/07/02 21:54:54 bcabe Exp $
+ * $Id: IncrementalModelBuilder.java,v 1.3 2009/07/03 21:07:44 bcabe Exp $
  */
 package org.eclipse.pde.ds.builder.internal.validation;
 
@@ -55,8 +55,12 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 				// Do nothing
 				break;
 			case IResourceDelta.CHANGED:
-				if (resource instanceof IProject)
+				if (resource instanceof IContainer)
 					return true;
+				if (!"org.eclipse.pde.ds.content-type"
+						.equals(((IFile) resource).getContentDescription()
+								.getContentType().getId()))
+					return false;
 				// handle changed resource
 				URI resourceURI = URI.createPlatformResourceURI(resource
 						.getFullPath().toString(), true);
@@ -156,8 +160,7 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 							: "/"; //$NON-NLS-1$
 					// TODO we need to support pattern (path may be equal to
 					// something like "/OSGI-INF/comp-*.xml"...)
-					IFile componentFile = getProject().getFile(
-							path + definitionFile);
+					IFile componentFile = getProject().getFile(definitionFile);
 					URI res = URI.createPlatformResourceURI(componentFile
 							.getFullPath().toString(), true);
 					Resource modelResource = new AdapterFactoryEditingDomain(
