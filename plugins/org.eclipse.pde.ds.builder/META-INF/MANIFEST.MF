@@ -15,4 +15,5 @@ Import-Package: org.eclipse.jdt.core,
  org.eclipse.pde.ds.scr.util,
  org.eclipse.pde.internal.core,
  org.eclipse.pde.internal.core.ibundle,
- org.eclipse.pde.internal.core.natures
+ org.eclipse.pde.internal.core.natures,
+ org.osgi.service.component;version="1.1.0"
