@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+<provider id="org.eclipse.team.cvs.core.cvsnature">
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/eclipse,pde-incubator/modeling/plugins/org.eclipse.pde.ds,org.eclipse.pde.ds"/>
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/eclipse,pde-incubator/modeling/plugins/org.eclipse.pde.ds.builder,org.eclipse.pde.ds.builder"/>
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/eclipse,pde-incubator/modeling/plugins/org.eclipse.pde.ds.edit,org.eclipse.pde.ds.edit"/>
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/eclipse,pde-incubator/modeling/plugins/org.eclipse.pde.ds.ui,org.eclipse.pde.ds.ui"/>
+<project reference="1.0,:pserver:dev.eclipse.org:/cvsroot/eclipse,pde-incubator/modeling/plugins/org.eclipse.pde.emfforms,org.eclipse.pde.emfforms"/>
+</provider>
+</psf>
