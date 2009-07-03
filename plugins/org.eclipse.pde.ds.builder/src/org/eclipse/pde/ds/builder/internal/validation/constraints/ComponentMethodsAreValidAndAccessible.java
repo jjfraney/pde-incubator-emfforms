@@ -8,18 +8,18 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentMethodsAreValidAndAccessible.java,v 1.2 2009/07/02 09:34:02 bcabe Exp $
+ * $Id: ComponentMethodsAreValidAndAccessible.java,v 1.3 2009/07/03 20:14:25 bcabe Exp $
  */
 package org.eclipse.pde.ds.builder.internal.validation.constraints;
 
 import java.util.*;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.ConstraintStatus;
 import org.eclipse.jdt.core.*;
+import org.eclipse.pde.ds.builder.internal.validation.EMFHelper;
 import org.eclipse.pde.ds.builder.internal.validation.EnhancedConstraintStatus;
 import org.eclipse.pde.ds.scr.Component;
 import org.eclipse.pde.ds.scr.ScrPackage;
@@ -42,9 +42,8 @@ public class ComponentMethodsAreValidAndAccessible extends
 	@Override
 	public IStatus validate(IValidationContext ctx) {
 		Component comp = (Component) ctx.getTarget();
-		IJavaProject project = JavaCore.create(ResourcesPlugin.getWorkspace()
-				.getRoot().getProject("/a")); // TODO retrieve the actual
-		// project ;)
+		IJavaProject project = JavaCore.create(EMFHelper.getIProject(comp
+				.eResource()));
 
 		List<IStatus> statuses = new ArrayList<IStatus>();
 
