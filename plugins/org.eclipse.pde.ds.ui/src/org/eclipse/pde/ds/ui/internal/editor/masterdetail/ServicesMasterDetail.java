@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.1 2009/07/05 20:22:53 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.2 2009/07/05 20:35:27 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -83,8 +83,9 @@ public class ServicesMasterDetail extends MasterDetailsBlock implements IDetails
 				Service service = ((Component) object).getService();
 				if (service != null) {
 					Object[] children = super.getChildren(service);
-					for (Object o : children)
-						l.add(o);
+					for (Object o : children) {
+						l.add(AdapterFactoryEditingDomain.getWrapper(o, _editingDomain));
+					}
 				}
 				return l.toArray();
 			}
