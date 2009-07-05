@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.9 2009/06/19 10:54:53 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.10 2009/07/05 17:00:20 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.edit.command.CreateChildCommand;
@@ -56,6 +57,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -67,7 +69,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @param <T>
  *            The type of the {@link EObject} to edit.
  */
-public abstract class EmfFormEditor<T extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener {
+public abstract class EmfFormEditor<T extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener, IGotoMarker {
 
 	/**
 	 * This keeps track of the editing domain that is used to track all changes
@@ -686,6 +688,32 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		}
 
 		return propertySheetPage;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void gotoMarker(IMarker marker) {
+		if (getViewer() == null)
+			return; // atm we only handle in-viewer selection
+
+		try {
+			if (marker.getType().equals(EValidator.MARKER)) {
+				String uriAttribute = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
+				if (uriAttribute != null) {
+					URI uri = URI.createURI(uriAttribute);
+					EObject eObject = getEditingDomain().getResourceSet().getEObject(uri, true);
+					if (eObject != null && (getEditingDomain() instanceof AdapterFactoryEditingDomain)) {
+						AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain) getEditingDomain();
+						if (getViewer() != null) {
+							getViewer().setSelection(new StructuredSelection(Collections.singleton(AdapterFactoryEditingDomain.getWrapper(eObject, editingDomain)).toArray()));
+						}
+					}
+				}
+			}
+		} catch (CoreException exception) {
+			Activator.log(exception);
+		}
 	}
 
 	public DataBindingContext getDataBindingContext() {
