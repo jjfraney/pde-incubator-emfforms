@@ -38,6 +38,8 @@ public class Messages extends NLS {
 
 	public static String PropertyPage_Property_Section;
 
+	public static String ServicesPage_Title;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

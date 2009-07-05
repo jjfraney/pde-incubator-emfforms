@@ -8,9 +8,9 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesDetailsPart.java,v 1.6 2009/07/03 16:07:03 bcabe Exp $
+ * $Id: PropertiesDetailsPart.java,v 1.1 2009/07/05 20:22:53 bcabe Exp $
  */
-package org.eclipse.pde.ds.ui.internal.editor.detailpart;
+package org.eclipse.pde.ds.ui.internal.editor.detailpart.properties;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;

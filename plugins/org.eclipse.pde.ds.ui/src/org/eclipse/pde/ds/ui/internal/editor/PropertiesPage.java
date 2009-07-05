@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.7 2009/07/05 17:02:05 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.8 2009/07/05 20:22:53 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -22,7 +22,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.ds.scr.*;
-import org.eclipse.pde.ds.ui.internal.editor.action.newPropertiesAction;
 import org.eclipse.pde.ds.ui.internal.editor.masterdetail.PropertiesMasterDetail;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
@@ -34,7 +33,7 @@ public class PropertiesPage extends AbstractEmfFormPage {
 
 	private PropertiesMasterDetail _propertiesMasterDetail;
 
-	public final static String ID = "ds.propertie"; //$NON-NLS-1$
+	public final static String ID = "ds.properties"; //$NON-NLS-1$
 
 	public PropertiesPage(EmfFormEditor<?> editor) {
 		super(editor, 1, true);
@@ -62,7 +61,7 @@ public class PropertiesPage extends AbstractEmfFormPage {
 				Command command = AddCommand.create(editingDomain, getObservedValue().getValue(), null, entryP, idx);
 				editingDomain.getCommandStack().execute(command);
 
-				_propertiesMasterDetail.getViewer().setSelection(new StructuredSelection(p), true);
+				getViewer().setSelection(new StructuredSelection(AdapterFactoryEditingDomain.getWrapper(p, editingDomain)), true);
 			}
 		});
 
@@ -72,13 +71,8 @@ public class PropertiesPage extends AbstractEmfFormPage {
 				p.setEntry("properties" + System.currentTimeMillis()); //$NON-NLS-1$
 				Command command = AddCommand.create(editingDomain, getObservedValue().getValue(), null, FeatureMapUtil.createEntry(ScrPackage.Literals.COMPONENT__PROPERTIES, p), 0);
 				editingDomain.getCommandStack().execute(command);
-			}
-		});
 
-		_propertiesMasterDetail.getWizardAddButton().addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				newPropertiesAction action = new newPropertiesAction(getEditor().getEditorSite().getPage());
-				action.run();
+				getViewer().setSelection(new StructuredSelection(AdapterFactoryEditingDomain.getWrapper(p, editingDomain)), true);
 			}
 		});
 

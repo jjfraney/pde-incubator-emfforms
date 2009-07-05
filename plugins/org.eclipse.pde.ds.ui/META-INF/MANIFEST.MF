@@ -22,14 +22,15 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Localization: plugin
 Export-Package: org.eclipse.pde.ds.ui.internal;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor;x-internal:=true,
- org.eclipse.pde.ds.ui.internal.editor.action;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor.composites;x-internal:=true,
- org.eclipse.pde.ds.ui.internal.editor.detailpart;x-internal:=true,
+ org.eclipse.pde.ds.ui.internal.editor.detailpart.properties;x-internal:=true,
+ org.eclipse.pde.ds.ui.internal.editor.detailpart.services;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor.masterdetail;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor.wizard;x-internal:=true
 Import-Package: org.eclipse.core.databinding,
  org.eclipse.core.databinding.observable,
  org.eclipse.core.databinding.observable.value,
+ org.eclipse.emf.databinding,
  org.eclipse.emf.databinding.edit,
  org.eclipse.jface.databinding.swt,
  org.eclipse.jface.databinding.viewers,

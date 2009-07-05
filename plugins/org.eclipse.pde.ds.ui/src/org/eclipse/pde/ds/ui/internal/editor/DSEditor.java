@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditor.java,v 1.8 2009/07/03 20:59:37 bcabe Exp $
+ * $Id: DSEditor.java,v 1.9 2009/07/05 20:22:53 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -89,7 +89,8 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 									// current object
 									if (isMainResource) {
 										setMainResource(changedResource);
-										getDataBindingContext().updateModels();
+										// TODO this is not OK to do this yet, since updateModels() dirties the command stack...
+										//getDataBindingContext().updateModels();
 									}
 								} catch (IOException ioe) {
 									Activator.log(ioe);
@@ -141,6 +142,7 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 
 		pages.add(new OverviewPage(this));
 		pages.add(new PropertiesPage(this));
+		pages.add(new ServicesPage(this));
 		try {
 			pages.add(new SourcePage(this));
 		} catch (NoClassDefFoundError ex) {
