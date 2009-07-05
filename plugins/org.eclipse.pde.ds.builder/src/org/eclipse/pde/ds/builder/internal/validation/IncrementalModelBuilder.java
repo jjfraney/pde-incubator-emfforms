@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IncrementalModelBuilder.java,v 1.4 2009/07/05 17:12:48 bcabe Exp $
+ * $Id: IncrementalModelBuilder.java,v 1.5 2009/07/05 20:21:06 bcabe Exp $
  */
 package org.eclipse.pde.ds.builder.internal.validation;
 
@@ -30,13 +30,15 @@ import org.osgi.service.component.ComponentConstants;
 
 /**
  * An abstract class to subclass to launch background jobs on the modified model
+ * TODO: Listen to modification on Java files
  */
 public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder {
 	protected class ModelFileDeltaVisitor implements IResourceDeltaVisitor {
 		private Map<Resource, IResource> modifiedResources = new HashMap<Resource, IResource>();
+		private String _contentType;
 
-		public ModelFileDeltaVisitor() {
-			// Do nothing
+		public ModelFileDeltaVisitor(String contentType) {
+			_contentType = contentType;
 		}
 
 		public Map<Resource, IResource> getModifiedResources() {
@@ -57,9 +59,10 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 			case IResourceDelta.CHANGED:
 				if (resource instanceof IContainer)
 					return true;
-				if (!"org.eclipse.pde.ds.content-type"
-						.equals(((IFile) resource).getContentDescription()
-								.getContentType().getId()))
+				if (_contentType != null
+						&& !_contentType.equals(((IFile) resource)
+								.getContentDescription().getContentType()
+								.getId()))
 					return false;
 				// handle changed resource
 				URI resourceURI = URI.createPlatformResourceURI(resource
@@ -119,7 +122,8 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 			monitor = new NullProgressMonitor();
 		}
 		// the visitor does the work.
-		ModelFileDeltaVisitor visitor = new ModelFileDeltaVisitor();
+		ModelFileDeltaVisitor visitor = new ModelFileDeltaVisitor(
+				getContentType());
 		delta.accept(visitor);
 
 		Map<Resource, IResource> modifiedResources = visitor
@@ -137,6 +141,17 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 
 	}
 
+	/**
+	 * If the model files to build have a content-type, this method must return
+	 * it, in order to optimize the build process (fail-fast mode)
+	 * 
+	 * @return the content-type of model files, or null if no content-type
+	 *         exists
+	 */
+	protected String getContentType() {
+		return null;
+	}
+
 	@SuppressWarnings("restriction")
 	protected void fullBuild(IProgressMonitor monitor) throws CoreException {
 		if (monitor == null) {
@@ -148,7 +163,8 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 			if (bundle instanceof IBundlePluginModelBase) {
 				IBundleModel bundleModel = ((IBundlePluginModelBase) bundle)
 						.getBundleModel();
-				// XXX for some reason, if we don't call load() by hand, some headers are missing (???)
+				// XXX for some reason, if we don't call load() by hand, some
+				// headers are missing (???)
 				bundleModel.load();
 				String serviceComponents = bundleModel.getBundle().getHeader(
 						ComponentConstants.SERVICE_COMPONENT);
@@ -181,4 +197,10 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 
 	protected abstract void build(EObject modelObject, IResource resource,
 			boolean force, IProgressMonitor monitor) throws CoreException;
+
+	/*
+	 * private boolean isComponentReferencedInManifest() {
+	 * 
+	 * }
+	 */
 }

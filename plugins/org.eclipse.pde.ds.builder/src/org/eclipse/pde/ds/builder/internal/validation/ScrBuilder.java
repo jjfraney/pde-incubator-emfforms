@@ -1,13 +1,11 @@
 package org.eclipse.pde.ds.builder.internal.validation;
 
-import java.util.Map;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -18,24 +16,7 @@ import org.eclipse.pde.ds.builder.internal.Activator;
 public class ScrBuilder extends IncrementalModelBuilder {
 	public static final String ID = "org.eclipse.pde.ds.builder.scrBuilder";
 
-	protected void incrementalBuild(IResourceDelta delta,
-			IProgressMonitor monitor) throws CoreException {
-		if (monitor == null) {
-			monitor = new NullProgressMonitor();
-		}
-		// the visitor does the work.
-		ModelFileDeltaVisitor visitor = new ModelFileDeltaVisitor();
-		delta.accept(visitor);
-
-		Map<Resource, IResource> modifiedResources = visitor
-				.getModifiedResources();
-
-		// If one resource is changed in the project, all the project must be
-		// validated
-		if (modifiedResources.size() > 0) {
-			fullBuild(monitor);
-		}
-
+	public ScrBuilder() {
 	}
 
 	protected void build(EObject modelObject, IResource resource,
@@ -104,6 +85,10 @@ public class ScrBuilder extends IncrementalModelBuilder {
 			return new BasicDiagnostic(Diagnostic.ERROR, "ModelChecker", 0, ie
 					.getMessage(), new Object[] { modelObject });
 		}
+	}
 
+	@Override
+	protected String getContentType() {
+		return "org.eclipse.pde.ds.content-type";
 	}
 }
