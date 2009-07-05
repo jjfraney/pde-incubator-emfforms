@@ -1,19 +1,8 @@
 package org.eclipse.pde.ds.builder.internal.validation;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import java.util.*;
+import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -26,7 +15,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  */
 public final class MarkerHelper {
 
-	public static final String VALIDATION_MARKER_TYPE = "org.eclipse.core.resources.problemmarker"; //$NON-NLS-1$
+	public static final String VALIDATION_MARKER_TYPE = EValidator.MARKER;
 
 	public static void cleanMarkers(IContainer container) throws CoreException {
 		if (container != null) {
