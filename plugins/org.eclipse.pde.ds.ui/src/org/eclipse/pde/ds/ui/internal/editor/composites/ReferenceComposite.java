@@ -8,10 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ReferenceComposite.java,v 1.1 2009/07/05 20:22:53 bcabe Exp $
+ * $Id: ReferenceComposite.java,v 1.2 2009/07/05 20:31:07 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.composites;
 
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.pde.emfforms.editor.PDEFormToolkit;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -21,6 +22,10 @@ public class ReferenceComposite extends Composite {
 	private Text _textName;
 
 	private Text _textInterface;
+
+	private ComboViewer _comboCardinality;
+
+	private ComboViewer _comboPolicy;
 
 	private Text _textTarget;
 
@@ -44,6 +49,8 @@ public class ReferenceComposite extends Composite {
 	private void createContents() {
 		_textName = PDEFormToolkit.createLabelAndText("Name:", this);
 		_textInterface = PDEFormToolkit.createLabelAndText("Interface", this);
+		_comboCardinality = PDEFormToolkit.createLabelAndComboViewer("Cardinality", this);
+		_comboPolicy = PDEFormToolkit.createLabelAndComboViewer("Policy", this);
 		_textTarget = PDEFormToolkit.createLabelAndText("Target", this);
 		_textBind = PDEFormToolkit.createLabelAndText("Bind", this);
 		_textUnbind = PDEFormToolkit.createLabelAndText("Unbind", this);
@@ -55,6 +62,14 @@ public class ReferenceComposite extends Composite {
 
 	public Text getTextInterface() {
 		return _textInterface;
+	}
+
+	public ComboViewer getComboCardinality() {
+		return _comboCardinality;
+	}
+
+	public ComboViewer getComboPolicy() {
+		return _comboPolicy;
 	}
 
 	public Text getTextTarget() {

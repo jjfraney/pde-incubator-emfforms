@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ReferenceDetailsPart.java,v 1.1 2009/07/05 20:22:53 bcabe Exp $
+ * $Id: ReferenceDetailsPart.java,v 1.2 2009/07/05 20:31:07 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart.services;
 
@@ -19,11 +19,12 @@ import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.pde.ds.scr.ScrPackage;
+import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.composites.ReferenceComposite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -67,6 +68,8 @@ public class ReferenceDetailsPart implements IDetailsPage {
 		section.setClient(referenceComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 
+		referenceComposite.getComboCardinality().setInput(Cardinality.values());
+		referenceComposite.getComboPolicy().setInput(Policy.values());
 		bind(dataBindingContext);
 	}
 
@@ -76,6 +79,12 @@ public class ReferenceDetailsPart implements IDetailsPage {
 
 		// Interface
 		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextInterface()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getReference_Interface()).observeDetail(currentProperty), null, null);
+
+		// Cardinality
+		bindingContext.bindValue(ViewerProperties.singleSelection().observe(referenceComposite.getComboCardinality()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getReference_Cardinality()).observeDetail(currentProperty), null, null);
+
+		// Policy
+		bindingContext.bindValue(ViewerProperties.singleSelection().observe(referenceComposite.getComboPolicy()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getReference_Policy()).observeDetail(currentProperty), null, null);
 
 		// Target
 		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextTarget()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getReference_Target()).observeDetail(currentProperty), null, null);
