@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentMethodsAreValidAndAccessible.java,v 1.3 2009/07/03 20:14:25 bcabe Exp $
+ * $Id: ComponentMethodsAreValidAndAccessible.java,v 1.4 2009/07/05 17:06:26 bcabe Exp $
  */
 package org.eclipse.pde.ds.builder.internal.validation.constraints;
 
@@ -63,12 +63,21 @@ public class ComponentMethodsAreValidAndAccessible extends
 							.getDeactivate()));
 				}
 
-				return ConstraintStatus.createMultiStatus(ctx, statuses);
+				// TODO validate 'modified' method (dunno the spec yet)
+				// ...
+				// ...
+
+				if (!statuses.isEmpty()) {
+					return ConstraintStatus.createMultiStatus(ctx, statuses);
+				}
 			} else
+				// If the type cannot be found, report a success (we don't want
+				// hundreds of cascading error messages...)
 				return ctx.createSuccessStatus();
 		} catch (JavaModelException e) {
 			return ctx.createFailureStatus(comp);
 		}
+		return ctx.createSuccessStatus();
 	}
 
 	/**
