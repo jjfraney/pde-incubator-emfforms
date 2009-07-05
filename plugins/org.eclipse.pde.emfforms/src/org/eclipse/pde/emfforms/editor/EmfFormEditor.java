@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.10 2009/07/05 17:00:20 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.11 2009/07/05 20:22:09 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -28,7 +28,6 @@ import org.eclipse.emf.common.ui.dialogs.DiagnosticDialog;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -39,17 +38,22 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.dnd.*;
+import org.eclipse.emf.edit.ui.provider.*;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
+import org.eclipse.pde.emfforms.databinding.EMFValidatingDatabindingContext;
 import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.pde.emfforms.internal.editor.Messages;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
@@ -59,6 +63,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
@@ -116,7 +122,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 */
 	protected MarkerHelper markerHelper = new EditUIMarkerHelper();
 
-	private EMFDataBindingContext _bindingContext;
+	private DataBindingContext _bindingContext;
 
 	public EmfFormEditor() {
 		this._editorConfig = getFormEditorConfig();
@@ -132,7 +138,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private void init() {
 		_editingDomain = createEditingDomain();
-		_bindingContext = new EMFDataBindingContext();
+		_bindingContext = new EMFValidatingDatabindingContext();
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
@@ -237,13 +243,12 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				new ProgressMonitorDialog(getSite().getShell()).run(true, false, operation);
 
 				// Refresh the necessary state.
-				((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
-				firePropertyChange(IEditorPart.PROP_DIRTY);
 				// if we have a BasicCommandStack (that's to say almost all the time), don't flush it but call saveIsDone instead  
 				if (getEditingDomain().getCommandStack() instanceof BasicCommandStack)
 					((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
 				else
 					getEditingDomain().getCommandStack().flush();
+				firePropertyChange(IEditorPart.PROP_DIRTY);
 
 			} catch (Exception exception) {
 				// Something went wrong that shouldn't.
@@ -472,10 +477,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		return _observableValue;
 	}
 
-	// -------------------------------------------//
-	// -- Context Menu on EMF objects ------------//
-	// -------------------------------------------//
-
 	/**
 	 * @param viewer
 	 */
@@ -641,6 +642,123 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		}
 	}
 
+	/**
+	 * This is the content outline page.
+	 */
+	protected IContentOutlinePage contentOutlinePage;
+
+	protected IStatusLineManager contentOutlineStatusLineManager;
+
+	/**
+	 * This is the content outline page's viewer.
+	 */
+	protected TreeViewer contentOutlineViewer;
+
+	/**
+	 * This accesses a cached version of the content outliner.
+	 * @generated
+	 */
+	public IContentOutlinePage getContentOutlinePage() {
+		if (contentOutlinePage == null) {
+			// The content outline is just a tree.
+			class MyContentOutlinePage extends ContentOutlinePage {
+				@Override
+				public void createControl(Composite parent) {
+					super.createControl(parent);
+					contentOutlineViewer = getTreeViewer();
+					contentOutlineViewer.addSelectionChangedListener(this);
+
+					// Set up the tree viewer.
+					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
+					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
+					contentOutlineViewer.setInput(getCurrentEObject().eResource());
+					contentOutlineViewer.addFilter(new ViewerFilter() {
+						@Override
+						public boolean select(Viewer viewer, Object parentElement, Object element) {
+							return (!(AdapterFactoryEditingDomain.unwrap(element) instanceof String));
+						}
+					});
+
+					// Make sure our popups work.
+					createContextMenuFor(contentOutlineViewer);
+
+					if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
+						// Select the root object in the view.
+						contentOutlineViewer.setSelection(new StructuredSelection(getEditingDomain().getResourceSet().getResources().get(0)), true);
+					}
+				}
+
+				@Override
+				public void makeContributions(IMenuManager menuManager, IToolBarManager toolBarManager, IStatusLineManager statusLineManager) {
+					super.makeContributions(menuManager, toolBarManager, statusLineManager);
+					contentOutlineStatusLineManager = statusLineManager;
+				}
+
+				@Override
+				public void setActionBars(IActionBars actionBars) {
+					super.setActionBars(actionBars);
+					getActionBarContributor().shareGlobalActions(this, actionBars);
+				}
+			}
+
+			contentOutlinePage = new MyContentOutlinePage();
+
+			// Listen to selection so that we can handle it is a special way.
+			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
+				// This ensures that we handle selections correctly.
+				public void selectionChanged(SelectionChangedEvent event) {
+					handleContentOutlineSelection(event.getSelection());
+				}
+			});
+		}
+
+		return contentOutlinePage;
+	}
+
+	/**
+	 * This deals with how we want selection in the outliner to affect the other views.
+	 */
+	public void handleContentOutlineSelection(ISelection selection) {
+		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
+			Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
+			if (selectedElements.hasNext()) {
+				// Get the first selected element.
+				Object selectedElement = selectedElements.next();
+
+				// If it's the selection viewer, then we want it to select the same selection as this selection.
+				if (getViewer() != null) {
+					ArrayList<Object> selectionList = new ArrayList<Object>();
+					selectionList.add(selectedElement);
+					while (selectedElements.hasNext()) {
+						selectionList.add(selectedElements.next());
+					}
+
+					// Set the selection to the widget.
+					getViewer().setSelection(new StructuredSelection(selectionList));
+				}
+			}
+		}
+	}
+
+	/**
+	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
+	 */
+	protected void createContextMenuFor(StructuredViewer viewer) {
+		MenuManager contextMenu = new MenuManager("#PopUp");
+		contextMenu.add(new Separator("additions"));
+		contextMenu.setRemoveAllWhenShown(true);
+		// TODO
+		// contextMenu.addMenuListener(this);
+		Menu menu = contextMenu.createContextMenu(viewer.getControl());
+		viewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
+
+		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
+		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
+		viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(getEditingDomain(), viewer));
+	}
+
 	private EmfFormEditor<T> getCurrentInstance() {
 		return this;
 	}
@@ -660,10 +778,17 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		return _adapterFactory;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class key) {
+		if (key.equals(IContentOutlinePage.class)) {
+			return getFormEditorConfig().isShowOutlinePage() ? getContentOutlinePage() : null;
+		}
 		if (key.equals(IPropertySheetPage.class)) {
 			return getPropertySheetPage();
+		}
+		if (key.equals(IGotoMarker.class)) {
+			return this;
 		}
 		return super.getAdapter(key);
 	}

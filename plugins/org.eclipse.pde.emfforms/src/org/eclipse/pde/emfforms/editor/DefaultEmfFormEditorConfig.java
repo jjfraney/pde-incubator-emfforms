@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DefaultEmfFormEditorConfig.java,v 1.1 2009/04/24 11:52:09 bcabe Exp $
+ * $Id: DefaultEmfFormEditorConfig.java,v 1.2 2009/07/05 20:22:09 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -27,6 +27,10 @@ public class DefaultEmfFormEditorConfig implements IEmfFormEditorConfig {
 
 	public boolean isUsingSharedClipboard() {
 		return false;
+	}
+
+	public boolean isShowOutlinePage() {
+		return true;
 	}
 
 	public PDEFormToolkit createPDEFormToolkit(Display display) {
