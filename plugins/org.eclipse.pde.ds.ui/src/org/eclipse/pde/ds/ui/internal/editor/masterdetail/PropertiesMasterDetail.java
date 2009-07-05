@@ -8,17 +8,17 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.6 2009/07/03 15:24:54 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.7 2009/07/05 17:02:04 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.*;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.WrapperItemProvider;
 import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -28,7 +28,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.ds.scr.Properties;
 import org.eclipse.pde.ds.scr.Property;
-import org.eclipse.pde.ds.scr.provider.ScrItemProviderAdapterFactory;
 import org.eclipse.pde.ds.ui.internal.editor.Messages;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.PropertiesDetailsPart;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.PropertyDetailsPart;
@@ -71,11 +70,20 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 		return _viewer;
 	}
 
-	public void setComponentAndEditingDomain(IObservableValue iObservableValue, EditingDomain editingDomain, IEditorSite editorSite, DataBindingContext bindingContext) {
+	public void setComponentAndEditingDomain(IObservableValue iObservableValue, AdapterFactory adapterFactory, EditingDomain editingDomain, IEditorSite editorSite, DataBindingContext bindingContext) {
 		_editingDomain = editingDomain;
 		_databindingContext = bindingContext;
+
+		getViewer().setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+		getViewer().setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		getViewer().addFilter(new ViewerFilter() {
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(element);
+				return (unwrappedElement instanceof Properties || unwrappedElement instanceof Property);
+			}
+		});
 		_databindingContext.bindValue(ViewerProperties.input().observe(_viewer), iObservableValue);
-		_viewer.expandAll();
 
 		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
@@ -93,6 +101,8 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 						((NumericalActionBarContributor) _site.getActionBarContributor()).disableGlobalHandlers();
 					}
 				});*/
+
+		_viewer.expandAll();
 	}
 
 	public void registerContextMenu() {
@@ -144,22 +154,6 @@ public class PropertiesMasterDetail extends MasterDetailsBlock implements IDetai
 
 		GridDataFactory.fillDefaults().applyTo(buttonComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(browseComposite);
-
-		ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ScrItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-
-		getViewer().setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-		getViewer().setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
-		getViewer().addFilter(new ViewerFilter() {
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(element);
-				return (unwrappedElement instanceof Properties || unwrappedElement instanceof Property);
-			}
-		});
 
 		//toolkit.paintBordersFor(client);
 
