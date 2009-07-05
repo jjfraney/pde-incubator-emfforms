@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <xsd:schema xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="scr" ecore:package="org.eclipse.pde.ds.scr" targetNamespace="http://www.osgi.org/xmlns/scr/v1.1.0">
   <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:element ecore:ignore="true" name="component" type="scr:component"/>
   <xsd:element ecore:ignore="true" name="Implementation" type="scr:Implementation"/>
   <xsd:element ecore:ignore="true" name="Properties" type="scr:Properties"/>
   <xsd:element ecore:ignore="true" name="Service" type="scr:Service"/>
   <xsd:element ecore:ignore="true" name="Provide" type="scr:Provide"/>
   <xsd:element ecore:ignore="true" name="Reference" type="scr:Reference"/>
-  <xsd:complexType ecore:name="Component" mixed="true" name="component">
+  <xsd:complexType ecore:name="component" mixed="true" name="component">
     <xsd:sequence>
       <xsd:element name="implementation" type="scr:Implementation"/>
       <xsd:choice ecore:featureMap="allProperties" maxOccurs="unbounded">
