@@ -8,49 +8,36 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesDetailsPart.java,v 1.1 2009/07/05 20:22:53 bcabe Exp $
+ * $Id: PropertiesDetailsPart.java,v 1.2 2009/07/06 21:08:14 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart.properties;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.ui.internal.editor.composites.PropertiesComposite2;
+import org.eclipse.pde.emfforms.editor.EmfDetailsPart;
+import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.*;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-public class PropertiesDetailsPart implements IDetailsPage {
-
-	private IManagedForm managedForm;
-	private EditingDomain editingDomain;
-	private DataBindingContext dataBindingContext;
-	private IObservableValue currentProperties;
+public class PropertiesDetailsPart extends EmfDetailsPart {
 	private PropertiesComposite2 propertiesComposite;
 
-	public PropertiesDetailsPart(IManagedForm managedForm, EditingDomain editingDomain, DataBindingContext dataBindingContext) {
-		this.managedForm = managedForm;
-		this.editingDomain = editingDomain;
-		this.dataBindingContext = dataBindingContext;
-
-		this.currentProperties = new WritableValue();
+	public PropertiesDetailsPart(EmfFormEditor<?> parentEditor) {
+		super(parentEditor);
 	}
 
-	public void createContents(Composite parent) {
+	@Override
+	protected void createSpecificContent(Composite parent) {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
-		FormToolkit toolkit = managedForm.getToolkit();
+		FormToolkit toolkit = parentEditor.getToolkit();
 		Section section = toolkit.createSection(parent, Section.TITLE_BAR);
 		section.setText("Details");
 		section.marginWidth = 10;
@@ -59,58 +46,22 @@ public class PropertiesDetailsPart implements IDetailsPage {
 		propertiesComposite = new PropertiesComposite2(section, SWT.NONE);
 		GridDataFactory.fillDefaults().span(1, 1).grab(true, true).applyTo(propertiesComposite);
 
-		managedForm.getToolkit().adapt(propertiesComposite);
+		parentEditor.getToolkit().adapt(propertiesComposite);
 
 		toolkit.adapt(propertiesComposite);
 		propertiesComposite.setParent(section);
 
 		section.setClient(propertiesComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
-
-		bind(dataBindingContext);
 	}
 
-	private void bind(DataBindingContext bindingContext) {
-
+	protected void bind(DataBindingContext bindingContext) {
 		// Entry
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertiesComposite.getTextEntry()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getProperties_Entry()).observeDetail(currentProperties), null, null);
-	}
-
-	public void commit(boolean onSave) {
-	}
-
-	public void dispose() {
-
-	}
-
-	public void initialize(IManagedForm form) {
-
-	}
-
-	public boolean isDirty() {
-		return false;
-	}
-
-	public boolean isStale() {
-		return false;
-	}
-
-	public void refresh() {
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertiesComposite.getTextEntry()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperties_Entry()).observeDetail(selectedObject), null, null);
 	}
 
 	public void setFocus() {
 		propertiesComposite.getTextEntry().setFocus();
 		propertiesComposite.getTextEntry().selectAll();
 	}
-
-	public boolean setFormInput(Object input) {
-		return false;
-	}
-
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection sel = (IStructuredSelection) selection;
-		Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(sel.getFirstElement());
-		currentProperties.setValue(unwrappedElement);
-	}
-
 }

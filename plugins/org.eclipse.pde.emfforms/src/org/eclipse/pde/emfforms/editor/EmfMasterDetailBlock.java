@@ -8,14 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.1 2009/06/02 09:03:59 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.2 2009/07/06 21:08:13 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
-import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.ui.provider.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -40,7 +37,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 //	private DataBindingContext dataBindingContext;
 //	private EditingDomain editingDomain;
 //	private IObservableValue libraryObservable;
-	private EmfFormEditor<?> parentEditor;
+	protected EmfFormEditor<?> parentEditor;
 
 	public EmfMasterDetailBlock(EmfFormEditor<?> editor, String title) {
 		this.title = title;
@@ -90,14 +87,8 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(buttonComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(browseComposite);
 
-		ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
-		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(getSpecificItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-
-		treeViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
-		treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+		treeViewer.setContentProvider(new AdapterFactoryContentProvider(parentEditor.getAdapterFactory()));
+		treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(parentEditor.getAdapterFactory()));
 		treeViewer.addFilter(getTreeFilter());
 
 		final SectionPart spart = new SectionPart(section);
@@ -129,14 +120,6 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	 */
 	protected abstract ViewerFilter getTreeFilter();
 
-	/**
-	 * Return an ItemProviderAdapterFactory for the treeViewer.
-	 * 
-	 * @return an ItemProviderAdapterFactory for the treeViewer.
-	 */
-	//FIXME may be deduce from EmfFormEditor
-	protected abstract AdapterFactory getSpecificItemProviderAdapterFactory();
-
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		// TODO Auto-generated method stub
@@ -148,7 +131,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	public Object getPageKey(Object object) {
-		return object;
+		return AdapterFactoryEditingDomain.unwrap(object);
 	}
 
 	public TreeViewer getTreeViewer() {
@@ -178,7 +161,6 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 
 	public void menuAboutToShow(IMenuManager manager) {
 		((IMenuListener) parentEditor.getEditorSite().getActionBarContributor()).menuAboutToShow(manager);
-
 	}
 
 }
