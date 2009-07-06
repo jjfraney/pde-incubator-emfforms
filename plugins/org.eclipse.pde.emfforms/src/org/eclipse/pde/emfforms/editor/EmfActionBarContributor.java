@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfActionBarContributor.java,v 1.1 2009/06/02 09:06:04 bcabe Exp $
+ * $Id: EmfActionBarContributor.java,v 1.2 2009/07/06 20:14:01 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -20,27 +20,41 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
+/**
+ * A specialized {@link EditingDomainActionBarContributor} very similar
+ * to what EMF codegen generates in the editor layer.
+ */
 public class EmfActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener {
 
+	/** The create child menu manager. */
 	private MenuManager createChildMenuManager;
+
+	/** The active editor part. */
 	private IEditorPart activeEditorPart;
+
+	/** The selection provider. */
 	private ISelectionProvider selectionProvider;
+
+	/** The create actions. */
 	private Collection<IAction> createActions;
 
+	/** The show properties view action. */
 	protected IAction showPropertiesViewAction = new Action("Open properties") {
 		@Override
 		public void run() {
 			try {
 				getPage().showView("org.eclipse.ui.views.PropertySheet");
 			} catch (PartInitException exception) {
-				exception.printStackTrace();
+				Activator.logErrorMessage("The properties view is not available");
 			}
 		}
 	};
 
+	/** The filter. */
 	private IFilter filter = new IFilter() {
 
 		public boolean select(Object toTest) {
@@ -49,6 +63,9 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 
 	};
 
+	/**
+	 * Instantiates a new emf action bar contributor.
+	 */
 	public EmfActionBarContributor() {
 		super(ADDITIONS_LAST_STYLE);
 		loadResourceAction = new LoadResourceAction();
@@ -56,6 +73,9 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		controlAction = new ControlAction();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor#contributeToMenu(org.eclipse.jface.action.IMenuManager)
+	 */
 	@Override
 	public void contributeToMenu(IMenuManager menuManager) {
 		super.contributeToMenu(menuManager);
@@ -80,6 +100,9 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		addGlobalActions(submenuManager);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor#setActiveEditor(org.eclipse.ui.IEditorPart)
+	 */
 	@Override
 	public void setActiveEditor(IEditorPart part) {
 		super.setActiveEditor(part);
@@ -102,6 +125,9 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+	 */
 	public void selectionChanged(SelectionChangedEvent event) {
 		// Remove any menu items for old selection.
 		if (createChildMenuManager != null) {
@@ -131,6 +157,13 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 
 	}
 
+	/**
+	 * Populate manager.
+	 * 
+	 * @param manager the manager
+	 * @param actions the actions
+	 * @param contributionID the contribution id
+	 */
 	private void populateManager(MenuManager manager, Collection<? extends IAction> actions, String contributionID) {
 		if (actions != null) {
 			for (IAction action : actions) {
@@ -143,6 +176,15 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		}
 	}
 
+	/**
+	 * Generate create actions.
+	 * 
+	 * @param childDescriptors the child descriptors
+	 * @param simblingDescriptors the simbling descriptors
+	 * @param selection the selection
+	 * 
+	 * @return the collection< i action>
+	 */
 	protected Collection<IAction> generateCreateActions(Collection<?> childDescriptors, Collection<?> simblingDescriptors, ISelection selection) {
 		Collection<IAction> actions = new ArrayList<IAction>();
 		if (childDescriptors != null) {
@@ -160,6 +202,12 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		return actions;
 	}
 
+	/**
+	 * Depopulate manager.
+	 * 
+	 * @param manager the manager
+	 * @param actions the actions
+	 */
 	protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions) {
 		if (actions != null) {
 			IContributionItem[] items = manager.getItems();
@@ -181,6 +229,9 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor#menuAboutToShow(org.eclipse.jface.action.IMenuManager)
+	 */
 	@Override
 	public void menuAboutToShow(IMenuManager menuManager) {
 		super.menuAboutToShow(menuManager);
@@ -191,6 +242,11 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		menuManager.insertBefore("edit", submenuManager);
 	}
 
+	/**
+	 * Sets the filter.
+	 * 
+	 * @param filter the new filter
+	 */
 	public void setFilter(IFilter filter) {
 		this.filter = filter;
 	}
