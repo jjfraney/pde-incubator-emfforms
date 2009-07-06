@@ -3,9 +3,8 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: Anyware coding conventions
-    Description: 
-Anyware coding conventions
+    Checkstyle-Configuration: PDE Modeling Incubator Checkstyle
+    Description: none
 -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
@@ -50,7 +49,6 @@ Anyware coding conventions
             <property name="severity" value="error"/>
         </module>
         <module name="VisibilityModifier"/>
-        <module name="AvoidStarImport"/>
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
