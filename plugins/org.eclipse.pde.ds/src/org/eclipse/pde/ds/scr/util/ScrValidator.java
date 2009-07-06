@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ScrValidator.java,v 1.2 2009/06/26 10:49:33 bcabe Exp $
+ * $Id: ScrValidator.java,v 1.3 2009/07/06 19:19:41 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.util;
 
@@ -175,22 +175,33 @@ public class ScrValidator extends EObjectValidator {
 			switch(property.getType()) {
 			case BOOLEAN:
 				Boolean.valueOf(value) ;
+				break;
 			case BYTE:
 				Byte.valueOf(value) ;
+				break;
 			case CHARACTER:
 				Integer.valueOf(value) ;
+				break;
 			case DOUBLE:
 				Double.valueOf(value) ;
+				break;
 			case FLOAT:
 				Float.valueOf(value) ;
+				break;
 			case INTEGER:
 				Integer.valueOf(value) ;
+				break;
 			case LONG:
 				Long.valueOf(value) ;
+				break;
 			case SHORT:
 				Short.valueOf(value) ;
+				break;
 			case STRING:
 				// always OK
+				break;
+			default:
+				// nothing
 			}
 		} catch (NumberFormatException e) {
 			isValueConsistent = false ;
