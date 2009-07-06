@@ -9,6 +9,9 @@ import org.eclipse.emf.ecore.resource.Resource;
  * A set of helper methods for EMF
  */
 public final class EMFHelper {
+	private EMFHelper() {
+	}
+
 	private static final String PLATFORM_SCHEME = "platform"; //$NON-NLS-1$
 
 	private static final String FILE_SCHEME = "file"; //$NON-NLS-1$

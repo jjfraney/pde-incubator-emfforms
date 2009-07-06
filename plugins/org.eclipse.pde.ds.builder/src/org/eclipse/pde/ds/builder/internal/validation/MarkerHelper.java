@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * Helper class to manage markers : clean, creation...
  */
 public final class MarkerHelper {
+	private MarkerHelper() {
+	}
 
 	public static final String VALIDATION_MARKER_TYPE = EValidator.MARKER;
 
