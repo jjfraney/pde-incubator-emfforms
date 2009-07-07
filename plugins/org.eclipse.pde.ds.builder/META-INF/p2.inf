@@ -1,0 +1,7 @@
+# this bundle should be autostarted in order to register its custom EMF validator correctly...
+instructions.configure = \
+                 setStartLevel(startLevel:4); \
+                 markStarted(started: true);
+instructions.unconfigure = \
+                 setStartLevel(startLevel:-1); \
+                 markStarted(started: false);                 
