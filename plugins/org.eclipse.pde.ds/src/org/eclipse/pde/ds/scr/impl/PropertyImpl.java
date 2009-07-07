@@ -8,20 +8,17 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertyImpl.java,v 1.2 2009/02/15 20:54:36 bcabe Exp $
+ * $Id: PropertyImpl.java,v 1.3 2009/07/07 21:52:30 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
-import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.pde.ds.scr.JavaType;
 import org.eclipse.pde.ds.scr.Property;
 import org.eclipse.pde.ds.scr.ScrPackage;

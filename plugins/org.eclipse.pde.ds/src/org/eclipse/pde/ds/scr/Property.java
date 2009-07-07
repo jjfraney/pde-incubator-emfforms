@@ -8,11 +8,10 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Property.java,v 1.2 2009/02/15 20:54:36 bcabe Exp $
+ * $Id: Property.java,v 1.3 2009/07/07 21:52:30 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.3 2009/07/07 09:36:46 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.4 2009/07/07 21:52:28 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -34,14 +34,12 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.forms.IDetailsPage;
-import org.eclipse.ui.forms.IManagedForm;
 
 public class ServicesMasterDetail extends EmfMasterDetailBlock {
 
 	private TreeViewer _viewer;
 	private EditingDomain _editingDomain;
 	private DataBindingContext _databindingContext;
-	private IManagedForm _managedForm;
 
 	private Button _btnAddProvided;
 	private Button _btnAddRequired;

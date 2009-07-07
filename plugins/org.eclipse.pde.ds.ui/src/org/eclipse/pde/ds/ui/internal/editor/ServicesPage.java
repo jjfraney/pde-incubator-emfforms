@@ -8,12 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesPage.java,v 1.2 2009/07/07 09:36:47 bcabe Exp $
+ * $Id: ServicesPage.java,v 1.3 2009/07/07 21:52:28 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -112,10 +111,6 @@ public class ServicesPage extends AbstractEmfFormPage {
 	@Override
 	public Viewer getViewer() {
 		return _servicesMasterDetail.getTreeViewer();
-	}
-
-	private IObservableValue getObservedValue() {
-		return ((DSEditor) getEditor()).getInputObservable();
 	}
 
 }

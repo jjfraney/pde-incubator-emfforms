@@ -8,12 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.10 2009/07/07 09:36:47 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.11 2009/07/07 21:52:28 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -122,10 +121,6 @@ public class PropertiesPage extends AbstractEmfFormPage {
 	@Override
 	public Viewer getViewer() {
 		return _propertiesMasterDetail.getTreeViewer();
-	}
-
-	private IObservableValue getObservedValue() {
-		return ((DSEditor) getEditor()).getInputObservable();
 	}
 
 }

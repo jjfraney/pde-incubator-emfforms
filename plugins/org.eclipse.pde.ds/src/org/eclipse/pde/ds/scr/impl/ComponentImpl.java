@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentImpl.java,v 1.4 2009/04/24 21:33:43 bcabe Exp $
+ * $Id: ComponentImpl.java,v 1.5 2009/07/07 21:52:30 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.impl;
 
@@ -31,8 +31,6 @@ import org.eclipse.pde.ds.scr.Property;
 import org.eclipse.pde.ds.scr.Reference;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.scr.Service;
-import org.eclipse.emf.ecore.util.*;
-import org.eclipse.pde.ds.scr.*;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '
