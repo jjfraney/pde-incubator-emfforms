@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.11 2009/07/05 20:22:09 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.12 2009/07/07 20:58:20 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -628,8 +628,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 										setMainResource(changedResource);
 									}
 								} catch (IOException ioe) {
-									ioe.printStackTrace();
-									//Activator.log(ioe);
+									Activator.log(ioe);
 								}
 							}
 						}
@@ -716,7 +715,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * This deals with how we want selection in the outliner to affect the other views.
+	 * This deals with how we want selection in the outline to affect the other views.
 	 */
 	public void handleContentOutlineSelection(ISelection selection) {
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
@@ -769,8 +768,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
 			delta.accept(visitor);
 		} catch (CoreException ce) {
-			ce.printStackTrace();
-			//Activator.log(ce);
+			Activator.log(ce);
 		}
 	}
 
