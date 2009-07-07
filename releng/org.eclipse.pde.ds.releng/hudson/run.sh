@@ -56,7 +56,7 @@ touch ${writableBuildRoot}/.cvspass
 #define symlinked required folders
 relengBaseBuilderDir="${writableBuildRoot}/org.eclipse.releng.basebuilder"
 relengCommonBuilderDir="${writableBuildRoot}/org.eclipse.dash.common.releng"
-# symlink basebuilder and common.releng; alternatively, if you omit this, they'll be checked out in start.sh
+# symlink basebuilder and common.releng; alternatively, if you omit this, they will be checked out in start.sh
 ln -s /opt/public/cbi/build/org.eclipse.releng.basebuilder ${writableBuildRoot}/
 ln -s /opt/public/cbi/build/org.eclipse.dash.common.releng ${writableBuildRoot}/
 
