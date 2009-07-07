@@ -5,4 +5,4 @@ plugin@org.eclipse.pde.ds.builder=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsro
 plugin@org.eclipse.pde.ds.edit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.ds.edit
 plugin@org.eclipse.pde.ds.ui=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.ds.ui
 
-feature@org.eclipse.gef.all=v20090422-2346,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.gef/features/org.eclipse.gef.all-feature
+feature@org.eclipse.pde.ds=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/features/org.eclipse.pde.ds-feature
