@@ -16,7 +16,7 @@ version="0.1.0"
 
 # leave blank to use assumed values (which may be wrong!)
 projRelengRoot='-projRelengRoot :pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse'
-projRelengPath='-projRelengPath pde-incubator/modeling/releng/org.eclipse.pde.ds.releng
+projRelengPath='-projRelengPath pde-incubator/modeling/releng/org.eclipse.pde.ds.releng'
 
 # DONE CONFIGURATION
 
