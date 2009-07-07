@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertyDetailsPart.java,v 1.2 2009/07/06 21:08:14 bcabe Exp $
+ * $Id: PropertyDetailsPart.java,v 1.3 2009/07/07 09:36:46 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart.properties;
 
@@ -40,7 +40,7 @@ public class PropertyDetailsPart extends EmfDetailsPart {
 	protected void createSpecificContent(Composite parent) {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
-		FormToolkit toolkit = parentEditor.getToolkit();
+		FormToolkit toolkit = getEditor().getToolkit();
 		Section section = toolkit.createSection(parent, Section.TITLE_BAR);
 		section.setText("Details");
 		section.marginWidth = 10;
@@ -49,7 +49,7 @@ public class PropertyDetailsPart extends EmfDetailsPart {
 		propertyComposite = new PropertyComposite(section, SWT.NONE);
 		GridDataFactory.fillDefaults().span(1, 1).grab(true, true).applyTo(propertyComposite);
 
-		parentEditor.getToolkit().adapt(propertyComposite);
+		getEditor().getToolkit().adapt(propertyComposite);
 
 		toolkit.adapt(propertyComposite);
 		propertyComposite.setParent(section);
@@ -62,13 +62,13 @@ public class PropertyDetailsPart extends EmfDetailsPart {
 
 	protected void bind(DataBindingContext bindingContext) {
 		// Name
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextName()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Name()).observeDetail(selectedObject), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextName()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Name()).observeDetail(getCurrentSelection()), null, null);
 
 		// Type
-		bindingContext.bindValue(ViewersObservables.observeSingleSelection(propertyComposite.getComboType()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Type()).observeDetail(selectedObject), null, null);
+		bindingContext.bindValue(ViewersObservables.observeSingleSelection(propertyComposite.getComboType()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Type()).observeDetail(getCurrentSelection()), null, null);
 
 		//Value
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextValue()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(selectedObject), null, null);
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextValue()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(getCurrentSelection()), null, null);
 
 	}
 

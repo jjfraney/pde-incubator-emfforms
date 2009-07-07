@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.2 2009/07/06 21:08:13 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.3 2009/07/07 09:36:40 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.forms.*;
@@ -29,27 +30,16 @@ import org.eclipse.ui.forms.widgets.Section;
 
 public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements IDetailsPageProvider, IMenuListener {
 
-//	private IManagedForm managedForm;
 	private String title;
 	private TreeViewer treeViewer;
 	private Button addButton;
 	private Button removeButton;
-//	private DataBindingContext dataBindingContext;
-//	private EditingDomain editingDomain;
-//	private IObservableValue libraryObservable;
 	protected EmfFormEditor<?> parentEditor;
 
 	public EmfMasterDetailBlock(EmfFormEditor<?> editor, String title) {
 		this.title = title;
 		this.parentEditor = editor;
 	}
-
-//	public void setComponentAndEditingDomain(EditingDomain editingDomain, IEditorSite editorSite, DataBindingContext bindingContext, IObservableValue iObservableValue) {
-//		this.treeViewer.setInput(iObservableValue.getValue());
-//		this.dataBindingContext = bindingContext;
-//		this.editingDomain = editingDomain;
-//		this.libraryObservable = iObservableValue;
-//	}
 
 	@Override
 	protected void createMasterPart(final IManagedForm managedForm_, Composite parent) {
@@ -153,14 +143,17 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		contextMenu.addMenuListener(this);
 		Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
-		((EmfActionBarContributor) parentEditor.getEditorSite().getActionBarContributor()).setFilter(getContextMenuFilter());
+		IEditorActionBarContributor actionBarContributor = parentEditor.getEditorSite().getActionBarContributor();
+		if (actionBarContributor != null && actionBarContributor instanceof EmfActionBarContributor)
+			((EmfActionBarContributor) actionBarContributor).setFilter(getContextMenuFilter());
 		parentEditor.getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 	}
 
 	protected abstract IFilter getContextMenuFilter();
 
 	public void menuAboutToShow(IMenuManager manager) {
-		((IMenuListener) parentEditor.getEditorSite().getActionBarContributor()).menuAboutToShow(manager);
+		if (parentEditor.getEditorSite().getActionBarContributor() != null)
+			((IMenuListener) parentEditor.getEditorSite().getActionBarContributor()).menuAboutToShow(manager);
 	}
 
 }

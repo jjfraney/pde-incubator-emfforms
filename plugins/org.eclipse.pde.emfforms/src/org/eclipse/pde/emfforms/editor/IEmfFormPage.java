@@ -8,16 +8,15 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IEmfFormPage.java,v 1.2 2009/04/24 12:16:08 bcabe Exp $
+ * $Id: IEmfFormPage.java,v 1.3 2009/07/07 09:36:40 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.editor.IFormPage;
 
-public interface IEmfFormPage extends IFormPage {
+public interface IEmfFormPage {
 
 	void createContents(Composite parent);
 
