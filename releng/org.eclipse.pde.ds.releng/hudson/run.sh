@@ -11,12 +11,13 @@ echo "[`date +%Y/%m/%d\ %H:%M`] Hudson job ${JOBNAME} build #${BUILD_NUMBER} (${
 # BEGIN CONFIGURATION
 
 buildTimestamp="`date +%Y%m%d%H%M`"
-projectid="ds.modeling.incubator"
+projectid="org.eclipse.pde.ds"
 version="0.1.0"
 
 # leave blank to use assumed values (which may be wrong!)
+projNamespace='-projNamespace org.eclipse.pde.ds'
 projRelengRoot='-projRelengRoot :pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse'
-projRelengPath='-projRelengPath pde-incubator/modeling/releng'
+projRelengPath='-projRelengPath pde-incubator/modeling/releng/org.eclipse.pde.ds.releng'
 projRelengName='-projRelengName org.eclipse.pde.ds.releng'
 
 # DONE CONFIGURATION
