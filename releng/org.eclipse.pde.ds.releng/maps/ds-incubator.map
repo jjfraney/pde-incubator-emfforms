@@ -6,3 +6,10 @@ plugin@org.eclipse.pde.ds.edit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/
 plugin@org.eclipse.pde.ds.ui=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.ds.ui
 
 feature@org.eclipse.pde.ds=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/features/org.eclipse.pde.ds-feature
+
+#########
+# TESTS #
+#########
+plugin@org.eclipse.pde.ds.tests=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/tests/org.eclipse.pde.ds.tests
+
+feature@org.eclipse.pde.ds.test=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/features/org.eclipse.pde.ds.test-feature
