@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesTest.java,v 1.1 2009/07/08 16:38:11 bcabe Exp $
+ * $Id: PropertiesTest.java,v 1.2 2009/07/08 20:49:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.tests;
 
@@ -96,4 +96,8 @@ public class PropertiesTest extends TestCase {
 		setFixture(null);
 	}
 
+	public void testOk() {
+		assertTrue(true);
+	}
+	
 } //PropertiesTest

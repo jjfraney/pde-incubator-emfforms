@@ -8,16 +8,19 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ComponentTest.java,v 1.1 2009/07/08 16:38:11 bcabe Exp $
+ * $Id: ComponentTest.java,v 1.2 2009/07/08 20:49:55 bcabe Exp $
  */
 package org.eclipse.pde.ds.scr.tests;
 
 import junit.framework.TestCase;
-
 import junit.textui.TestRunner;
 
 import org.eclipse.pde.ds.scr.Component;
+import org.eclipse.pde.ds.scr.Properties;
+import org.eclipse.pde.ds.scr.Property;
 import org.eclipse.pde.ds.scr.ScrFactory;
+import org.eclipse.pde.ds.scr.ScrPackage;
+import org.eclipse.pde.ds.scr.Service;
 
 /**
  * <!-- begin-user-doc -->
@@ -112,12 +115,10 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#getImplementation()
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testGetImplementation() {
-		// TODO: implement this feature getter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		assertNotNull(getFixture().getImplementation()) ;
 	}
 
 	/**
@@ -125,12 +126,10 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#setImplementation(org.eclipse.pde.ds.scr.Implementation)
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testSetImplementation() {
-		// TODO: implement this feature setter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		assertTrue(true);
 	}
 
 	/**
@@ -138,12 +137,25 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#getAllProperties()
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testGetAllProperties() {
-		// TODO: implement this feature getter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		Component c = getFixture() ;
+		c.getAllProperties().add(ScrPackage.Literals.COMPONENT__PROPERTY, ScrFactory.eINSTANCE.createProperty()) ;
+		c.getAllProperties().add(ScrPackage.Literals.COMPONENT__PROPERTIES, ScrFactory.eINSTANCE.createProperties()) ;
+		c.getAllProperties().add(ScrPackage.Literals.COMPONENT__PROPERTY, ScrFactory.eINSTANCE.createProperty()) ;
+		// check the allProperties collection preserves property/properties interlacing
+		assertTrue(c.getAllProperties().get(0).getValue() instanceof Property) ;
+		assertTrue(c.getAllProperties().get(1).getValue() instanceof Properties) ;
+		assertTrue(c.getAllProperties().get(2).getValue() instanceof Property) ;
+		// check that values added to "actual" collections are accessible via getAllProperties
+		c.getProperties().add(ScrFactory.eINSTANCE.createProperties()) ;
+		c.getProperty().add(ScrFactory.eINSTANCE.createProperty()) ;
+		c.getProperties().add(ScrFactory.eINSTANCE.createProperties()) ;
+		assertTrue(c.getAllProperties().get(3).getValue() instanceof Properties) ;
+		assertTrue(c.getAllProperties().get(4).getValue() instanceof Property) ;
+		assertTrue(c.getAllProperties().get(5).getValue() instanceof Properties) ;
+		
 	}
 
 	/**
@@ -151,12 +163,10 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#getProperty()
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testGetProperty() {
-		// TODO: implement this feature getter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		assertTrue(getFixture().getProperty().isEmpty());
 	}
 
 	/**
@@ -164,12 +174,10 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#getProperties()
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testGetProperties() {
-		// TODO: implement this feature getter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		assertTrue(getFixture().getProperties().isEmpty());
 	}
 
 	/**
@@ -177,12 +185,10 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#getService()
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testGetService() {
-		// TODO: implement this feature getter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		assertNull(getFixture().getService());
 	}
 
 	/**
@@ -190,12 +196,12 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#setService(org.eclipse.pde.ds.scr.Service)
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testSetService() {
-		// TODO: implement this feature setter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		Service s = ScrFactory.eINSTANCE.createService();
+		getFixture().setService(s);
+		assertSame(s, getFixture().getService());
 	}
 
 	/**
@@ -203,12 +209,10 @@ public class ComponentTest extends TestCase {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.pde.ds.scr.Component#getReference()
-	 * @generated
+	 * @generated NOT
 	 */
 	public void testGetReference() {
-		// TODO: implement this feature getter test method
-		// Ensure that you remove @generated or mark it @generated NOT
-		fail();
+		assertTrue(getFixture().getReference().isEmpty());
 	}
 
 } //ComponentTest
