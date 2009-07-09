@@ -10,6 +10,9 @@ feature@org.eclipse.pde.ds=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/ecli
 #########
 # TESTS #
 #########
+bundle@org.eclipse.ant.optional.junit=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,org.eclipse.ant.optional.junit
+plugin@org.eclipse.test=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,org.eclipse.test
+
 plugin@org.eclipse.pde.ds.tests=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/tests/org.eclipse.pde.ds.tests
 
 feature@org.eclipse.pde.ds.test=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/features/org.eclipse.pde.ds.test-feature
