@@ -1,159 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
 <!--
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: PDE Modeling Incubator Checkstyle
+    Checkstyle-Configuration: Anyware coding conventions
     Description: none
 -->
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
-    <property name="severity" value="warning"/>
-    <module name="TreeWalker">
-        <module name="FileContentsHolder"/>
-        <module name="ArrayTypeStyle"/>
-        <module name="ModifierOrder"/>
-        <module name="RedundantModifier">
-            <property name="severity" value="ignore"/>
-        </module>
-        <module name="TodoComment">
-            <property name="format" value="TODO"/>
-        </module>
-        <module name="UpperEll"/>
-        <module name="AvoidNestedBlocks"/>
-        <module name="CovariantEquals"/>
-        <module name="DeclarationOrder">
-            <property name="severity" value="info"/>
-        </module>
-        <module name="DefaultComesLast"/>
-        <module name="DoubleCheckedLocking"/>
-        <module name="EmptyStatement"/>
-        <module name="EqualsHashCode"/>
-        <module name="HiddenField">
-            <property name="ignoreConstructorParameter" value="true"/>
-            <property name="ignoreSetter" value="true"/>
-        </module>
-        <module name="IllegalCatch">
-            <property name="severity" value="error"/>
-        </module>
-        <module name="IllegalInstantiation"/>
-        <module name="InnerAssignment"/>
-        <module name="MissingSwitchDefault"/>
-        <module name="ModifiedControlVariable"/>
-        <module name="MultipleVariableDeclarations"/>
-        <module name="RedundantThrows"/>
-        <module name="SimplifyBooleanExpression"/>
-        <module name="SimplifyBooleanReturn"/>
-        <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor">
-            <property name="severity" value="error"/>
-        </module>
-        <module name="VisibilityModifier"/>
-        <module name="IllegalImport"/>
-        <module name="RedundantImport"/>
-        <module name="UnusedImports"/>
-        <module name="JavadocStyle">
-            <property name="checkFirstSentence" value="false"/>
-        </module>
-        <module name="JavadocType"/>
-        <module name="CyclomaticComplexity">
-            <property name="max" value="7"/>
-        </module>
-        <module name="NPathComplexity"/>
-        <module name="ConstantName">
-            <property name="format" value="^[A-Z](_?[A-Z0-9]+)*$"/>
-        </module>
-        <module name="LocalFinalVariableName"/>
-        <module name="LocalVariableName"/>
-        <module name="MemberName">
-            <property name="format" value="^_?[a-z][a-zA-Z0-9]*$"/>
-        </module>
-        <module name="MethodName"/>
-        <module name="PackageName">
-            <property name="format" value="^[a-z]+(\.[a-z_][a-z0-9_]*)*$"/>
-        </module>
-        <module name="ParameterName"/>
-        <module name="StaticVariableName">
-            <property name="format" value="^[A-Z0-9_]*$"/>
-        </module>
-        <module name="TypeName"/>
-        <module name="AnonInnerLength"/>
-        <module name="FileLength"/>
-        <module name="LineLength">
-            <property name="max" value="300"/>
-        </module>
-        <module name="MethodLength">
-            <property name="countEmpty" value="false"/>
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
-        </module>
-        <module name="ParameterNumber">
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
-        </module>
-        <module name="EmptyBlock"/>
-        <module name="NeedBraces">
-            <property name="severity" value="ignore"/>
-        </module>
-        <module name="IllegalThrows"/>
-        <module name="FallThrough">
-            <property name="severity" value="error"/>
-        </module>
-        <module name="NestedIfDepth">
-            <property name="max" value="4"/>
-        </module>
-        <module name="NestedTryDepth"/>
-        <module name="PackageDeclaration"/>
-        <module name="ParameterAssignment"/>
-        <module name="StringLiteralEquality"/>
-        <module name="SuperClone"/>
-        <module name="SuperFinalize"/>
-        <module name="UnnecessaryParentheses"/>
-        <module name="MutableException"/>
-        <module name="BooleanExpressionComplexity">
-            <property name="tokens" value="LAND,BAND,LOR,BXOR"/>
-        </module>
-        <module name="ClassDataAbstractionCoupling">
-            <property name="severity" value="ignore"/>
-        </module>
-        <module name="ClassFanOutComplexity">
-            <property name="severity" value="ignore"/>
-        </module>
-        <module name="JavaNCSS"/>
-        <module name="GenericIllegalRegexp">
-            <property name="severity" value="error"/>
-            <property name="format" value="[.]*\.printStackTrace()"/>
-            <property name="ignoreComments" value="true"/>
-            <property name="message" value="Use logger instead of printStackTrace()."/>
-        </module>
-        <module name="GenericIllegalRegexp">
-            <property name="severity" value="error"/>
-            <property name="format" value="System\.out\.print"/>
-            <property name="message" value="Use log instead of System.out.print."/>
-        </module>
-        <module name="GenericIllegalRegexp">
-            <property name="severity" value="error"/>
-            <property name="format" value="System\.exit"/>
-        </module>
-        <module name="IllegalType">
-            <metadata name="com.atlassw.tools.eclipse.checkstyle.customMessage" value="You should try to use a more appropriate type"/>
-            <property name="severity" value="info"/>
-            <property name="tokens" value="METHOD_DEF,PARAMETER_DEF,VARIABLE_DEF"/>
-            <property name="illegalClassNames" value="java.util.Vector"/>
-        </module>
-        <module name="TodoComment">
-            <property name="format" value="FIXME"/>
-        </module>
-        <module name="AbstractClassName"/>
+  <property name="severity" value="warning"/>
+  <module name="TreeWalker">
+    <module name="FileContentsHolder"/>
+    <module name="ArrayTypeStyle"/>
+    <module name="ModifierOrder"/>
+    <module name="RedundantModifier">
+      <property name="severity" value="ignore"/>
     </module>
-    <module name="SuppressionCommentFilter">
-        <metadata name="com.atlassw.tools.eclipse.checkstyle.comment" value="Default suppression comment filter"/>
-        <property name="checkCPP" value="false"/>
-        <property name="checkC" value="false"/>
+    <module name="TodoComment">
+      <property name="format" value="TODO"/>
     </module>
-    <module name="SuppressionCommentFilter">
-        <metadata name="com.atlassw.tools.eclipse.checkstyle.comment" value="Generated code suppression comment filterrrrrrrr"/>
-        <property name="offCommentFormat" value="@generated"/>
-        <property name="onCommentFormat" value="@generated NOT"/>
-        <property name="checkCPP" value="false"/>
-        <property name="checkC" value="false"/>
+    <module name="UpperEll"/>
+    <module name="AvoidNestedBlocks"/>
+    <module name="CovariantEquals"/>
+    <module name="DeclarationOrder">
+      <property name="severity" value="info"/>
     </module>
+    <module name="DefaultComesLast"/>
+    <module name="DoubleCheckedLocking"/>
+    <module name="EmptyStatement"/>
+    <module name="EqualsHashCode"/>
+    <module name="HiddenField">
+      <property name="ignoreConstructorParameter" value="true"/>
+      <property name="ignoreSetter" value="true"/>
+    </module>
+    <module name="IllegalCatch">
+      <property name="severity" value="error"/>
+    </module>
+    <module name="IllegalInstantiation"/>
+    <module name="InnerAssignment"/>
+    <module name="MissingSwitchDefault"/>
+    <module name="ModifiedControlVariable"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="RedundantThrows"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="FinalClass"/>
+    <module name="HideUtilityClassConstructor">
+      <property name="severity" value="error"/>
+    </module>
+    <module name="VisibilityModifier"/>
+    <module name="AvoidStarImport"/>
+    <module name="IllegalImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+    <module name="JavadocStyle">
+      <property name="checkFirstSentence" value="false"/>
+    </module>
+    <module name="JavadocType">
+      <property name="severity" value="ignore"/>
+    </module>
+    <module name="CyclomaticComplexity">
+      <property name="max" value="7"/>
+    </module>
+    <module name="NPathComplexity"/>
+    <module name="ConstantName">
+      <property name="format" value="^[A-Z](_?[A-Z0-9]+)*$"/>
+    </module>
+    <module name="LocalFinalVariableName"/>
+    <module name="LocalVariableName"/>
+    <module name="MemberName">
+      <property name="format" value="^_?[a-z][a-zA-Z0-9]*$"/>
+    </module>
+    <module name="MethodName"/>
+    <module name="PackageName">
+      <property name="format" value="^[a-z]+(\.[a-z_][a-z0-9_]*)*$"/>
+    </module>
+    <module name="ParameterName"/>
+    <module name="StaticVariableName">
+      <property name="format" value="^[A-Z0-9_]*$"/>
+    </module>
+    <module name="TypeName"/>
+    <module name="AnonInnerLength"/>
+    <module name="LineLength">
+      <property name="max" value="300"/>
+    </module>
+    <module name="MethodLength">
+      <property name="countEmpty" value="false"/>
+      <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+    </module>
+    <module name="ParameterNumber">
+      <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+    </module>
+    <module name="EmptyBlock"/>
+    <module name="NeedBraces">
+      <property name="severity" value="ignore"/>
+    </module>
+    <module name="IllegalThrows"/>
+    <module name="FallThrough">
+      <property name="severity" value="error"/>
+    </module>
+    <module name="NestedIfDepth">
+      <property name="max" value="4"/>
+    </module>
+    <module name="NestedTryDepth"/>
+    <module name="PackageDeclaration"/>
+    <module name="ParameterAssignment"/>
+    <module name="StringLiteralEquality"/>
+    <module name="SuperClone"/>
+    <module name="SuperFinalize"/>
+    <module name="UnnecessaryParentheses"/>
+    <module name="MutableException"/>
+    <module name="BooleanExpressionComplexity">
+      <property name="tokens" value="LAND,BAND,LOR,BXOR"/>
+    </module>
+    <module name="ClassDataAbstractionCoupling">
+      <property name="severity" value="ignore"/>
+    </module>
+    <module name="ClassFanOutComplexity">
+      <property name="severity" value="ignore"/>
+    </module>
+    <module name="JavaNCSS"/>
+    <module name="IllegalType">
+      <property name="severity" value="info"/>
+      <property name="tokens" value="METHOD_DEF,PARAMETER_DEF,VARIABLE_DEF"/>
+      <property name="illegalClassNames" value="java.util.Vector"/>
+      <metadata name="com.atlassw.tools.eclipse.checkstyle.customMessage" value="You should try to use a more appropriate type"/>
+    </module>
+    <module name="TodoComment">
+      <property name="format" value="FIXME"/>
+    </module>
+    <module name="AbstractClassName"/>
+  </module>
+  <module name="FileLength"/>
+  <module name="RegexpSingleline">
+    <property name="severity" value="error"/>
+    <property name="format" value="[.]*\.printStackTrace\(\)"/>
+    <property name="message" value="Use logger instead of printStackTrace()."/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="severity" value="error"/>
+    <property name="format" value="System\.out\.print"/>
+    <property name="message" value="Use log instead of System.out.print."/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="severity" value="error"/>
+    <property name="format" value="System\.exit"/>
+  </module>
+  <module name="SuppressionCommentFilter">
+    <metadata name="net.sf.eclipsecs.core.comment" value="Generic filter"/>
+  </module>
+  <module name="SuppressionCommentFilter">
+    <metadata name="net.sf.eclipsecs.core.comment" value="EMF Codegen filter"/>
+    <property name="offCommentFormat" value="@generated(?! NOT)"/>
+    <property name="onCommentFormat" value="@generated NOT"/>
+  </module>
 </module>
