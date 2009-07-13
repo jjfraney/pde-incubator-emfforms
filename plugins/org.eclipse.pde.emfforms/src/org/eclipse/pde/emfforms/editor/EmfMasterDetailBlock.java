@@ -8,17 +8,20 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.3 2009/07/07 09:36:40 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.4 2009/07/13 18:28:48 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -80,6 +83,11 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		treeViewer.setContentProvider(new AdapterFactoryContentProvider(parentEditor.getAdapterFactory()));
 		treeViewer.setLabelProvider(new AdapterFactoryLabelProvider(parentEditor.getAdapterFactory()));
 		treeViewer.addFilter(getTreeFilter());
+
+		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
+		treeViewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(treeViewer));
+		treeViewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(parentEditor.getEditingDomain(), treeViewer));
 
 		final SectionPart spart = new SectionPart(section);
 		managedForm_.addPart(spart);
