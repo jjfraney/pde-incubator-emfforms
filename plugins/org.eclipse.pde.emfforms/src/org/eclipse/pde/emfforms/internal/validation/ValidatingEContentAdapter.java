@@ -69,21 +69,30 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 	}
 
 	private void analyzeDiagnostic(Diagnostic diagnostic, IMessageManager messageManager) {
+		boolean atLeastOneErroneousBinding = false;
 		for (Object o : _dataBindingContext.getBindings()) {
 			Binding binding = (Binding) o;
+			IEMFObservable emfObservable = null;
+			ISWTObservable swtObservable = null;
 			if (binding.getModel() instanceof IEMFObservable && binding.getTarget() instanceof ISWTObservable) {
-				checkBinding((IEMFObservable) binding.getModel(), (ISWTObservable) binding.getTarget(), diagnostic, messageManager);
+				emfObservable = (IEMFObservable) binding.getModel();
+				swtObservable = (ISWTObservable) binding.getTarget();
 			} else if (binding.getTarget() instanceof IEMFObservable && binding.getModel() instanceof ISWTObservable) {
-				checkBinding((IEMFObservable) binding.getTarget(), (ISWTObservable) binding.getModel(), diagnostic, messageManager);
-			} else {
-				// add an error message anyways
-				messageManager.addMessage(diagnostic, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()));
-
+				swtObservable = (ISWTObservable) binding.getModel();
+				emfObservable = (IEMFObservable) binding.getTarget();
 			}
+
+			if (emfObservable != null && swtObservable != null)
+				if (checkBinding(emfObservable, swtObservable, diagnostic, messageManager))
+					atLeastOneErroneousBinding = true;
+		}
+		if (!atLeastOneErroneousBinding) {
+			// add an error message anyways
+			messageManager.addMessage(diagnostic, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()));
 		}
 	}
 
-	private void checkBinding(IEMFObservable emfObservable, ISWTObservable swtObservable, Diagnostic diagnostic, IMessageManager messageManager) {
+	private boolean checkBinding(IEMFObservable emfObservable, ISWTObservable swtObservable, Diagnostic diagnostic, IMessageManager messageManager) {
 		List<?> diagnosticData = diagnostic.getData();
 		if (diagnosticData.size() >= 2) {
 			if (diagnosticData.get(0) == emfObservable.getObserved()) {
@@ -91,14 +100,17 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 					if (swtObservable.getWidget() instanceof Control) {
 						Control control = (Control) swtObservable.getWidget();
 
-						if (true || control.isVisible()) {
+						if (control.isVisible())
 							messageManager.addMessage(swtObservable, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()), control);
-						} else
+						else
 							messageManager.addMessage(swtObservable, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()));
+
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
 	protected static class KeyMap {
