@@ -8,12 +8,13 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: OverviewPage.java,v 1.11 2009/07/05 20:22:53 bcabe Exp $
+ * $Id: OverviewPage.java,v 1.12 2009/07/13 19:46:28 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.IToolBarManager;
@@ -24,7 +25,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.pde.ds.scr.ScrPackage;
 import org.eclipse.pde.ds.ui.internal.editor.composites.ComponentComposite;
 import org.eclipse.pde.ds.ui.internal.editor.composites.OptionsComposite;
-import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.swt.SWT;
@@ -55,7 +55,7 @@ public class OverviewPage extends AbstractEmfFormPage {
 		// component name
 		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextName()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Name()).observeDetail(getObservedValue()), null, null);
 		// component impl
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextImplementation()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Implementation()).value(ScrPackage.eINSTANCE.getImplementation_Class()).observeDetail(getObservedValue()), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextImplementation()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Implementation()).value(ScrPackage.eINSTANCE.getImplementation_Class()).observeDetail(getObservedValue()), new EMFUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (((String) value).trim().equals(""))

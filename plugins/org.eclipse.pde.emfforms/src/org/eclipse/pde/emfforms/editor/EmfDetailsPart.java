@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfDetailsPart.java,v 1.3 2009/07/07 09:36:40 bcabe Exp $
+ * $Id: EmfDetailsPart.java,v 1.4 2009/07/13 19:46:25 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -91,8 +91,10 @@ public abstract class EmfDetailsPart implements IDetailsPage {
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection sel = (IStructuredSelection) selection;
-		if (!sel.isEmpty())
+		if (!sel.isEmpty()) {
 			getCurrentSelection().setValue(AdapterFactoryEditingDomain.unwrap(sel.getFirstElement()));
+			getEditor().validate();
+		}
 	}
 
 	protected EditingDomain getEditingDomain() {

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.4 2009/06/02 09:06:35 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.5 2009/07/13 19:46:25 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -16,7 +16,6 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.pde.emfforms.internal.editor.MessageManagerListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -91,8 +90,8 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 		getFormToolkit().adapt(actualContent);
 
 		DataBindingContext bindingContext = ((EmfFormEditor<?>) getEditor()).getDataBindingContext();
-		bindingContext.getValidationStatusProviders().addListChangeListener(new MessageManagerListener(managedForm.getMessageManager()));
 		bind(bindingContext);
+		getEditor().validate();
 	}
 
 	private void createHeader() {
@@ -133,6 +132,13 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	 */
 	public Viewer getViewer() {
 		return null;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (active) {
+			getEditor().validate();
+		}
 	}
 
 	public abstract void bind(DataBindingContext bindingContext);

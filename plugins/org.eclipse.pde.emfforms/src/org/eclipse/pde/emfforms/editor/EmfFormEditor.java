@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.12 2009/07/07 20:58:20 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.13 2009/07/13 19:46:25 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -28,6 +28,7 @@ import org.eclipse.emf.common.ui.dialogs.DiagnosticDialog;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -48,10 +49,10 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
-import org.eclipse.pde.emfforms.databinding.EMFValidatingDatabindingContext;
 import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.pde.emfforms.internal.editor.Messages;
+import org.eclipse.pde.emfforms.internal.validation.ValidatingEContentAdapter;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
@@ -124,6 +125,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private DataBindingContext _bindingContext;
 
+	private ValidatingEContentAdapter _validator;
+
 	public EmfFormEditor() {
 		this._editorConfig = getFormEditorConfig();
 		init();
@@ -138,7 +141,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private void init() {
 		_editingDomain = createEditingDomain();
-		_bindingContext = new EMFValidatingDatabindingContext();
+		_bindingContext = new EMFDataBindingContext();
+		_validator = new ValidatingEContentAdapter(_observableValue, _bindingContext, this);
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
@@ -444,8 +448,12 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	protected void setMainResource(Resource resource) {
+		if (_currentEObject != null)
+			_currentEObject.eAdapters().remove(_validator);
+
 		_currentEObject = (T) resource.getContents().get(0);
 		_observableValue.setValue(_currentEObject);
+		_currentEObject.eAdapters().add(_validator);
 	}
 
 	/**
@@ -853,4 +861,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	public abstract String getID();
+
+	/* package */void validate() {
+		_validator.validate();
+	}
 }
