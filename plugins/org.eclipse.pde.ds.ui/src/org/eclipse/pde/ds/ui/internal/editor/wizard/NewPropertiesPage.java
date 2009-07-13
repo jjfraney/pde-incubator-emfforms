@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: NewPropertiesPage.java,v 1.6 2009/06/02 10:48:05 bcabe Exp $
+ * $Id: NewPropertiesPage.java,v 1.7 2009/07/13 19:54:48 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.wizard;
 
@@ -16,6 +16,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
@@ -28,7 +29,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.composites.PropertiesComposite2;
-import org.eclipse.pde.emfforms.databinding.EMFValidatingUpdateValueStrategy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -59,7 +59,7 @@ public class NewPropertiesPage extends WizardPage {
 		IObservableValue iov = new WritableValue();
 		iov.setValue(p);
 		//Name
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertiesComposite.getTextEntry()), EMFEditProperties.value(ed, ScrPackage.eINSTANCE.getProperties_Entry()).observeDetail(iov), new EMFValidatingUpdateValueStrategy() {
+		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertiesComposite.getTextEntry()), EMFEditProperties.value(ed, ScrPackage.eINSTANCE.getProperties_Entry()).observeDetail(iov), new EMFUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (value != null && !"".equals((String) value)) //$NON-NLS-1$
