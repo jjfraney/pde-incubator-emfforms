@@ -8,9 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.4 2009/07/07 21:52:28 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.5 2009/07/13 19:45:41 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
+
+import org.eclipse.pde.ds.scr.Properties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,13 +90,14 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 	}
 
 	public IDetailsPage getPage(Object key) {
-		if (key instanceof Reference) {
+		if (key instanceof Class<?>) {
+			if (Reference.class.isAssignableFrom((Class<?>) key)) {
 			return new ReferenceDetailsPart(parentEditor);
 		}
-		if (key instanceof Provide) {
-			return new ProvideDetailsPart(parentEditor);
+			if (Provide.class.isAssignableFrom((Class<?>) key)) {
+						return new ProvideDetailsPart(parentEditor);
 		}
-		return null;
+		}		return null;
 	}
 
 	public Button getBtnAddProvided() {

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.4 2009/07/13 18:28:48 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.5 2009/07/13 19:45:40 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -129,7 +129,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	public Object getPageKey(Object object) {
-		return AdapterFactoryEditingDomain.unwrap(object);
+		return AdapterFactoryEditingDomain.unwrap(object).getClass();
 	}
 
 	public TreeViewer getTreeViewer() {

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.10 2009/07/07 09:36:46 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.11 2009/07/13 19:45:41 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -33,11 +33,13 @@ public class PropertiesMasterDetail extends EmfMasterDetailBlock {
 	}
 
 	public IDetailsPage getPage(Object key) {
-		if (key instanceof Properties) {
-			return new PropertiesDetailsPart(parentEditor);
-		}
-		if (key instanceof Property) {
-			return new PropertyDetailsPart(parentEditor);
+		if (key instanceof Class<?>) {
+			if (Properties.class.isAssignableFrom((Class<?>) key)) {
+				return new PropertiesDetailsPart(parentEditor);
+			}
+			if (Property.class.isAssignableFrom((Class<?>) key)) {
+				return new PropertyDetailsPart(parentEditor);
+			}
 		}
 		return null;
 	}
