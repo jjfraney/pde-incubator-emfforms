@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfActionBarContributor.java,v 1.2 2009/07/06 20:14:01 bcabe Exp $
+ * $Id: EmfActionBarContributor.java,v 1.3 2009/07/17 14:33:24 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -33,14 +33,20 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 	/** The create child menu manager. */
 	private MenuManager createChildMenuManager;
 
+	/** The create child menu manager. */
+	private MenuManager createSiblingMenuManager;
+
 	/** The active editor part. */
 	private IEditorPart activeEditorPart;
 
 	/** The selection provider. */
 	private ISelectionProvider selectionProvider;
 
-	/** The create actions. */
-	private Collection<IAction> createActions;
+	/** The create child actions. */
+	private Collection<IAction> createChildActions;
+
+	/** The create sibling actions */
+	protected Collection<IAction> createSiblingActions;
 
 	/** The show properties view action. */
 	protected IAction showPropertiesViewAction = new Action("Open properties") {
@@ -60,17 +66,19 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		public boolean select(Object toTest) {
 			return true;
 		}
-
 	};
+
+	private String menuID;
 
 	/**
 	 * Instantiates a new emf action bar contributor.
 	 */
-	public EmfActionBarContributor() {
+	public EmfActionBarContributor(String menuID) {
 		super(ADDITIONS_LAST_STYLE);
 		loadResourceAction = new LoadResourceAction();
 		validateAction = new ValidateAction();
 		controlAction = new ControlAction();
+		this.menuID = menuID;
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +88,7 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 	public void contributeToMenu(IMenuManager menuManager) {
 		super.contributeToMenu(menuManager);
 
-		IMenuManager submenuManager = new MenuManager("", "libraryMenuID");
+		IMenuManager submenuManager = new MenuManager("", menuID);
 		menuManager.insertAfter("additions", submenuManager);
 		submenuManager.add(new Separator("settings"));
 		submenuManager.add(new Separator("actions"));
@@ -131,7 +139,10 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 	public void selectionChanged(SelectionChangedEvent event) {
 		// Remove any menu items for old selection.
 		if (createChildMenuManager != null) {
-			depopulateManager(createChildMenuManager, createActions);
+			depopulateManager(createChildMenuManager, createChildActions);
+		}
+		if (createSiblingMenuManager != null) {
+			depopulateManager(createSiblingMenuManager, createSiblingActions);
 		}
 
 		// Query the new selection for appropriate new child/sibling descriptors
@@ -148,11 +159,16 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		}
 
 		// Generate actions for selection; populate and redraw the menus.
-		createActions = generateCreateActions(newChildDescriptors, newSiblingDescriptors, selection);
+		createChildActions = generateCreateChildActions(newChildDescriptors, selection);
+		createSiblingActions = generateCreateSiblingActions(newSiblingDescriptors, selection);
 
 		if (createChildMenuManager != null) {
-			populateManager(createChildMenuManager, createActions, null);
+			populateManager(createChildMenuManager, createChildActions, null);
 			createChildMenuManager.update(true);
+		}
+		if (createSiblingMenuManager != null) {
+			populateManager(createSiblingMenuManager, createSiblingActions, null);
+			createSiblingMenuManager.update(true);
 		}
 
 	}
@@ -177,15 +193,14 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 	}
 
 	/**
-	 * Generate create actions.
+	 * Generate create actions for child menu.
 	 * 
 	 * @param childDescriptors the child descriptors
-	 * @param simblingDescriptors the simbling descriptors
 	 * @param selection the selection
 	 * 
 	 * @return the collection< i action>
 	 */
-	protected Collection<IAction> generateCreateActions(Collection<?> childDescriptors, Collection<?> simblingDescriptors, ISelection selection) {
+	protected Collection<IAction> generateCreateChildActions(Collection<?> childDescriptors, ISelection selection) {
 		Collection<IAction> actions = new ArrayList<IAction>();
 		if (childDescriptors != null) {
 			for (Object descriptor : childDescriptors) {
@@ -193,10 +208,23 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 					actions.add(new CreateChildAction(activeEditorPart, selection, descriptor));
 			}
 		}
-		if (simblingDescriptors != null) {
-			for (Object descriptor : simblingDescriptors) {
-				if (this.filter.select(((CommandParameter) descriptor).value))
-					actions.add(new CreateSiblingAction(activeEditorPart, selection, descriptor));
+
+		return actions;
+	}
+
+	/**
+	 * Generate create actions for sibling menu.
+	 * 
+	 * @param descriptors the sibling descriptors
+	 * @param selection the selection
+	 * 
+	 * @return the collection< i action>
+	 */
+	protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection) {
+		Collection<IAction> actions = new ArrayList<IAction>();
+		if (descriptors != null) {
+			for (Object descriptor : descriptors) {
+				actions.add(new CreateSiblingAction(activeEditorPart, selection, descriptor));
 			}
 		}
 		return actions;
@@ -237,9 +265,14 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		super.menuAboutToShow(menuManager);
 		MenuManager submenuManager = null;
 
-		submenuManager = new MenuManager("New");
-		populateManager(submenuManager, createActions, null);
+		submenuManager = new MenuManager("New child");
+		populateManager(submenuManager, createChildActions, null);
 		menuManager.insertBefore("edit", submenuManager);
+
+		submenuManager = new MenuManager("New sibling");
+		populateManager(submenuManager, createSiblingActions, null);
+		menuManager.insertBefore("edit", submenuManager);
+
 	}
 
 	/**
