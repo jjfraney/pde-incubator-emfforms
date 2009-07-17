@@ -8,12 +8,15 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: Activator.java,v 1.1 2009/02/12 22:20:33 bcabe Exp $
+ * $Id: Activator.java,v 1.2 2009/07/17 14:33:55 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal;
 
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.*;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -105,6 +108,93 @@ public class Activator extends AbstractUIPlugin {
 			status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message, e);
 		}
 		log(status);
+	}
+
+	/**
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path.
+	 * 
+	 * @param path
+	 *            the path
+	 * @return the image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(String pluginId, String path) {
+		return AbstractUIPlugin.imageDescriptorFromPlugin(pluginId, path);
+	}
+
+	/**
+	 * Add an image to the image registry
+	 * 
+	 * @param registry
+	 *            the registry to use
+	 * @param imgPath
+	 *            the path of the image to add
+	 */
+	public static void addImageToRegistry(ImageRegistry registry, String imgPath) {
+		ImageDescriptor descriptor = getImageDescriptor(getDefault().getBundle().getSymbolicName(), imgPath);
+		addImageToRegistry(registry, imgPath, descriptor);
+	}
+
+	/**
+	 * Register in the given ImageRegistry the ImageDescriptor using the Image's
+	 * path as key.
+	 * 
+	 * @param registry
+	 *            ImageRegistry
+	 * @param imgPath
+	 *            String
+	 * @param imgDesc
+	 *            ImageDescriptor
+	 */
+	public static void addImageToRegistry(ImageRegistry registry, String imgPath, ImageDescriptor imgDesc) {
+		ImageRegistry imgRegistry = registry;
+		if (imgRegistry == null) {
+			imgRegistry = getDefault().getImageRegistry();
+		}
+
+		imgRegistry.put(imgPath, imgDesc);
+	}
+
+	/**
+	 * Get an image from the local ImageRegistry. If the given Image's path is
+	 * not already registered, do it.
+	 * 
+	 * @param imagePath
+	 *            String, path and key identifying the image in the
+	 *            ImageRegistry
+	 * 
+	 * @return Image or null if nothing corresponds to the given key
+	 */
+	public static Image getImage(String imagePath) {
+		Image result = getDefault().getImageRegistry().get(imagePath);
+
+		if (result == null) {
+			addImageToRegistry(getDefault().getImageRegistry(), imagePath);
+			result = getDefault().getImageRegistry().get(imagePath);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Get an ImageDescriptor from the local ImageRegistry. If the given Image's
+	 * path is not already registered, do it.
+	 * 
+	 * @param imagePath
+	 *            String, path and key identifying the ImageDescriptor in the
+	 *            ImageRegistry
+	 * 
+	 * @return ImageDescriptor or null if nothing corresponds to the given key
+	 */
+	public static ImageDescriptor getImageDescriptor(String imagePath) {
+		ImageDescriptor result = getDefault().getImageRegistry().getDescriptor(imagePath);
+
+		if (result == null) {
+			addImageToRegistry(getDefault().getImageRegistry(), imagePath);
+			result = getDefault().getImageRegistry().getDescriptor(imagePath);
+		}
+
+		return result;
 	}
 
 }

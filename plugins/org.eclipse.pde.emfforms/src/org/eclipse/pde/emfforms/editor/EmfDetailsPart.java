@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfDetailsPart.java,v 1.4 2009/07/13 19:46:25 bcabe Exp $
+ * $Id: EmfDetailsPart.java,v 1.5 2009/07/17 14:33:54 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -39,7 +39,7 @@ public abstract class EmfDetailsPart implements IDetailsPage {
 
 	final public void createContents(Composite parent) {
 
-		GridLayoutFactory.fillDefaults().margins(10, 5).applyTo(parent);
+		GridLayoutFactory.fillDefaults().margins(5, 5).applyTo(parent);
 
 		_mainDetailComposite = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(_mainDetailComposite);

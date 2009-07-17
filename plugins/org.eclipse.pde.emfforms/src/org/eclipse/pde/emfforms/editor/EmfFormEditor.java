@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.13 2009/07/13 19:46:25 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.14 2009/07/17 14:33:54 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -704,7 +704,9 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				@Override
 				public void setActionBars(IActionBars actionBars) {
 					super.setActionBars(actionBars);
-					getActionBarContributor().shareGlobalActions(this, actionBars);
+					if (getActionBarContributor() != null) {
+						getActionBarContributor().shareGlobalActions(this, actionBars);
+					}
 				}
 			}
 
@@ -812,7 +814,9 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				@Override
 				public void setActionBars(IActionBars actionBars) {
 					super.setActionBars(actionBars);
-					getActionBarContributor().shareGlobalActions(this, actionBars);
+					if (getActionBarContributor() != null) {
+						getActionBarContributor().shareGlobalActions(this, actionBars);
+					}
 				}
 			};
 			propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(_adapterFactory));

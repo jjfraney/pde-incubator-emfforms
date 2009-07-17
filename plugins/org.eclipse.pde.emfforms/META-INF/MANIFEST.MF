@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.eclipse.pde.emfforms
+Bundle-SymbolicName: org.eclipse.pde.emfforms;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: org.eclipse.pde.emfforms.internal.Activator
 Bundle-Vendor: %providerName
