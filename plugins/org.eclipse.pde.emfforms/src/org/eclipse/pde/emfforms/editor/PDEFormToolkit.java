@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PDEFormToolkit.java,v 1.3 2009/06/02 09:05:03 bcabe Exp $
+ * $Id: PDEFormToolkit.java,v 1.4 2009/07/17 14:33:02 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -190,6 +190,20 @@ public class PDEFormToolkit extends FormToolkit {
 		removeButton.setText("-"); //$NON-NLS-1$
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(browseComposite);
 		return new Pair<ListViewer, Pair<Button, Button>>(listViewer, new Pair<Button, Button>(addButton, removeButton));
+	}
+
+	public static ListViewer createLabelAndList(String label, Composite composite) {
+		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
+
+		Label labelName = new Label(composite, SWT.NONE);
+		labelName.setText(label);
+		GridDataFactory.fillDefaults().span(2, 1).align(SWT.FILL, SWT.BEGINNING).applyTo(labelName);
+		labelName.setAlignment(SWT.LEFT);
+
+		ListViewer listViewer = new ListViewer(composite, SWT.BORDER);
+		GridDataFactory.fillDefaults().grab(true, false).span(2, 1).hint(SWT.DEFAULT, 80).applyTo(listViewer.getList());
+
+		return listViewer;
 	}
 
 	/**
