@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfActionBarContributor.java,v 1.3 2009/07/17 14:33:24 bcabe Exp $
+ * $Id: EmfActionBarContributor.java,v 1.4 2009/07/18 13:16:58 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -70,15 +70,23 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 
 	private String menuID;
 
+	public void setMenuID(String menuID) {
+		this.menuID = menuID;
+	}
+
 	/**
 	 * Instantiates a new emf action bar contributor.
 	 */
-	public EmfActionBarContributor(String menuID) {
+	public EmfActionBarContributor() {
 		super(ADDITIONS_LAST_STYLE);
 		loadResourceAction = new LoadResourceAction();
 		validateAction = new ValidateAction();
 		controlAction = new ControlAction();
-		this.menuID = menuID;
+	}
+
+	public EmfActionBarContributor(String menuID) {
+		this();
+		setMenuID(menuID);
 	}
 
 	/* (non-Javadoc)
