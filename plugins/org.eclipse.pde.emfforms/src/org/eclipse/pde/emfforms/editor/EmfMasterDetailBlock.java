@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.6 2009/07/17 14:33:54 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.7 2009/07/18 14:42:39 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -145,12 +145,26 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		Menu menu = contextMenu.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		IEditorActionBarContributor actionBarContributor = parentEditor.getEditorSite().getActionBarContributor();
-		if (actionBarContributor != null && actionBarContributor instanceof EmfActionBarContributor)
-			((EmfActionBarContributor) actionBarContributor).setFilter(getContextMenuFilter());
+		if (actionBarContributor != null && actionBarContributor instanceof EmfActionBarContributor) {
+			((EmfActionBarContributor) actionBarContributor).setCreateChildMenuFilter(getCreateChildContextMenuFilter());
+			((EmfActionBarContributor) actionBarContributor).setCreateSiblingMenuFilter(getCreateSiblingContextMenuFilter());
+		}
 		parentEditor.getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 	}
 
-	protected abstract IFilter getContextMenuFilter();
+	/**
+	 * TODO doc
+	 */
+	protected IFilter getCreateChildContextMenuFilter() {
+		return AcceptAllFilter.getInstance();
+	}
+
+	/**
+	 * TODO doc
+	 */
+	protected IFilter getCreateSiblingContextMenuFilter() {
+		return AcceptAllFilter.getInstance();
+	}
 
 	public void menuAboutToShow(IMenuManager manager) {
 		if (parentEditor.getEditorSite().getActionBarContributor() != null)

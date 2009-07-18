@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfActionBarContributor.java,v 1.4 2009/07/18 13:16:58 bcabe Exp $
+ * $Id: EmfActionBarContributor.java,v 1.5 2009/07/18 14:42:40 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -60,13 +60,11 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		}
 	};
 
-	/** The filter. */
-	private IFilter filter = new IFilter() {
+	/** The filter for create child actions . */
+	private IFilter createChildMenuFilter = AcceptAllFilter.getInstance();
 
-		public boolean select(Object toTest) {
-			return true;
-		}
-	};
+	/** The filter for create sibling actions. */
+	private IFilter createSiblingMenuFilter = AcceptAllFilter.getInstance();
 
 	private String menuID;
 
@@ -212,7 +210,7 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		Collection<IAction> actions = new ArrayList<IAction>();
 		if (childDescriptors != null) {
 			for (Object descriptor : childDescriptors) {
-				if (this.filter.select(((CommandParameter) descriptor).value))
+				if (this.createChildMenuFilter.select(((CommandParameter) descriptor).value))
 					actions.add(new CreateChildAction(activeEditorPart, selection, descriptor));
 			}
 		}
@@ -232,7 +230,8 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 		Collection<IAction> actions = new ArrayList<IAction>();
 		if (descriptors != null) {
 			for (Object descriptor : descriptors) {
-				actions.add(new CreateSiblingAction(activeEditorPart, selection, descriptor));
+				if (this.createSiblingMenuFilter.select(((CommandParameter) descriptor).value))
+					actions.add(new CreateSiblingAction(activeEditorPart, selection, descriptor));
 			}
 		}
 		return actions;
@@ -284,11 +283,21 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 	}
 
 	/**
-	 * Sets the filter.
+	 * Sets the filter used to selection actions to display in the create child menu.
 	 * 
 	 * @param filter the new filter
 	 */
-	public void setFilter(IFilter filter) {
-		this.filter = filter;
+	public void setCreateChildMenuFilter(IFilter filter) {
+		this.createChildMenuFilter = filter;
 	}
+
+	/**
+	 * Sets the filter used to selection actions to display in the create sibling menu.
+	 * 
+	 * @param filter the new filter
+	 */
+	public void setCreateSiblingMenuFilter(IFilter filter) {
+		this.createSiblingMenuFilter = filter;
+	}
+
 }

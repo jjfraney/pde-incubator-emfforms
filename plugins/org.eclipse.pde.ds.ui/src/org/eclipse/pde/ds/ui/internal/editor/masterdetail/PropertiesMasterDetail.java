@@ -8,10 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.11 2009/07/13 19:45:41 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.12 2009/07/18 14:42:41 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.ds.scr.Properties;
@@ -64,10 +65,16 @@ public class PropertiesMasterDetail extends EmfMasterDetailBlock {
 	}
 
 	@Override
-	protected IFilter getContextMenuFilter() {
+	protected IFilter getCreateSiblingContextMenuFilter() {
 		return new IFilter() {
+
 			public boolean select(Object toTest) {
+				if (toTest instanceof FeatureMap.Entry) {
+					Object val = ((FeatureMap.Entry) toTest).getValue();
+					return (val instanceof Property || val instanceof Properties);
+				}
 				return true;
+
 			}
 		};
 	}
