@@ -8,32 +8,26 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.6 2009/07/18 14:42:41 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.7 2009/07/18 15:29:53 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.services.ProvideDetailsPart;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.services.ReferenceDetailsPart;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.pde.emfforms.editor.EmfMasterDetailBlock;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.ui.IEditorSite;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IDetailsPage;
+import org.eclipse.ui.forms.IManagedForm;
 
 public class ServicesMasterDetail extends EmfMasterDetailBlock {
 
@@ -48,11 +42,11 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 		super(editor, "Services");
 	}
 
-	public void setComponentAndEditingDomain(IObservableValue iObservableValue, AdapterFactory adapterFactory, EditingDomain editingDomain, IEditorSite editorSite, DataBindingContext bindingContext) {
-		_editingDomain = editingDomain;
-		_databindingContext = bindingContext;
-
-		getTreeViewer().setContentProvider(new AdapterFactoryContentProvider(adapterFactory) {
+	@Override
+	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
+		super.createMasterPart(managedForm, parent);
+		// use a custom content provider because we want to display both Provide and Reference elements
+		getTreeViewer().setContentProvider(new AdapterFactoryContentProvider(parentEditor.getAdapterFactory()) {
 			@Override
 			public Object[] getElements(Object object) {
 				List<Object> l = new ArrayList<Object>();
@@ -63,28 +57,13 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 				if (service != null) {
 					Object[] children = super.getChildren(service);
 					for (Object o : children) {
-						l.add(AdapterFactoryEditingDomain.getWrapper(o, _editingDomain));
+						l.add(AdapterFactoryEditingDomain.getWrapper(o, parentEditor.getEditingDomain()));
 					}
 				}
 				return l.toArray();
 			}
 		});
-		getTreeViewer().setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
-		getTreeViewer().addFilter(new ViewerFilter() {
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(element);
-				return (unwrappedElement instanceof Reference || unwrappedElement instanceof Provide);
-			}
-		});
-		_databindingContext.bindValue(ViewerProperties.input().observe(_viewer), iObservableValue);
 
-		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
-		_viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(_viewer));
-		_viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(_editingDomain, _viewer));
-
-		_viewer.expandAll();
 	}
 
 	public IDetailsPage getPage(Object key) {
