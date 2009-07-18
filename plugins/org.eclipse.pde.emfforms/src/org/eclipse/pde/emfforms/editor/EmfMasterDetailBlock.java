@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.9 2009/07/18 20:13:00 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.10 2009/07/18 20:26:56 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -138,8 +138,8 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	protected void createContextMenuFor(StructuredViewer viewer) {
-		MenuManager contextMenu = new MenuManager("#PopUp");
-		contextMenu.add(new Separator("additions"));
+		MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
+		contextMenu.add(new Separator("additions")); //$NON-NLS-1$
 		contextMenu.setRemoveAllWhenShown(true);
 		contextMenu.addMenuListener(this);
 		Menu menu = contextMenu.createContextMenu(viewer.getControl());
