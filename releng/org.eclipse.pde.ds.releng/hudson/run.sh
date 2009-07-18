@@ -77,6 +77,6 @@ cd ${writableBuildRoot}/org.eclipse.dash.common.releng/tools/scripts
 rm -f ${writableBuildRoot}/.cvspass
 
 # copy update site zip to build/ root and give it a "unique" name in order to have a stable location to use as an update-site in eclipse!
-find ${writableBuildRoot}/../build *-Update-*.zip -exec cp {} ../repository.zip
+find ${writableBuildRoot}/../build *-Update-*.zip -exec cp \{\} ../repository.zip
 
 echo "[`date +%Y/%m/%d\ %H:%M`] Hudson job ${JOBNAME} build #${BUILD_NUMBER} (${BUILD_ID}) done." 
