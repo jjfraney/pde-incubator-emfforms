@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.7 2009/07/18 14:42:39 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.8 2009/07/18 14:44:04 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -46,7 +46,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	@Override
-	protected void createMasterPart(final IManagedForm managedForm_, Composite parent) {
+	protected void createMasterPart(final IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = parentEditor.getToolkit();
 
 		Section section = toolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
@@ -85,11 +85,11 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		treeViewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(parentEditor.getEditingDomain(), treeViewer));
 
 		final SectionPart spart = new SectionPart(section);
-		managedForm_.addPart(spart);
+		managedForm.addPart(spart);
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
-				managedForm_.fireSelectionChanged(spart, event.getSelection());
+				managedForm.fireSelectionChanged(spart, event.getSelection());
 			}
 		});
 
