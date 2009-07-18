@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IEmfFormsImages.java,v 1.1 2009/07/17 14:33:54 bcabe Exp $
+ * $Id: IEmfFormsImages.java,v 1.2 2009/07/18 12:56:34 bcabe Exp $
  */
 
 package org.eclipse.pde.emfforms.internal.editor;
@@ -19,9 +19,9 @@ package org.eclipse.pde.emfforms.internal.editor;
 public interface IEmfFormsImages {
 	public static final String ICONS_FOLDER = "icons/";
 
-	public static final String DECORATORS_FOLDER = ICONS_FOLDER + "decorators/";
+	public static final String DECORATORS_FOLDER = ICONS_FOLDER + "ovr16/";
 
-	public static final String ERROR_DECORATOR = DECORATORS_FOLDER + "error_ovr.gif";
+	public static final String ERROR_DECORATOR = DECORATORS_FOLDER + "error.gif";
 
-	public static final String WARNING_DECORATOR = DECORATORS_FOLDER + "warning_co.gif";
+	public static final String WARNING_DECORATOR = DECORATORS_FOLDER + "warning.gif";
 }
