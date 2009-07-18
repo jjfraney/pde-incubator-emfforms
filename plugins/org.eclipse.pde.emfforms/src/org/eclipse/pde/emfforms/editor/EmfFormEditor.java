@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.14 2009/07/17 14:33:54 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.15 2009/07/18 14:42:27 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -127,6 +127,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private ValidatingEContentAdapter _validator;
 
+	private boolean isSaving = false;
+
 	public EmfFormEditor() {
 		this._editorConfig = getFormEditorConfig();
 		init();
@@ -226,6 +228,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
+			isSaving = true;
+
 			internalDoValidate(monitor);
 
 			// Do the work within an operation because this is a long running
@@ -262,6 +266,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 		} catch (OperationCanceledException oce) {
 			// Do nothing
+		} finally {
+			isSaving = false;
 		}
 
 	}
@@ -604,7 +610,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 					final URI changedURI = URI.createPlatformResourceURI(fullPath, false);
 
 					SWTObservables.getRealm(Display.getDefault()).asyncExec(new Runnable() {
-						private boolean isSaving = false;
 
 						public void run() {
 							EObject currentEObject = (EObject) getInputObservable().getValue();
@@ -660,6 +665,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 * This is the content outline page's viewer.
 	 */
 	protected TreeViewer contentOutlineViewer;
+
+	private ResourceDeltaVisitor _visitor;
 
 	/**
 	 * This accesses a cached version of the content outliner.
@@ -775,8 +782,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	public void resourceChanged(IResourceChangeEvent event) {
 		IResourceDelta delta = event.getDelta();
 		try {
-			ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
-			delta.accept(visitor);
+			_visitor = new ResourceDeltaVisitor();
+			delta.accept(_visitor);
 		} catch (CoreException ce) {
 			Activator.log(ce);
 		}
