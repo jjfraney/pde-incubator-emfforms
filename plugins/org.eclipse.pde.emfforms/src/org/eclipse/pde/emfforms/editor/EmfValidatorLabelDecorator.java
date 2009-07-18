@@ -8,18 +8,20 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfValidatorLabelDecorator.java,v 1.1 2009/07/17 14:33:54 bcabe Exp $
+ * $Id: EmfValidatorLabelDecorator.java,v 1.2 2009/07/18 13:16:15 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
-
-import org.eclipse.pde.emfforms.internal.editor.IEmfFormsImages;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.provider.IWrapperItemProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.emfforms.internal.Activator;
+import org.eclipse.pde.emfforms.internal.editor.IEmfFormsImages;
 
 public class EmfValidatorLabelDecorator implements ILightweightLabelDecorator {
 
@@ -28,11 +30,17 @@ public class EmfValidatorLabelDecorator implements ILightweightLabelDecorator {
 	 *      org.eclipse.jface.viewers.IDecoration)
 	 */
 	public void decorate(Object element, IDecoration decoration) {
-		if (!(element instanceof EObject)) {
+		if (!(element instanceof EObject || element instanceof FeatureMap.Entry || element instanceof IWrapperItemProvider)) {
 			return;
 		}
 
-		EObject object = (EObject) element;
+		EObject object = null;
+		if (element instanceof EObject) {
+			object = (EObject) element;
+		} else {
+			object = (EObject) AdapterFactoryEditingDomain.unwrap(element);
+		}
+
 		Diagnostic validate = Diagnostician.INSTANCE.validate(object);
 
 		if (validate.getSeverity() == Diagnostic.ERROR) {
