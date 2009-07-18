@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
-            class="org.eclipse.pde.emfforms.editor.EmfValidatorLabelDecorator"
+            class="org.eclipse.pde.emfforms.internal.validation.EmfValidatorLabelDecorator"
             id="org.eclipse.pde.emfforms.masterDetailDecorator"
             label="EMF trees warnning and errors"
             lightweight="true"
