@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.8 2009/07/18 14:44:04 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.9 2009/07/18 20:13:00 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -71,7 +71,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 
 		removeButton = new Button(buttonComposite, SWT.FLAT | SWT.PUSH);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(removeButton);
-		removeButton.setText("Remove..."); //$NON-NLS-1$
+		removeButton.setText("Remove"); //$NON-NLS-1$
 
 		GridDataFactory.fillDefaults().grab(false, false).applyTo(buttonComposite);
 
