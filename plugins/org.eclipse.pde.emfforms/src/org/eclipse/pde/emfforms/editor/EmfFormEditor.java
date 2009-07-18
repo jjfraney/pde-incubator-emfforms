@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.15 2009/07/18 14:42:27 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.16 2009/07/18 20:27:34 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -874,6 +874,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	public abstract String getID();
 
 	/* package */void validate() {
+		// TODO perform validation in a separate job
 		_validator.validate();
 	}
 }
