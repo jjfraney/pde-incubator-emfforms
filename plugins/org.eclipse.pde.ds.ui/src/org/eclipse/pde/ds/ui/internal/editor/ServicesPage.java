@@ -8,16 +8,18 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesPage.java,v 1.3 2009/07/07 21:52:28 bcabe Exp $
+ * $Id: ServicesPage.java,v 1.4 2009/07/28 16:19:13 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.*;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.viewers.ViewerProperties;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.masterdetail.ServicesMasterDetail;
 import org.eclipse.pde.emfforms.editor.AbstractEmfFormPage;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
@@ -39,28 +41,40 @@ public class ServicesPage extends AbstractEmfFormPage {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
 
 		bindingContext.bindValue(ViewerProperties.input().observe(_servicesMasterDetail.getTreeViewer()), getEditor().getInputObservable());
-		/*
-				_servicesMasterDetail.getBtnAddProvided().addSelectionListener(new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e) {
-						Object sel = ((IStructuredSelection) getViewer().getSelection()).getFirstElement();
-						Provide p = ScrFactory.eINSTANCE.createProvide();
-						Command command = AddCommand.create(editingDomain, ((Component) getObservedValue().getValue()).getService(), null, p);
-						editingDomain.getCommandStack().execute(command);
 
-						getViewer().setSelection(new StructuredSelection(AdapterFactoryEditingDomain.getWrapper(p, editingDomain)), true);
-					}
-				});
+		_servicesMasterDetail.getBtnAddProvided().addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Object sel = ((IStructuredSelection) _servicesMasterDetail.getTreeViewer().getSelection()).getFirstElement();
+				int idx = CommandParameter.NO_INDEX;
+				if (sel != null) {
+					Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(sel);
+					idx = ((Component) getEditor().getInputObservable().getValue()).getService().getProvide().indexOf(unwrappedElement);
+				}
 
-				_servicesMasterDetail.getBtnAddRequired().addSelectionListener(new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent e) {
-						Reference r = ScrFactory.eINSTANCE.createReference();
-						r.setName("ref" + System.currentTimeMillis()); //$NON-NLS-1$
-						Command command = AddCommand.create(editingDomain, getObservedValue().getValue(), null, FeatureMapUtil.createEntry(ScrPackage.Literals.COMPONENT__REFERENCE, r), 0);
-						editingDomain.getCommandStack().execute(command);
+				Provide p = ScrFactory.eINSTANCE.createProvide();
+				Command command = AddCommand.create(editingDomain, ((Component) getEditor().getInputObservable().getValue()).getService(), ScrPackage.Literals.SERVICE__PROVIDE, p, idx);
+				editingDomain.getCommandStack().execute(command);
 
-						getViewer().setSelection(new StructuredSelection(AdapterFactoryEditingDomain.getWrapper(r, editingDomain)), true);
-					}
-				});*/
+				getViewer().setSelection(new StructuredSelection(AdapterFactoryEditingDomain.getWrapper(p, editingDomain)), true);
+			}
+		});
+
+		_servicesMasterDetail.getBtnAddRequired().addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Object sel = ((IStructuredSelection) _servicesMasterDetail.getTreeViewer().getSelection()).getFirstElement();
+				int idx = CommandParameter.NO_INDEX;
+				if (sel != null) {
+					Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(sel);
+					idx = ((Component) getEditor().getInputObservable().getValue()).getReference().indexOf(unwrappedElement);
+				}
+
+				Reference r = ScrFactory.eINSTANCE.createReference();
+				Command command = AddCommand.create(editingDomain, getEditor().getInputObservable().getValue(), ScrPackage.Literals.COMPONENT__REFERENCE, r, idx);
+				editingDomain.getCommandStack().execute(command);
+
+				getViewer().setSelection(new StructuredSelection(AdapterFactoryEditingDomain.getWrapper(r, editingDomain)), true);
+			}
+		});
 
 		_servicesMasterDetail.getRemoveButton().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

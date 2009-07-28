@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesMasterDetail.java,v 1.12 2009/07/18 14:42:41 bcabe Exp $
+ * $Id: PropertiesMasterDetail.java,v 1.13 2009/07/28 16:19:13 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -22,6 +22,7 @@ import org.eclipse.pde.ds.ui.internal.editor.detailpart.properties.PropertyDetai
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.pde.emfforms.editor.EmfMasterDetailBlock;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IDetailsPage;
 
 public class PropertiesMasterDetail extends EmfMasterDetailBlock {
@@ -31,6 +32,7 @@ public class PropertiesMasterDetail extends EmfMasterDetailBlock {
 
 	public PropertiesMasterDetail(EmfFormEditor<?> editor) {
 		super(editor, "Properties");
+		useGenericAddButton = false;
 	}
 
 	public IDetailsPage getPage(Object key) {
@@ -43,6 +45,12 @@ public class PropertiesMasterDetail extends EmfMasterDetailBlock {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected void createCustomAddButtons(Composite parent) {
+		addButtonProperty = createButton(parent, "Add Property");
+		addButtonProperties = createButton(parent, "Add Properties");
 	}
 
 	public Button getAddButtonProperty() {

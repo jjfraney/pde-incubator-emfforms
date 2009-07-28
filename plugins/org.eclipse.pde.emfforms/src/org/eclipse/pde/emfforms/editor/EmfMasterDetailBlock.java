@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.10 2009/07/18 20:26:56 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.11 2009/07/28 16:19:11 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -34,11 +34,12 @@ import org.eclipse.ui.forms.widgets.Section;
 
 public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements IDetailsPageProvider, IMenuListener {
 
+	protected EmfFormEditor<?> parentEditor;
+	protected boolean useGenericAddButton = true;
 	private String title;
 	private TreeViewer treeViewer;
 	private Button addButton;
 	private Button removeButton;
-	protected EmfFormEditor<?> parentEditor;
 
 	public EmfMasterDetailBlock(EmfFormEditor<?> editor, String title) {
 		this.title = title;
@@ -65,13 +66,12 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		Composite buttonComposite = new Composite(client, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(buttonComposite);
 
-		addButton = new Button(buttonComposite, SWT.FLAT | SWT.PUSH);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(addButton);
-		addButton.setText("Add..."); //$NON-NLS-1$
+		if (useGenericAddButton)
+			addButton = createButton(buttonComposite, "Add...");
 
-		removeButton = new Button(buttonComposite, SWT.FLAT | SWT.PUSH);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(removeButton);
-		removeButton.setText("Remove"); //$NON-NLS-1$
+		createCustomAddButtons(buttonComposite);
+
+		removeButton = createButton(buttonComposite, "Remove"); //$NON-NLS-1$
 
 		GridDataFactory.fillDefaults().grab(false, false).applyTo(buttonComposite);
 
@@ -104,6 +104,14 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		section.setClient(client);
 	}
 
+	protected Button createButton(Composite parent, String btnText) {
+		Button btn = new Button(parent, SWT.FLAT | SWT.PUSH);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(btn);
+		btn.setText(btnText); //$NON-NLS-1$
+
+		return btn;
+	}
+
 	/**
 	 * Return a ViewerFilter to apply on the treeViewer
 	 * 
@@ -129,8 +137,15 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		return treeViewer;
 	}
 
-	public Button getAddButton() {
+	/**
+	 * @return The "Add..." button that can be used to hook an element creation wizard, or <code>null</code> if the {@link EmfMasterDetailBlock#useGenericAddButton} flag is set to <code>false</code> 
+	 */
+	public Button getGenericAddButton() {
 		return addButton;
+	}
+
+	protected void createCustomAddButtons(Composite parent) {
+		// Should be overriden by clients wanting to contribute their own "add" button(s) 
 	}
 
 	public Button getRemoveButton() {

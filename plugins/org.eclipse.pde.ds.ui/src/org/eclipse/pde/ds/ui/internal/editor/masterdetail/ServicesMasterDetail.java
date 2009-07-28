@@ -8,17 +8,16 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.7 2009/07/18 15:29:53 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.8 2009/07/28 16:19:13 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.services.ProvideDetailsPart;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.services.ReferenceDetailsPart;
@@ -30,16 +29,12 @@ import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IManagedForm;
 
 public class ServicesMasterDetail extends EmfMasterDetailBlock {
-
-	private TreeViewer _viewer;
-	private EditingDomain _editingDomain;
-	private DataBindingContext _databindingContext;
-
 	private Button _btnAddProvided;
 	private Button _btnAddRequired;
 
 	public ServicesMasterDetail(EmfFormEditor<?> editor) {
 		super(editor, "Services");
+		useGenericAddButton = false;
 	}
 
 	@Override
@@ -63,7 +58,6 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 				return l.toArray();
 			}
 		});
-
 	}
 
 	public IDetailsPage getPage(Object key) {
@@ -76,6 +70,12 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected void createCustomAddButtons(Composite parent) {
+		_btnAddRequired = createButton(parent, "Add Reference");
+		_btnAddProvided = createButton(parent, "Add Provided");
 	}
 
 	public Button getBtnAddProvided() {
