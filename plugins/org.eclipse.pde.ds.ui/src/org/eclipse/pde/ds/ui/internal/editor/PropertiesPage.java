@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PropertiesPage.java,v 1.12 2009/07/28 16:19:13 bcabe Exp $
+ * $Id: PropertiesPage.java,v 1.13 2009/07/28 16:38:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -101,17 +101,6 @@ public class PropertiesPage extends AbstractEmfFormPage {
 		// the editor shall add a listener the viewer, and this is a way for him
 		// to know that viewer exists.
 		((DSEditor) getEditor()).addViewerToListenTo(_propertiesMasterDetail.getTreeViewer());
-	}
-
-	public void setActive(boolean active) {
-		super.setActive(active);
-		if (active) {
-			// force the selection, to avoid a bug on the ContextMenu (on tab
-			// changed, display menu was unconsistent)
-			IStructuredSelection selection = (IStructuredSelection) _propertiesMasterDetail.getTreeViewer().getSelection();
-			_propertiesMasterDetail.getTreeViewer().setSelection(selection);
-			_propertiesMasterDetail.getTreeViewer().refresh();
-		}
 	}
 
 	@Override

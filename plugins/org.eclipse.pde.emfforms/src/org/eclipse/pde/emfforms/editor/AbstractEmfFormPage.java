@@ -8,13 +8,14 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.5 2009/07/13 19:46:25 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.6 2009/07/28 16:38:44 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -138,6 +139,14 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	public void setActive(boolean active) {
 		if (active) {
 			getEditor().validate();
+
+			// force the selection on the viewer if there is any, to avoid a bug on the ContextMenu (on tab
+			// changed, display menu was unconsistent)
+			if (getViewer() != null) {
+				IStructuredSelection selection = (IStructuredSelection) getViewer().getSelection();
+				getViewer().setSelection(selection);
+				getViewer().refresh();
+			}
 		}
 	}
 

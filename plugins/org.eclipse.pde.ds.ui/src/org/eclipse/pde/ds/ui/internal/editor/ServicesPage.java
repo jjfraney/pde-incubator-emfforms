@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesPage.java,v 1.5 2009/07/28 16:23:51 bcabe Exp $
+ * $Id: ServicesPage.java,v 1.6 2009/07/28 16:38:42 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -100,17 +100,6 @@ public class ServicesPage extends AbstractEmfFormPage {
 		// the editor shall add a listener the viewer, and this is a way for him
 		// to know that viewer exists.
 		((DSEditor) getEditor()).addViewerToListenTo((StructuredViewer) getViewer());
-	}
-
-	public void setActive(boolean active) {
-		super.setActive(active);
-		if (active) {
-			// force the selection, to avoid a bug on the ContextMenu (on tab
-			// changed, display menu was unconsistent)
-			IStructuredSelection selection = (IStructuredSelection) getViewer().getSelection();
-			getViewer().setSelection(selection);
-			getViewer().refresh();
-		}
 	}
 
 	@Override
