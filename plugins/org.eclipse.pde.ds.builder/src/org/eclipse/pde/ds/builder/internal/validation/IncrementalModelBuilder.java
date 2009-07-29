@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IncrementalModelBuilder.java,v 1.5 2009/07/05 20:21:06 bcabe Exp $
+ * $Id: IncrementalModelBuilder.java,v 1.6 2009/07/29 10:31:26 bcabe Exp $
  */
 package org.eclipse.pde.ds.builder.internal.validation;
 
@@ -168,26 +168,30 @@ public abstract class IncrementalModelBuilder extends IncrementalProjectBuilder 
 				bundleModel.load();
 				String serviceComponents = bundleModel.getBundle().getHeader(
 						ComponentConstants.SERVICE_COMPONENT);
-				StringTokenizer tok = new StringTokenizer(serviceComponents,
-						","); //$NON-NLS-1$
-				// process all definition file
-				while (tok.hasMoreElements()) {
-					String definitionFile = tok.nextToken().trim();
-					int ind = definitionFile.lastIndexOf('/');
-					String path = ind != -1 ? definitionFile.substring(0, ind)
-							: "/"; //$NON-NLS-1$
-					// TODO we need to support pattern (path may be equal to
-					// something like "/OSGI-INF/comp-*.xml"...)
-					IFile componentFile = getProject().getFile(definitionFile);
-					URI res = URI.createPlatformResourceURI(componentFile
-							.getFullPath().toString(), true);
-					Resource modelResource = new AdapterFactoryEditingDomain(
-							new ComposedAdapterFactory(
-									ComposedAdapterFactory.Descriptor.Registry.INSTANCE),
-							new BasicCommandStack()).getResourceSet()
-							.getResource(res, true);
-					build(modelResource.getContents().get(0), componentFile,
-							true, new SubProgressMonitor(monitor, 1));
+				if (serviceComponents != null) {
+					StringTokenizer tok = new StringTokenizer(
+							serviceComponents, ","); //$NON-NLS-1$
+					// process all definition file
+					while (tok.hasMoreElements()) {
+						String definitionFile = tok.nextToken().trim();
+						int ind = definitionFile.lastIndexOf('/');
+						String path = ind != -1 ? definitionFile.substring(0,
+								ind) : "/"; //$NON-NLS-1$
+						// TODO we need to support patterns (path may be equal
+						// to something like "/OSGI-INF/comp-*.xml"...)
+						IFile componentFile = getProject().getFile(
+								definitionFile);
+						URI res = URI.createPlatformResourceURI(componentFile
+								.getFullPath().toString(), true);
+						Resource modelResource = new AdapterFactoryEditingDomain(
+								new ComposedAdapterFactory(
+										ComposedAdapterFactory.Descriptor.Registry.INSTANCE),
+								new BasicCommandStack()).getResourceSet()
+								.getResource(res, true);
+						build(modelResource.getContents().get(0),
+								componentFile, true, new SubProgressMonitor(
+										monitor, 1));
+					}
 				} // end while
 
 			}
