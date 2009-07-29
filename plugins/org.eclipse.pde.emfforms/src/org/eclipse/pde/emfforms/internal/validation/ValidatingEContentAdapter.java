@@ -51,7 +51,8 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 
 	@Override
 	public void notifyChanged(Notification notification) {
-		validate();
+		if (notification.getEventType() != Notification.REMOVING_ADAPTER)
+			validate();
 	}
 
 	public void validate() {
@@ -100,7 +101,7 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 					if (swtObservable.getWidget() instanceof Control) {
 						Control control = (Control) swtObservable.getWidget();
 
-						if (control.isVisible())
+						if (true || control.isVisible())
 							messageManager.addMessage(swtObservable, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()), control);
 						else
 							messageManager.addMessage(swtObservable, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()));
