@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.xml.core;bundle-version="1.1.400";resolution:=optional,
  org.eclipse.wst.xml.ui;bundle-version="1.1.0";resolution:=optional,
  org.eclipse.jface.text;bundle-version="3.5.0",
- org.eclipse.ui.ide;bundle-version="3.5.0"
+ org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.ui
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Localization: plugin
@@ -26,7 +27,8 @@ Export-Package: org.eclipse.pde.ds.ui.internal;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor.detailpart.properties;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor.detailpart.services;x-internal:=true,
  org.eclipse.pde.ds.ui.internal.editor.masterdetail;x-internal:=true,
- org.eclipse.pde.ds.ui.internal.editor.wizard;x-internal:=true
+ org.eclipse.pde.ds.ui.internal.editor.wizard;x-internal:=true,
+ org.eclipse.pde.ds.ui.internal.handlers;x-internal:=true
 Import-Package: org.eclipse.core.databinding,
  org.eclipse.core.databinding.observable,
  org.eclipse.core.databinding.observable.value,

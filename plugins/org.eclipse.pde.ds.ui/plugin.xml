@@ -17,4 +17,28 @@
          </contentTypeBinding>
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.pde.ds.ui.internal.handlers.AddScrBuilderHandler"
+            id="org.eclipse.pde.ds.ui.experimental.commands.addScrBuilder"
+            name="%command.configureDSBuilder.name"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <command
+               commandId="org.eclipse.pde.ds.ui.experimental.commands.addScrBuilder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate>
+                  <adapt
+                        type="org.eclipse.core.resources.IProject">
+                  </adapt></iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
 </plugin>
