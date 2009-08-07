@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.databinding.*;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.databinding.edit.*;
+import org.eclipse.emf.databinding.IEMFObservable;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.jface.dialogs.IMessageProvider;
