@@ -8,15 +8,14 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.6 2009/07/28 16:38:44 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.7 2009/08/07 11:03:24 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -93,6 +92,16 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 		DataBindingContext bindingContext = ((EmfFormEditor<?>) getEditor()).getDataBindingContext();
 		bind(bindingContext);
 		getEditor().validate();
+
+		//select first element if there is one
+		if (getViewer() != null && getViewer() instanceof TreeViewer) {
+			TreeViewer treeViewer = (TreeViewer) getViewer();
+			if (treeViewer.getTree().getItemCount() > 0) {
+				treeViewer.getTree().setSelection(treeViewer.getTree().getItem(0));
+				treeViewer.getTree().setFocus();
+			}
+		}
+
 	}
 
 	private void createHeader() {
