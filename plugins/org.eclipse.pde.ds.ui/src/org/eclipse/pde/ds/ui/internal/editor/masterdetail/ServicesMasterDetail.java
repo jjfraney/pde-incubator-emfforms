@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.8 2009/07/28 16:19:13 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.9 2009/08/07 16:41:55 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -34,7 +34,7 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 
 	public ServicesMasterDetail(EmfFormEditor<?> editor) {
 		super(editor, "Services");
-		useGenericAddButton = false;
+		useGenericButton = false;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 	}
 
 	@Override
-	protected void createCustomAddButtons(Composite parent) {
+	protected void createCustomButtons(Composite parent) {
 		_btnAddRequired = createButton(parent, "Add Reference");
 		_btnAddProvided = createButton(parent, "Add Provided");
 	}
