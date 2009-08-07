@@ -1,4 +1,5 @@
 plugin@org.eclipse.pde.emfforms=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.emfforms
+bundle@org.eclipse.pde.emfforms.validation_35=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.emfforms.validation_35
 
 plugin@org.eclipse.pde.ds=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.ds
 plugin@org.eclipse.pde.ds.builder=HEAD,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,,pde-incubator/modeling/plugins/org.eclipse.pde.ds.builder

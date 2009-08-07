@@ -16,7 +16,10 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.pde.emfforms.editor,
+ org.eclipse.pde.emfforms.editor.actions,
  org.eclipse.pde.emfforms.internal;x-internal:=true,
+ org.eclipse.pde.emfforms.internal.actions;x-internal:=true,
  org.eclipse.pde.emfforms.internal.editor;x-internal:=true,
  org.eclipse.pde.emfforms.internal.validation;x-internal:=true
 Import-Package: org.eclipse.core.resources
+Service-Component: OSGI-INF/*.xml

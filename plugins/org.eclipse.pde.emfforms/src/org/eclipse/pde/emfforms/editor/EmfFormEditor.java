@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.16 2009/07/18 20:27:34 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.17 2009/08/07 16:25:33 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -700,6 +700,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 						// Select the root object in the view.
 						contentOutlineViewer.setSelection(new StructuredSelection(getEditingDomain().getResourceSet().getResources().get(0)), true);
 					}
+
 				}
 
 				@Override
@@ -723,7 +724,14 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
 				// This ensures that we handle selections correctly.
 				public void selectionChanged(SelectionChangedEvent event) {
-					handleContentOutlineSelection(event.getSelection());
+					handleContentOutlineSelection(event.getSelection(), getViewer());
+				}
+			});
+
+			addSelectionChangedListener(new ISelectionChangedListener() {
+				// This ensures that we handle selections correctly.
+				public void selectionChanged(SelectionChangedEvent event) {
+					handleContentOutlineSelection(event.getSelection(), contentOutlineViewer);
 				}
 			});
 		}
@@ -734,24 +742,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	/**
 	 * This deals with how we want selection in the outline to affect the other views.
 	 */
-	public void handleContentOutlineSelection(ISelection selection) {
-		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			Iterator<?> selectedElements = ((IStructuredSelection) selection).iterator();
-			if (selectedElements.hasNext()) {
-				// Get the first selected element.
-				Object selectedElement = selectedElements.next();
-
-				// If it's the selection viewer, then we want it to select the same selection as this selection.
-				if (getViewer() != null) {
-					ArrayList<Object> selectionList = new ArrayList<Object>();
-					selectionList.add(selectedElement);
-					while (selectedElements.hasNext()) {
-						selectionList.add(selectedElements.next());
-					}
-
-					// Set the selection to the widget.
-					getViewer().setSelection(new StructuredSelection(selectionList));
-				}
+	public void handleContentOutlineSelection(ISelection selection, Viewer viewerToSnych) {
+		if (!selection.isEmpty() && selection instanceof IStructuredSelection && viewerToSnych != null) {
+			if (((IStructuredSelection) selection).getFirstElement() != ((IStructuredSelection) viewerToSnych.getSelection()).getFirstElement()) {
+				viewerToSnych.setSelection(new StructuredSelection(((IStructuredSelection) selection).getFirstElement()));
 			}
 		}
 	}
@@ -848,7 +842,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 					if (eObject != null && (getEditingDomain() instanceof AdapterFactoryEditingDomain)) {
 						AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain) getEditingDomain();
 						if (getViewer() != null) {
-							getViewer().setSelection(new StructuredSelection(Collections.singleton(AdapterFactoryEditingDomain.getWrapper(eObject, editingDomain)).toArray()));
+							getViewer().setSelection(new StructuredSelection(Collections.singleton(editingDomain.getWrapper(eObject)).toArray()));
 						}
 					}
 				}

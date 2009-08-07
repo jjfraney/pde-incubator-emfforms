@@ -1,22 +1,19 @@
 package org.eclipse.pde.emfforms.internal.validation;
 
-import java.util.*;
-import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.databinding.IEMFObservable;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
-import org.eclipse.jface.databinding.swt.ISWTObservable;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.pde.emfforms.editor.EmfFormEditor;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.pde.emfforms.editor.ValidatingService;
+import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.ui.forms.IMessageManager;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 public class ValidatingEContentAdapter extends EContentAdapter {
 	private DataBindingContext _dataBindingContext;
@@ -24,7 +21,7 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 	private IObservableValue _observedValue;
 	private Diagnostician _diagnostician;
 
-	private static final KeyMap keyMap = new KeyMap();
+	private ValidatingService validatingService;
 
 	public ValidatingEContentAdapter(IObservableValue observedValue, DataBindingContext dataBindingContext, EmfFormEditor<?> formEditor) {
 		_formEditor = formEditor;
@@ -51,8 +48,9 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 
 	@Override
 	public void notifyChanged(Notification notification) {
-		if (notification.getEventType() != Notification.REMOVING_ADAPTER)
+		if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
 			validate();
+		}
 	}
 
 	public void validate() {
@@ -63,71 +61,19 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 		Diagnostic diagnostics = _diagnostician.validate((EObject) _observedValue.getValue());
 
 		for (Diagnostic diagnostic : diagnostics.getChildren()) {
-			analyzeDiagnostic(diagnostic, messageManager);
+			getValidatorService().analyzeDiagnostic(_dataBindingContext, diagnostic, messageManager);
 		}
 
 		messageManager.update();
 	}
 
-	private void analyzeDiagnostic(Diagnostic diagnostic, IMessageManager messageManager) {
-		boolean atLeastOneErroneousBinding = false;
-		for (Object o : _dataBindingContext.getBindings()) {
-			Binding binding = (Binding) o;
-			IEMFObservable emfObservable = null;
-			ISWTObservable swtObservable = null;
-			if (binding.getModel() instanceof IEMFObservable && binding.getTarget() instanceof ISWTObservable) {
-				emfObservable = (IEMFObservable) binding.getModel();
-				swtObservable = (ISWTObservable) binding.getTarget();
-			} else if (binding.getTarget() instanceof IEMFObservable && binding.getModel() instanceof ISWTObservable) {
-				swtObservable = (ISWTObservable) binding.getModel();
-				emfObservable = (IEMFObservable) binding.getTarget();
-			}
-
-			if (emfObservable != null && swtObservable != null)
-				if (checkBinding(emfObservable, swtObservable, diagnostic, messageManager))
-					atLeastOneErroneousBinding = true;
+	private ValidatingService getValidatorService() {
+		BundleContext context = Activator.getDefault().getBundle().getBundleContext();
+		if (validatingService == null) {
+			ServiceReference validatingServiceRef = context.getServiceReference(ValidatingService.class.getName());
+			validatingService = (ValidatingService) context.getService(validatingServiceRef);
 		}
-		if (!atLeastOneErroneousBinding) {
-			// add an error message anyways
-			messageManager.addMessage(diagnostic, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()));
-		}
-	}
-
-	private boolean checkBinding(IEMFObservable emfObservable, ISWTObservable swtObservable, Diagnostic diagnostic, IMessageManager messageManager) {
-		List<?> diagnosticData = diagnostic.getData();
-		if (diagnosticData.size() >= 2) {
-			if (diagnosticData.get(0) == emfObservable.getObserved()) {
-				if (diagnosticData.get(1) == emfObservable.getStructuralFeature()) {
-					if (swtObservable.getWidget() instanceof Control) {
-						Control control = (Control) swtObservable.getWidget();
-
-						if (true || control.isVisible())
-							messageManager.addMessage(swtObservable, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()), control);
-						else
-							messageManager.addMessage(swtObservable, diagnostic.getMessage(), null, keyMap.getMessageProviderKey(diagnostic.getSeverity()));
-
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	protected static class KeyMap {
-		private Map<Integer, Integer> keymap = new HashMap<Integer, Integer>();
-
-		protected KeyMap() {
-			keymap.put(Integer.valueOf(IStatus.ERROR), Integer.valueOf(IMessageProvider.ERROR));
-			keymap.put(Integer.valueOf(IStatus.INFO), Integer.valueOf(IMessageProvider.WARNING));
-			keymap.put(Integer.valueOf(IStatus.INFO), Integer.valueOf(IMessageProvider.INFORMATION));
-			keymap.put(Integer.valueOf(IStatus.OK), Integer.valueOf(IMessageProvider.NONE));
-			keymap.put(Integer.valueOf(IStatus.CANCEL), Integer.valueOf(IMessageProvider.INFORMATION));
-		}
-
-		protected int getMessageProviderKey(int iStatusKey) {
-			return keymap.get(Integer.valueOf(iStatusKey)).intValue();
-		}
+		return validatingService;
 	}
 
 }

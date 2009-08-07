@@ -8,20 +8,30 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.11 2009/07/28 16:19:11 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.12 2009/08/07 16:25:33 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.ui.dnd.*;
 import org.eclipse.emf.edit.ui.provider.*;
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.emfforms.internal.actions.RemoveAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IEditorActionBarContributor;
@@ -35,11 +45,15 @@ import org.eclipse.ui.forms.widgets.Section;
 public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements IDetailsPageProvider, IMenuListener {
 
 	protected EmfFormEditor<?> parentEditor;
-	protected boolean useGenericAddButton = true;
+	protected boolean useGenericButton = false;
+	protected boolean useGenericSectionToolBar = true;
+
 	private String title;
 	private TreeViewer treeViewer;
 	private Button addButton;
 	private Button removeButton;
+
+	private ToolBarManager toolBarManager;
 
 	public EmfMasterDetailBlock(EmfFormEditor<?> editor, String title) {
 		this.title = title;
@@ -58,22 +72,37 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		section.marginHeight = 5;
 
 		Composite client = toolkit.createComposite(section, SWT.WRAP);
-		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(client);
+		GridLayoutFactory.fillDefaults().numColumns(useGenericButton ? 2 : 1).applyTo(client);
 
-		FilteredTree ft = new FilteredTree(client, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, new PatternFilter(), true);
+		FilteredTree ft = new FilteredTree(client, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, new PatternFilter());
 		treeViewer = ft.getViewer();
 
-		Composite buttonComposite = new Composite(client, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(buttonComposite);
+		//Buttons
+		if (useGenericButton) {
+			Composite buttonComposite = new Composite(client, SWT.NONE);
+			GridLayoutFactory.fillDefaults().numColumns(1).applyTo(buttonComposite);
 
-		if (useGenericAddButton)
-			addButton = createButton(buttonComposite, "Add...");
+			addButton = createButton(buttonComposite, "Add"); //$NON-NLS-1$
+			removeButton = createButton(buttonComposite, "Remove"); //$NON-NLS-1$
 
-		createCustomAddButtons(buttonComposite);
+			createCustomButtons(buttonComposite);
+			GridDataFactory.fillDefaults().grab(false, false).applyTo(buttonComposite);
+		}
 
-		removeButton = createButton(buttonComposite, "Remove"); //$NON-NLS-1$
+		//SectionToolBar
+		final RemoveAction removeAction = new RemoveAction(this);
 
-		GridDataFactory.fillDefaults().grab(false, false).applyTo(buttonComposite);
+		if (useGenericSectionToolBar) {
+			toolBarManager = PDEFormToolkit.createSectionToolBarManager(section);
+			Action addAction = createCustomToolbarAddAction();
+			if (addAction != null) {
+				toolBarManager.add(addAction);
+			}
+
+			toolBarManager.add(removeAction);
+			toolBarManager.update(true);
+			section.setTextClient(toolBarManager.getControl());
+		}
 
 		treeViewer.setContentProvider(new AdapterFactoryContentProvider(parentEditor.getAdapterFactory()));
 		treeViewer.setLabelProvider(new DecoratingLabelProvider(new AdapterFactoryLabelProvider(parentEditor.getAdapterFactory()), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator()));
@@ -99,9 +128,66 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 			}
 		});
 
+		// add +/- key shortcuts
+		treeViewer.getTree().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == Action.findKeyCode("DELETE")) { //$NON-NLS-1$
+					removeAction.run();
+				}
+			}
+		});
+
+		if (useGenericButton) {
+
+			DataBindingContext bindingContext = new DataBindingContext();
+
+			//Enable button when the tree selection is not empty
+			bindingContext.bindValue(ViewersObservables.observeSingleSelection(getTreeViewer()), SWTObservables.observeEnabled(getRemoveButton()), new EMFUpdateValueStrategy() {
+				/**
+				 * @see org.eclipse.core.databinding.UpdateValueStrategy#convert(java.lang.Object)
+				 */
+				@Override
+				public Object convert(Object value) {
+					return !(getTreeViewer().getSelection().isEmpty());
+				}
+			}, null);
+
+			//Generic action for remove button
+			getRemoveButton().addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					Object sel = ((IStructuredSelection) getTreeViewer().getSelection()).getFirstElement();
+					if (sel != null) {
+						Command c = RemoveCommand.create(getEditor().getEditingDomain(), sel);
+						getEditor().getEditingDomain().getCommandStack().execute(c);
+					}
+				}
+			});
+		}
+
+		if (useGenericSectionToolBar) {
+
+			//Enable action when the tree selection is not empty
+			ViewersObservables.observeSingleSelection(getTreeViewer()).addValueChangeListener(new IValueChangeListener() {
+				public void handleValueChange(ValueChangeEvent event) {
+					boolean bool = !(getTreeViewer().getSelection().isEmpty());
+					removeAction.setEnabled(bool);
+				}
+			});
+
+		}
+
 		createContextMenuFor(treeViewer);
 
+		//update Editor selection
+		getEditor().addViewerToListenTo(getTreeViewer());
+
 		section.setClient(client);
+	}
+
+	protected Action createCustomToolbarAddAction() {
+		// Subclass may override this method
+		return null;
 	}
 
 	protected Button createButton(Composite parent, String btnText) {
@@ -138,13 +224,13 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	/**
-	 * @return The "Add..." button that can be used to hook an element creation wizard, or <code>null</code> if the {@link EmfMasterDetailBlock#useGenericAddButton} flag is set to <code>false</code> 
+	 * @return The "Add..." button that can be used to hook an element creation wizard, or <code>null</code> if the {@link EmfMasterDetailBlock#useGenericButton} flag is set to <code>false</code> 
 	 */
 	public Button getGenericAddButton() {
 		return addButton;
 	}
 
-	protected void createCustomAddButtons(Composite parent) {
+	protected void createCustomButtons(Composite parent) {
 		// Should be overriden by clients wanting to contribute their own "add" button(s) 
 	}
 
