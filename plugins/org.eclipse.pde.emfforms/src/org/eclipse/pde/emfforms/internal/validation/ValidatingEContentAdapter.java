@@ -58,13 +58,17 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 		messageManager.removeAllMessages();
 		messageManager.setAutoUpdate(false);
 
-		Diagnostic diagnostics = _diagnostician.validate((EObject) _observedValue.getValue());
+		Diagnostic diagnostics = validate((EObject) _observedValue.getValue());
 
 		for (Diagnostic diagnostic : diagnostics.getChildren()) {
 			getValidatorService().analyzeDiagnostic(_dataBindingContext, diagnostic, messageManager);
 		}
 
 		messageManager.update();
+	}
+
+	public Diagnostic validate(EObject obj) {
+		return _diagnostician.validate(obj);
 	}
 
 	private ValidatingService getValidatorService() {

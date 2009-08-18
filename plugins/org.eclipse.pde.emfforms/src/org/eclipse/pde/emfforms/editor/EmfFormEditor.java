@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.17 2009/08/07 16:25:33 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.18 2009/08/18 08:00:37 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -32,7 +32,6 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.edit.command.CreateChildCommand;
 import org.eclipse.emf.edit.domain.*;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -302,7 +301,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 		// if the validation is asked by the user
 		if (validateOnSave != VALIDATE_ON_SAVE.NO_VALIDATION)
-			diagnostic = Diagnostician.INSTANCE.validate(getCurrentEObject());
+			diagnostic = _validator.validate(getCurrentEObject());
 
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
 			switch (validateOnSave) {
