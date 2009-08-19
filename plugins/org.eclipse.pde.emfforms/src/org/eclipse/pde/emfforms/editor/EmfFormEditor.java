@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.19 2009/08/19 14:54:21 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.20 2009/08/19 15:15:20 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -209,12 +209,12 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		try {
 			for (IEmfFormPage page : getPagesToAdd())
 				addPage(page);
+			addSourcePage();
 
 			int i = 0;
 			for (Image img : getPagesImages())
 				setPageImage(i++, img);
 
-			addSourcePage();
 		} catch (PartInitException e) {
 			Activator.logException(e, Messages.EmfFormEditor_InitError);
 		}
