@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IEmfFormEditorConfig.java,v 1.2 2009/07/05 20:22:09 bcabe Exp $
+ * $Id: IEmfFormEditorConfig.java,v 1.3 2009/08/19 14:54:21 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -27,6 +27,8 @@ public interface IEmfFormEditorConfig {
 	public abstract boolean isUsingSharedClipboard();
 
 	public abstract boolean isShowOutlinePage();
+
+	public abstract boolean isShowSourcePage();
 
 	/**
 	 * 

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.18 2009/08/18 08:00:37 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.19 2009/08/19 14:54:21 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -50,7 +50,7 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
-import org.eclipse.pde.emfforms.internal.editor.Messages;
+import org.eclipse.pde.emfforms.internal.editor.*;
 import org.eclipse.pde.emfforms.internal.validation.ValidatingEContentAdapter;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
@@ -67,6 +67,8 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  * A {@link FormEditor} allowing to edit an EMF {@link EObject} in a convenient
@@ -212,9 +214,30 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			for (Image img : getPagesImages())
 				setPageImage(i++, img);
 
+			addSourcePage();
 		} catch (PartInitException e) {
 			Activator.logException(e, Messages.EmfFormEditor_InitError);
 		}
+	}
+
+	private void addSourcePage() throws PartInitException {
+		if (!_editorConfig.isShowSourcePage())
+			return;
+
+		boolean isXmlUiBundlePresent = false;
+		BundleContext bc = Activator.getDefault().getBundle().getBundleContext();
+		for (Bundle b : bc.getBundles()) {
+			if ("org.eclipse.wst.xml.ui".equals(b.getSymbolicName())) { //$NON-NLS-1$
+				isXmlUiBundlePresent = true;
+				break;
+			}
+		}
+
+		if (isXmlUiBundlePresent)
+			addPage(new XmlSourcePage(this));
+		else
+			addPage(new SimpleSourcePage(this));
+
 	}
 
 	/**
