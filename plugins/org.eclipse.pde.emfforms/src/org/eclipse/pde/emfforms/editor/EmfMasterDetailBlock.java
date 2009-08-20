@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.12 2009/08/07 16:25:33 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.13 2009/08/20 17:22:09 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -54,6 +54,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	private Button removeButton;
 
 	private ToolBarManager toolBarManager;
+	private Action removeAction;
 
 	public EmfMasterDetailBlock(EmfFormEditor<?> editor, String title) {
 		this.title = title;
@@ -90,7 +91,10 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		}
 
 		//SectionToolBar
-		final RemoveAction removeAction = new RemoveAction(this);
+		removeAction = createCustomToolbarRemoveAction();
+		if (removeAction == null) {
+			removeAction = new RemoveAction(this);
+		}
 
 		if (useGenericSectionToolBar) {
 			toolBarManager = PDEFormToolkit.createSectionToolBarManager(section);
@@ -186,6 +190,11 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	protected Action createCustomToolbarAddAction() {
+		// Subclass may override this method
+		return null;
+	}
+
+	protected Action createCustomToolbarRemoveAction() {
 		// Subclass may override this method
 		return null;
 	}
