@@ -1,4 +1,16 @@
-package org.eclipse.pde.emfforms.internal.validation;
+/**
+ * Copyright (c) 2009 Anyware Technologies and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Anyware Technologies - initial API and implementation
+ *
+ * $Id: ValidatingEContentAdapter.java,v 1.6 2009/08/20 17:27:03 bcabe Exp $
+ */
+ package org.eclipse.pde.emfforms.internal.validation;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -12,6 +24,7 @@ import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.pde.emfforms.editor.ValidatingService;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.ui.forms.IMessageManager;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -54,7 +67,12 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 	}
 
 	public void validate() {
-		IMessageManager messageManager = _formEditor.getActivePageInstance().getManagedForm().getMessageManager();
+		IFormPage activePageInstance = _formEditor.getActivePageInstance();
+		if (_formEditor.getActivePageInstance() == null) {
+			return;
+		}
+
+		IMessageManager messageManager = activePageInstance.getManagedForm().getMessageManager();
 		messageManager.removeAllMessages();
 		messageManager.setAutoUpdate(false);
 
