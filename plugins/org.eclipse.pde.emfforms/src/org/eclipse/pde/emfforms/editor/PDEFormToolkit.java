@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: PDEFormToolkit.java,v 1.4 2009/07/17 14:33:02 bcabe Exp $
+ * $Id: PDEFormToolkit.java,v 1.5 2009/08/21 16:57:04 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -193,11 +193,15 @@ public class PDEFormToolkit extends FormToolkit {
 	}
 
 	public static ListViewer createLabelAndList(String label, Composite composite) {
+		return createLabelAndList(label, composite, SWT.DEFAULT);
+	}
+
+	public static ListViewer createLabelAndList(String label, Composite composite, int labelHorizontalWidthHint) {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
 
 		Label labelName = new Label(composite, SWT.NONE);
 		labelName.setText(label);
-		GridDataFactory.fillDefaults().span(2, 1).align(SWT.FILL, SWT.BEGINNING).applyTo(labelName);
+		GridDataFactory.fillDefaults().span(2, 1).align(SWT.FILL, SWT.BEGINNING).hint(labelHorizontalWidthHint, SWT.DEFAULT).applyTo(labelName);
 		labelName.setAlignment(SWT.LEFT);
 
 		ListViewer listViewer = new ListViewer(composite, SWT.BORDER);
@@ -211,12 +215,14 @@ public class PDEFormToolkit extends FormToolkit {
 	 * @param generalInfoComposite
 	 * @return
 	 */
-	public static Text createLabelAndText(String label, Composite composite) {
+	public static Text createLabelAndText(String label, Composite composite, int labelHorizontalWidthHint) {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
 
 		Label labelName = new Label(composite, SWT.NONE);
 		labelName.setText(label);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).applyTo(labelName);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).hint(labelHorizontalWidthHint, SWT.DEFAULT).applyTo(labelName);
+		labelName.redraw();
+
 		labelName.setAlignment(SWT.LEFT);
 
 		Text text = new Text(composite, SWT.BORDER);
@@ -229,8 +235,21 @@ public class PDEFormToolkit extends FormToolkit {
 	 * @param generalInfoComposite
 	 * @return
 	 */
+	public static Text createLabelAndText(String label, Composite composite) {
+		return createLabelAndText(label, composite, SWT.DEFAULT);
+	}
+
+	/**
+	 * @param label
+	 * @param generalInfoComposite
+	 * @return
+	 */
 	public static Text createLabelAndTextArea(String label, Composite composite) {
 		return createLabelAndTextArea(label, composite, false);
+	}
+
+	public static Text createLabelAndTextArea(String label, Composite composite, int labelHorizontalWidthHint) {
+		return createLabelAndTextArea(label, composite, false, labelHorizontalWidthHint);
 	}
 
 	/**
@@ -239,11 +258,15 @@ public class PDEFormToolkit extends FormToolkit {
 	 * @return
 	 */
 	public static Text createLabelAndTextArea(String label, Composite composite, boolean scrollable) {
+		return createLabelAndTextArea(label, composite, scrollable, SWT.DEFAULT);
+	}
+
+	public static Text createLabelAndTextArea(String label, Composite composite, boolean scrollable, int labelHorizontalWidthHint) {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
 
 		Label labelName = new Label(composite, SWT.NONE);
 		labelName.setText(label);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).applyTo(labelName);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).hint(labelHorizontalWidthHint, SWT.DEFAULT).applyTo(labelName);
 		labelName.setAlignment(SWT.LEFT);
 
 		int sytle = SWT.BORDER | SWT.MULTI;
@@ -261,11 +284,15 @@ public class PDEFormToolkit extends FormToolkit {
 	 * @return
 	 */
 	public static ComboViewer createLabelAndComboViewer(String label, Composite composite) {
+		return createLabelAndComboViewer(label, composite, SWT.DEFAULT);
+	}
+
+	public static ComboViewer createLabelAndComboViewer(String label, Composite composite, int labelHorizontalWidthHint) {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(composite);
 
 		Label labelName = new Label(composite, SWT.NONE);
 		labelName.setText(label);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).applyTo(labelName);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).hint(labelHorizontalWidthHint, SWT.DEFAULT).applyTo(labelName);
 		labelName.setAlignment(SWT.LEFT);
 
 		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
@@ -324,7 +351,11 @@ public class PDEFormToolkit extends FormToolkit {
 	 * @return a checkBox
 	 */
 	public static Button createLabelAndCheckBox(String label, Composite composite) {
-		return createLabelAndButton(label, composite, SWT.CHECK);
+		return createLabelAndButton(label, composite, SWT.CHECK, SWT.DEFAULT);
+	}
+
+	public static Button createLabelAndCheckBox(String label, Composite composite, int labelHorizontalWidthHint) {
+		return createLabelAndButton(label, composite, SWT.CHECK, labelHorizontalWidthHint);
 	}
 
 	/**
@@ -367,12 +398,12 @@ public class PDEFormToolkit extends FormToolkit {
 	 * @param type
 	 * @return a button of type "type"
 	 */
-	private static Button createLabelAndButton(String label, Composite parent, int type) {
+	private static Button createLabelAndButton(String label, Composite parent, int type, int labelHorizontalWidthHint) {
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(parent);
 
 		Label labelName = new Label(parent, SWT.NONE);
 		labelName.setText(label);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).applyTo(labelName);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).hint(labelHorizontalWidthHint, SWT.DEFAULT).applyTo(labelName);
 		labelName.setAlignment(SWT.LEFT);
 
 		Button button = new Button(parent, type | SWT.FLAT);
