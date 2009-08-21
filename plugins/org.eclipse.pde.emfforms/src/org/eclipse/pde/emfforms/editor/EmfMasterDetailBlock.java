@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.13 2009/08/20 17:22:09 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.14 2009/08/21 16:56:49 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -45,8 +45,11 @@ import org.eclipse.ui.forms.widgets.Section;
 public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements IDetailsPageProvider, IMenuListener {
 
 	protected EmfFormEditor<?> parentEditor;
-	protected boolean useGenericButton = false;
-	protected boolean useGenericSectionToolBar = true;
+
+	public static final int NO_BUTTONS = 0;
+	public static final int USE_GENERIC_TOOLBAR_BUTTONS = 1 << 0;
+	public static final int USE_GENERIC_PUSH_BUTTONS = 1 << 1;
+	protected int buttonOption = USE_GENERIC_TOOLBAR_BUTTONS;
 
 	private String title;
 	private TreeViewer treeViewer;
@@ -61,6 +64,11 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		this.parentEditor = editor;
 	}
 
+	public EmfMasterDetailBlock(EmfFormEditor<?> editor, String title, int buttonOption) {
+		this(editor, title);
+		this.buttonOption = buttonOption;
+	}
+
 	@Override
 	protected void createMasterPart(final IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = parentEditor.getToolkit();
@@ -73,13 +81,15 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		section.marginHeight = 5;
 
 		Composite client = toolkit.createComposite(section, SWT.WRAP);
-		GridLayoutFactory.fillDefaults().numColumns(useGenericButton ? 2 : 1).applyTo(client);
+		GridLayoutFactory.fillDefaults().numColumns(showPushButtons() ? 2 : 1).applyTo(client);
 
+		// deliberate use of the 3.4 API
+		// TODO try to use the new look using a 3.5 fragment
 		FilteredTree ft = new FilteredTree(client, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, new PatternFilter());
 		treeViewer = ft.getViewer();
 
 		//Buttons
-		if (useGenericButton) {
+		if (showPushButtons()) {
 			Composite buttonComposite = new Composite(client, SWT.NONE);
 			GridLayoutFactory.fillDefaults().numColumns(1).applyTo(buttonComposite);
 
@@ -96,7 +106,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 			removeAction = new RemoveAction(this);
 		}
 
-		if (useGenericSectionToolBar) {
+		if (showToolbarButtons()) {
 			toolBarManager = PDEFormToolkit.createSectionToolBarManager(section);
 			Action addAction = createCustomToolbarAddAction();
 			if (addAction != null) {
@@ -142,7 +152,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 			}
 		});
 
-		if (useGenericButton) {
+		if (showPushButtons()) {
 
 			DataBindingContext bindingContext = new DataBindingContext();
 
@@ -169,7 +179,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 			});
 		}
 
-		if (useGenericSectionToolBar) {
+		if (showToolbarButtons()) {
 
 			//Enable action when the tree selection is not empty
 			ViewersObservables.observeSingleSelection(getTreeViewer()).addValueChangeListener(new IValueChangeListener() {
@@ -187,6 +197,14 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		getEditor().addViewerToListenTo(getTreeViewer());
 
 		section.setClient(client);
+	}
+
+	private boolean showPushButtons() {
+		return (buttonOption & USE_GENERIC_PUSH_BUTTONS) > 0;
+	}
+
+	private boolean showToolbarButtons() {
+		return (buttonOption & USE_GENERIC_TOOLBAR_BUTTONS) > 0;
 	}
 
 	protected Action createCustomToolbarAddAction() {
@@ -283,6 +301,10 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 
 	public EmfFormEditor<?> getEditor() {
 		return parentEditor;
+	}
+
+	public void setButtonOption(int buttonOption) {
+		this.buttonOption = buttonOption;
 	}
 
 }
