@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractSourcePage.java,v 1.1 2009/08/19 14:54:21 bcabe Exp $
+ * $Id: AbstractSourcePage.java,v 1.2 2009/08/21 21:03:03 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal.editor;
 
@@ -111,7 +111,8 @@ public abstract class AbstractSourcePage extends AbstractEmfFormPage {
 
 	@Override
 	public void dispose() {
-		_editingDomain.getCommandStack().removeCommandStackListener(_commandStackListener);
+		if (_editingDomain != null)
+			_editingDomain.getCommandStack().removeCommandStackListener(_commandStackListener);
 
 		super.dispose();
 	}
