@@ -1,19 +1,24 @@
+/**
+ * Copyright (c) 2009 Anyware Technologies and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Anyware Technologies - initial API and implementation
+ *
+ * $Id: ValidatingService35.java,v 1.3 2009/08/21 20:25:45 bcabe Exp $
+ */
 package org.eclipse.pde.emfforms.internal.validation;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.databinding.IEMFObservable;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
-import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.pde.emfforms.editor.EmfFormEditor;
 import org.eclipse.pde.emfforms.editor.ValidatingService;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IMessageManager;
