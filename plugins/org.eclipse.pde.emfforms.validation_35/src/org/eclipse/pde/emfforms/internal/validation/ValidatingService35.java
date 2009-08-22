@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ValidatingService35.java,v 1.3 2009/08/21 20:25:45 bcabe Exp $
+ * $Id: ValidatingService35.java,v 1.4 2009/08/22 11:36:36 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal.validation;
 
@@ -16,8 +16,9 @@ import java.util.List;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.IObserving;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.databinding.IEMFObservable;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.pde.emfforms.editor.ValidatingService;
 import org.eclipse.swt.widgets.Control;
@@ -25,22 +26,22 @@ import org.eclipse.ui.forms.IMessageManager;
 
 public class ValidatingService35 implements ValidatingService {
 
-	public void analyzeDiagnostic(DataBindingContext dataBindingContext, Diagnostic diagnostic,
-			IMessageManager messageManager) {
+	public void analyzeDiagnostic(DataBindingContext dataBindingContext,
+			Diagnostic diagnostic, IMessageManager messageManager) {
 
 		boolean atLeastOneErroneousBinding = false;
 		for (Object o : dataBindingContext.getBindings()) {
 			Binding binding = (Binding) o;
-			IEMFObservable emfObservable = null;
+			IObserving emfObservable = null;
 			ISWTObservable swtObservable = null;
-			if (binding.getModel() instanceof IEMFObservable
+			if (binding.getModel() instanceof IObserving
 					&& binding.getTarget() instanceof ISWTObservable) {
-				emfObservable = (IEMFObservable) binding.getModel();
+				emfObservable = (IObserving) binding.getModel();
 				swtObservable = (ISWTObservable) binding.getTarget();
-			} else if (binding.getTarget() instanceof IEMFObservable
+			} else if (binding.getTarget() instanceof IObserving
 					&& binding.getModel() instanceof ISWTObservable) {
 				swtObservable = (ISWTObservable) binding.getModel();
-				emfObservable = (IEMFObservable) binding.getTarget();
+				emfObservable = (IObserving) binding.getTarget();
 			}
 
 			if (emfObservable != null && swtObservable != null)
@@ -57,26 +58,20 @@ public class ValidatingService35 implements ValidatingService {
 
 	}
 
-	private boolean checkBinding(IEMFObservable emfObservable,
+	private boolean checkBinding(IObserving emfObservable,
 			ISWTObservable swtObservable, Diagnostic diagnostic,
 			IMessageManager messageManager) {
 		List<?> diagnosticData = diagnostic.getData();
 		if (diagnosticData.size() >= 2) {
 			if (diagnosticData.get(0) == emfObservable.getObserved()) {
-				if (diagnosticData.get(1) == emfObservable
-						.getStructuralFeature()) {
+				if (diagnosticData.get(1) == ((IObservableValue) emfObservable)
+						.getValueType()) {
 					if (swtObservable.getWidget() instanceof Control) {
 						Control control = (Control) swtObservable.getWidget();
-
-						// if (true || control.isVisible())
 						messageManager.addMessage(swtObservable, diagnostic
 								.getMessage(), null,
 								keyMap.getMessageProviderKey(diagnostic
 										.getSeverity()), control);
-						// else
-						// messageManager.addMessage(swtObservable,
-						// diagnostic.getMessage(), null,
-						// keyMap.getMessageProviderKey(diagnostic.getSeverity()));
 
 						return true;
 					}
