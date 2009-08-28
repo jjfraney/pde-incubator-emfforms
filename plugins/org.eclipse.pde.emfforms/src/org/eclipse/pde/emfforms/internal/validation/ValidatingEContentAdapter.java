@@ -8,10 +8,11 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ValidatingEContentAdapter.java,v 1.6 2009/08/20 17:27:03 bcabe Exp $
+ * $Id: ValidatingEContentAdapter.java,v 1.7 2009/08/28 09:43:26 bcabe Exp $
  */
- package org.eclipse.pde.emfforms.internal.validation;
+package org.eclipse.pde.emfforms.internal.validation;
 
+import java.util.Properties;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.notify.Notification;
@@ -25,8 +26,7 @@ import org.eclipse.pde.emfforms.editor.ValidatingService;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.ui.forms.IMessageManager;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 
 public class ValidatingEContentAdapter extends EContentAdapter {
 	private DataBindingContext _dataBindingContext;
@@ -40,6 +40,9 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 		_formEditor = formEditor;
 		_dataBindingContext = dataBindingContext;
 		_observedValue = observedValue;
+
+		// if SCR is not present, we want to register the Eclipse 3.4 validator manually ...
+		forceValidatingService34Registration();
 
 		// Subclass the default Diagnostician to customize the String
 		// representation of each validated EObject
@@ -57,6 +60,17 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 			}
 		};
 
+	}
+
+	private void forceValidatingService34Registration() {
+		if (getValidatorService() == null) {
+			BundleContext context = Activator.getDefault().getBundle().getBundleContext();
+			Properties serviceProperties = new Properties();
+			serviceProperties.put(Constants.SERVICE_RANKING, 10); //$NON-NLS-1$
+			validatingService = new ValidatingService34();
+			context.registerService(ValidatingService.class.getName(), validatingService, serviceProperties);
+
+		}
 	}
 
 	@Override
@@ -93,7 +107,8 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 		BundleContext context = Activator.getDefault().getBundle().getBundleContext();
 		if (validatingService == null) {
 			ServiceReference validatingServiceRef = context.getServiceReference(ValidatingService.class.getName());
-			validatingService = (ValidatingService) context.getService(validatingServiceRef);
+			if (validatingServiceRef != null)
+				validatingService = (ValidatingService) context.getService(validatingServiceRef);
 		}
 		return validatingService;
 	}
