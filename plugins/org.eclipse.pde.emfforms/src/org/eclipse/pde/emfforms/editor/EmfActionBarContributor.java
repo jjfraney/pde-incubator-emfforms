@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfActionBarContributor.java,v 1.5 2009/07/18 14:42:40 bcabe Exp $
+ * $Id: EmfActionBarContributor.java,v 1.6 2009/09/02 14:11:43 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -21,8 +21,8 @@ import org.eclipse.emf.edit.ui.action.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.emfforms.internal.Activator;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.*;
+import org.eclipse.ui.actions.ActionFactory;
 
 /**
  * A specialized {@link EditingDomainActionBarContributor} very similar
@@ -47,6 +47,29 @@ public class EmfActionBarContributor extends EditingDomainActionBarContributor i
 
 	/** The create sibling actions */
 	protected Collection<IAction> createSiblingActions;
+
+	@Override
+	public void init(IActionBars actionBars) {
+		super.init(actionBars);
+		// initially disable every global action redirection
+		disableGlobalHandlers();
+	}
+
+	public void disableGlobalHandlers() {
+		getActionBars().clearGlobalActionHandlers();
+		getActionBars().updateActionBars();
+	}
+
+	public void enableGlobalHandlers() {
+		IActionBars actionBars = getActionBars();
+		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), cutAction);
+		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
+		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), pasteAction);
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+		actionBars.updateActionBars();
+	}
 
 	/** The show properties view action. */
 	protected IAction showPropertiesViewAction = new Action("Open properties") {

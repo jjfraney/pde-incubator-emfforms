@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.14 2009/08/21 16:56:49 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.15 2009/09/02 14:11:43 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -152,6 +152,10 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 			}
 		});
 
+		// Add listeners to manage activation/deactivation of the treeViewer's
+		// ActionBarContributor's global handlers
+		configureActionBarManagement();
+
 		if (showPushButtons()) {
 
 			DataBindingContext bindingContext = new DataBindingContext();
@@ -197,6 +201,28 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		getEditor().addViewerToListenTo(getTreeViewer());
 
 		section.setClient(client);
+	}
+
+	/**
+	 * Add listeners to manage activation/deactivation of the treeViewer's
+	 * ActionBarContributor's global handlers
+	 */
+	protected void configureActionBarManagement() {
+		final IEditorActionBarContributor actionBarContributor = getEditor().getEditorSite().getActionBarContributor();
+
+		if (actionBarContributor != null && actionBarContributor instanceof EmfActionBarContributor) {
+			treeViewer.getControl().addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					((EmfActionBarContributor) actionBarContributor).enableGlobalHandlers();
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					((EmfActionBarContributor) actionBarContributor).disableGlobalHandlers();
+				}
+			});
+		}
 	}
 
 	private boolean showPushButtons() {
