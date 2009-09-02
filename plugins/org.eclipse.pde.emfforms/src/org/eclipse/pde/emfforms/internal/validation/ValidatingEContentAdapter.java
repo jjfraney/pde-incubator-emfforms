@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ValidatingEContentAdapter.java,v 1.7 2009/08/28 09:43:26 bcabe Exp $
+ * $Id: ValidatingEContentAdapter.java,v 1.8 2009/09/02 14:09:35 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal.validation;
 
@@ -75,6 +75,7 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 
 	@Override
 	public void notifyChanged(Notification notification) {
+		super.notifyChanged(notification);
 		if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
 			validate();
 		}
