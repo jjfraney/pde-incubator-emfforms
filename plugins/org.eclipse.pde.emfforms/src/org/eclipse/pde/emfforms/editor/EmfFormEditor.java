@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.20 2009/08/19 15:15:20 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.21 2009/09/04 16:48:23 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -706,7 +706,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 					// Set up the tree viewer.
 					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
-					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
+					contentOutlineViewer.setLabelProvider(new DecoratingLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator()));
 					contentOutlineViewer.setInput(getCurrentEObject().eResource());
 					contentOutlineViewer.addFilter(new ViewerFilter() {
 						@Override
