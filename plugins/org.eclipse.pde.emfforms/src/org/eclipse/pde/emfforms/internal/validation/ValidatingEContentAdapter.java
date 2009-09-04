@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ValidatingEContentAdapter.java,v 1.8 2009/09/02 14:09:35 bcabe Exp $
+ * $Id: ValidatingEContentAdapter.java,v 1.9 2009/09/04 16:55:17 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal.validation;
 
@@ -67,9 +67,7 @@ public class ValidatingEContentAdapter extends EContentAdapter {
 			BundleContext context = Activator.getDefault().getBundle().getBundleContext();
 			Properties serviceProperties = new Properties();
 			serviceProperties.put(Constants.SERVICE_RANKING, 10); //$NON-NLS-1$
-			validatingService = new ValidatingService34();
-			context.registerService(ValidatingService.class.getName(), validatingService, serviceProperties);
-
+			context.registerService(ValidatingService.class.getName(), new ValidatingService34(), serviceProperties);
 		}
 	}
 
