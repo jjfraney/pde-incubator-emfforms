@@ -479,9 +479,13 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		if (_currentEObject != null)
 			_currentEObject.eAdapters().remove(_validator);
 
-		_currentEObject = (T) resource.getContents().get(0);
+		_currentEObject = getRootObject(resource);
 		_observableValue.setValue(_currentEObject);
 		_currentEObject.eAdapters().add(_validator);
+	}
+
+	protected T getRootObject(Resource resource) {
+		return (T) resource.getContents().get(0);
 	}
 
 	/**
