@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.15 2009/09/02 14:11:43 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.16 2009/09/11 21:18:00 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -39,8 +39,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.forms.*;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.widgets.*;
 
 public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements IDetailsPageProvider, IMenuListener {
 
@@ -73,7 +72,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	protected void createMasterPart(final IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = parentEditor.getToolkit();
 
-		Section section = toolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
+		Section section = toolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
 		section.setText(title);
 		section.setDescription("Edit " + title); //$NON-NLS-1$
 		section.marginWidth = 5;
@@ -246,7 +245,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	protected Button createButton(Composite parent, String btnText) {
 		Button btn = new Button(parent, SWT.FLAT | SWT.PUSH);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(btn);
-		btn.setText(btnText); //$NON-NLS-1$
+		btn.setText(btnText);
 
 		return btn;
 	}

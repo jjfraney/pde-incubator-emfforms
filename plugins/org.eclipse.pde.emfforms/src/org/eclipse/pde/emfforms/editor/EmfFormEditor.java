@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.22 2009/09/11 20:10:54 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.23 2009/09/11 21:18:00 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -781,8 +781,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
 	 */
 	protected void createContextMenuFor(StructuredViewer viewer) {
-		MenuManager contextMenu = new MenuManager("#PopUp");
-		contextMenu.add(new Separator("additions"));
+		MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
+		contextMenu.add(new Separator("additions")); //$NON-NLS-1$
 		contextMenu.setRemoveAllWhenShown(true);
 		// TODO
 		// contextMenu.addMenuListener(this);
