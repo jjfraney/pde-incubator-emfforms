@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.21 2009/09/04 16:48:23 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.22 2009/09/11 20:10:54 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -612,6 +612,11 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
 		public boolean visit(IResourceDelta delta) throws CoreException {
+			// filter events related to changes on markers
+			if ((delta.getFlags() & IResourceDelta.MARKERS) == IResourceDelta.MARKERS) {
+				return false;
+			}
+
 			if (delta.getResource().getType() == IResource.FILE) {
 				if (delta.getKind() == IResourceDelta.REMOVED) {
 					String fullPath = delta.getFullPath().toString();
