@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: ServicesMasterDetail.java,v 1.11 2009/09/11 22:08:47 bcabe Exp $
+ * $Id: ServicesMasterDetail.java,v 1.12 2009/09/12 14:40:57 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor.masterdetail;
 
@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.pde.ds.scr.*;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.services.ProvideDetailsPart;
 import org.eclipse.pde.ds.ui.internal.editor.detailpart.services.ReferenceDetailsPart;
@@ -93,6 +92,16 @@ public class ServicesMasterDetail extends EmfMasterDetailBlock {
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(element);
 				return (unwrappedElement instanceof Reference || unwrappedElement instanceof Provide);
+			}
+		};
+	}
+
+	@Override
+	protected IFilter getCreateSiblingContextMenuFilter() {
+		return new IFilter() {
+			public boolean select(Object toTest) {
+				Object unwrappedElement = AdapterFactoryEditingDomain.unwrap(toTest);
+				return (unwrappedElement instanceof Provide || unwrappedElement instanceof Reference);
 			}
 		};
 	}
