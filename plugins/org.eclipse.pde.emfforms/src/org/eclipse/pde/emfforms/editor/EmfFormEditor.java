@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.23 2009/09/11 21:18:00 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.24 2009/09/12 12:57:54 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -38,12 +38,10 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
-import org.eclipse.emf.edit.ui.dnd.*;
-import org.eclipse.emf.edit.ui.provider.*;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
-import org.eclipse.jface.action.*;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
@@ -52,8 +50,6 @@ import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.pde.emfforms.internal.editor.*;
 import org.eclipse.pde.emfforms.internal.validation.ValidatingEContentAdapter;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
@@ -63,7 +59,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -684,68 +679,17 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	/**
 	 * This is the content outline page.
 	 */
-	protected IContentOutlinePage contentOutlinePage;
-
-	protected IStatusLineManager contentOutlineStatusLineManager;
-
-	/**
-	 * This is the content outline page's viewer.
-	 */
-	protected TreeViewer contentOutlineViewer;
+	protected EmfContentOutlinePage contentOutlinePage;
 
 	private ResourceDeltaVisitor _visitor;
 
 	/**
 	 * This accesses a cached version of the content outliner.
-	 * @generated
 	 */
-	public IContentOutlinePage getContentOutlinePage() {
+	private IContentOutlinePage getContentOutlinePage() {
 		if (contentOutlinePage == null) {
-			// The content outline is just a tree.
-			class MyContentOutlinePage extends ContentOutlinePage {
-				@Override
-				public void createControl(Composite parent) {
-					super.createControl(parent);
-					contentOutlineViewer = getTreeViewer();
-					contentOutlineViewer.addSelectionChangedListener(this);
-
-					// Set up the tree viewer.
-					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
-					contentOutlineViewer.setLabelProvider(new DecoratingLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator()));
-					contentOutlineViewer.setInput(getCurrentEObject().eResource());
-					contentOutlineViewer.addFilter(new ViewerFilter() {
-						@Override
-						public boolean select(Viewer viewer, Object parentElement, Object element) {
-							return (!(AdapterFactoryEditingDomain.unwrap(element) instanceof String));
-						}
-					});
-
-					// Make sure our popups work.
-					createContextMenuFor(contentOutlineViewer);
-
-					if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
-						// Select the root object in the view.
-						contentOutlineViewer.setSelection(new StructuredSelection(getEditingDomain().getResourceSet().getResources().get(0)), true);
-					}
-
-				}
-
-				@Override
-				public void makeContributions(IMenuManager menuManager, IToolBarManager toolBarManager, IStatusLineManager statusLineManager) {
-					super.makeContributions(menuManager, toolBarManager, statusLineManager);
-					contentOutlineStatusLineManager = statusLineManager;
-				}
-
-				@Override
-				public void setActionBars(IActionBars actionBars) {
-					super.setActionBars(actionBars);
-					if (getActionBarContributor() != null) {
-						getActionBarContributor().shareGlobalActions(this, actionBars);
-					}
-				}
-			}
-
-			contentOutlinePage = new MyContentOutlinePage();
+			contentOutlinePage = new EmfContentOutlinePage(this);
+			contentOutlinePage.setViewerInput(getCurrentEObject().eResource());
 
 			// Listen to selection so that we can handle it is a special way.
 			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -758,7 +702,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			addSelectionChangedListener(new ISelectionChangedListener() {
 				// This ensures that we handle selections correctly.
 				public void selectionChanged(SelectionChangedEvent event) {
-					handleContentOutlineSelection(event.getSelection(), contentOutlineViewer);
+					handleContentOutlineSelection(event.getSelection(), contentOutlinePage.getViewer());
 				}
 			});
 		}
@@ -775,25 +719,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				viewerToSnych.setSelection(new StructuredSelection(((IStructuredSelection) selection).getFirstElement()));
 			}
 		}
-	}
-
-	/**
-	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
-	 */
-	protected void createContextMenuFor(StructuredViewer viewer) {
-		MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
-		contextMenu.add(new Separator("additions")); //$NON-NLS-1$
-		contextMenu.setRemoveAllWhenShown(true);
-		// TODO
-		// contextMenu.addMenuListener(this);
-		Menu menu = contextMenu.createContextMenu(viewer.getControl());
-		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
-
-		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
-		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
-		viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(getEditingDomain(), viewer));
 	}
 
 	private EmfFormEditor<T> getCurrentInstance() {
