@@ -56,7 +56,7 @@
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/property"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/properties"/>
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/service"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/reference"/>
+      <genFeatures property="None" notify="false" createChild="true" ecoreFeature="ecore:EReference scr-1.1.ecore#//Component/reference"/>
     </genClasses>
     <genClasses ecoreClass="scr-1.1.ecore#//Implementation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scr-1.1.ecore#//Implementation/class"/>
