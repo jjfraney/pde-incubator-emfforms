@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IEmfFormEditorConfig.java,v 1.3 2009/08/19 14:54:21 bcabe Exp $
+ * $Id: IEmfFormEditorConfig.java,v 1.4 2009/09/12 20:16:06 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -20,21 +20,43 @@ public interface IEmfFormEditorConfig {
 		NO_VALIDATION, VALIDATE_AND_WARN, VALIDATE_AND_ABORT
 	}
 
-	public abstract VALIDATE_ON_SAVE getValidateOnSave();
+	/**
+	 * Return a member of {@link VALIDATE_ON_SAVE}, in order to say if a
+	 * validation must be executed before saving resource
+	 * 
+	 * <ul>
+	 * <li>
+	 * {@link VALIDATE_ON_SAVE#NO_VALIDATION} no validation executed before
+	 * saving resource</li>
+	 * <li>{@link VALIDATE_ON_SAVE#VALIDATE_AND_WARN} a validation is executed,
+	 * and only warn the user if the validation is not OK</li>
+	 * <li>
+	 * {@link VALIDATE_ON_SAVE#VALIDATE_AND_ABORT} a validation is executed, and
+	 * the resource cannot be saved</li>
+	 * </ul>
+	 * 
+	 * @return {@link VALIDATE_ON_SAVE}
+	 */
+	VALIDATE_ON_SAVE getValidateOnSave();
 
-	public abstract boolean isSaveAsAllowed();
+	boolean isSaveAsAllowed();
 
-	public abstract boolean isUsingSharedClipboard();
+	/**
+	 * @return <code>true</code> if the associated editor must use a shared clipboard,
+	 *         which will allow copy/paste actions between different instance of
+	 *         the same editor.
+	 */
+	boolean isUsingSharedClipboard();
 
-	public abstract boolean isShowOutlinePage();
+	boolean isShowOutlinePage();
 
-	public abstract boolean isShowSourcePage();
+	boolean isShowSourcePage();
 
 	/**
 	 * 
 	 * @param display
 	 * @return customized toolkit if not null, otherwise default toolkit from display
 	 */
-	public abstract PDEFormToolkit createPDEFormToolkit(Display display);
+	PDEFormToolkit createPDEFormToolkit(Display display);
 
 }

@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.24 2009/09/12 12:57:54 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.25 2009/09/12 20:16:06 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -125,6 +125,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private boolean isSaving = false;
 
+	private EmfContentOutlinePage contentOutlinePage;
+
+	private ResourceDeltaVisitor _visitor;
+
 	public EmfFormEditor() {
 		this._editorConfig = getFormEditorConfig();
 		init();
@@ -186,9 +190,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		// executed.
 		BasicCommandStack commandStack = new BasicCommandStack();
 
-		// Create the editing domain with a special command stack, and if it's
-		// asked a shared Clipboard
-		if (isUsingSharedClipboard())
+		if (_editorConfig.isUsingSharedClipboard())
 			return new SharedClipboardAdapterFactoryEditingDomain(_adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 		// else
 		return new AdapterFactoryEditingDomain(_adapterFactory, commandStack, new HashMap<Resource, Boolean>());
@@ -312,7 +314,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 * @param monitor
 	 */
 	protected void internalDoValidate(IProgressMonitor monitor) {
-		VALIDATE_ON_SAVE validateOnSave = validateOnSave();
+		VALIDATE_ON_SAVE validateOnSave = _editorConfig.getValidateOnSave();
 
 		// result of the Validation
 		Diagnostic diagnostic = Diagnostic.OK_INSTANCE;
@@ -363,30 +365,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			}
 
 		}
-	}
-
-	/**
-	 * Return a member of {@link VALIDATE_ON_SAVE}, in order to say if a
-	 * validation must be executed before saving resource
-	 * 
-	 * <ul>
-	 * <li>
-	 * {@link VALIDATE_ON_SAVE.NO_VALIDATION} no validation executed before
-	 * saving resource</li>
-	 * <li>{@link VALIDATE_ON_SAVE.VALIDATE_AND_WARN} a validation is executed,
-	 * and only warn the user if the validation is not OK</li>
-	 * <li>
-	 * {@link VALIDATE_ON_SAVE.VALIDATE_AND_ABORT} a validation is executed, and
-	 * the resource cannot be saved</li>
-	 * </ul>
-	 * 
-	 * Clients can override this method, by default return
-	 * {@link VALIDATE_ON_SAVE.NO_VALIDATION}
-	 * 
-	 * @return {@link VALIDATE_ON_SAVE}
-	 */
-	protected final VALIDATE_ON_SAVE validateOnSave() {
-		return _editorConfig.getValidateOnSave();
 	}
 
 	/**
@@ -546,15 +524,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * @return <code>true</code> if this editor must use a shared clipboard,
-	 *         which will allow copy/paste actions between different instance of
-	 *         the same editor. The default return value is <code>false</code>
-	 */
-	public final boolean isUsingSharedClipboard() {
-		return this._editorConfig.isUsingSharedClipboard();
-	}
-
-	/**
 	 * @param event
 	 */
 	protected void handleCommandStackChanged(final EventObject event) {
@@ -675,13 +644,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			return true;
 		}
 	}
-
-	/**
-	 * This is the content outline page.
-	 */
-	protected EmfContentOutlinePage contentOutlinePage;
-
-	private ResourceDeltaVisitor _visitor;
 
 	/**
 	 * This accesses a cached version of the content outliner.
