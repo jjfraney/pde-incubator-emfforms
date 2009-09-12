@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.25 2009/09/12 20:16:06 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.26 2009/09/12 20:36:02 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -673,7 +673,11 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * This deals with how we want selection in the outline to affect the other views.
+	 * This deals with how we want selection in the outline to affect the other views.<br><br>
+	 * <strong>Clients can override this method</strong> to have some special behaviour on selection changed events in the outline, such
+	 * as giving focus to a particular page of the editor. 
+	 * @param selection the current selection in the outline
+	 * @param viewerToSnych the viewer of the active page (if any)
 	 */
 	public void handleContentOutlineSelection(ISelection selection, Viewer viewerToSnych) {
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection && viewerToSnych != null) {
