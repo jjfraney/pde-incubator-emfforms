@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DefaultEmfFormEditorConfig.java,v 1.6 2009/09/13 18:18:43 bcabe Exp $
+ * $Id: DefaultEmfFormEditorConfig.java,v 1.7 2009/09/13 19:50:28 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -58,6 +58,9 @@ public class DefaultEmfFormEditorConfig<E extends EmfFormEditor<O>, O extends EO
 		this.customizedToolkit = customizedToolkit;
 	}
 
+	/**
+	 * This default implementation returns the eResource of suggestedInput
+	 */
 	public Object getOutlineInput(O suggestedInput) {
 		return suggestedInput.eResource();
 	};
