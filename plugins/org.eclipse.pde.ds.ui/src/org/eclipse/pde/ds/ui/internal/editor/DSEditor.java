@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditor.java,v 1.11 2009/07/18 13:52:29 bcabe Exp $
+ * $Id: DSEditor.java,v 1.12 2009/09/13 18:04:02 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -32,7 +32,7 @@ public class DSEditor extends EmfFormEditor<Component> implements IResourceChang
 
 	@Override
 	protected DefaultEmfFormEditorConfig getFormEditorConfig() {
-		return new DSEditorConfig();
+		return new DSEditorConfig(this);
 	}
 
 	@Override

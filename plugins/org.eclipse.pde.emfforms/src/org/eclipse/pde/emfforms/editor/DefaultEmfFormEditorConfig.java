@@ -8,14 +8,24 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DefaultEmfFormEditorConfig.java,v 1.4 2009/08/19 15:13:23 bcabe Exp $
+ * $Id: DefaultEmfFormEditorConfig.java,v 1.5 2009/09/13 18:04:04 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Display;
 
-public class DefaultEmfFormEditorConfig implements IEmfFormEditorConfig {
+public class DefaultEmfFormEditorConfig<T extends EObject> implements IEmfFormEditorConfig<T> {
 	private PDEFormToolkit customizedToolkit = null;
+	private EmfFormEditor<T> editor;
+
+	public DefaultEmfFormEditorConfig(EmfFormEditor<T> editor) {
+		this.editor = editor;
+	}
+
+	public EmfFormEditor<T> getEditor() {
+		return editor;
+	}
 
 	public VALIDATE_ON_SAVE getValidateOnSave() {
 		return VALIDATE_ON_SAVE.NO_VALIDATION;
@@ -47,5 +57,9 @@ public class DefaultEmfFormEditorConfig implements IEmfFormEditorConfig {
 	public void setCustomizedToolkit(PDEFormToolkit customizedToolkit) {
 		this.customizedToolkit = customizedToolkit;
 	}
+
+	public Object getOutlineInput(T suggestedInput) {
+		return suggestedInput.eResource();
+	};
 
 }

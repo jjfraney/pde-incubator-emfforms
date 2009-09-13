@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.26 2009/09/12 20:36:02 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.27 2009/09/13 18:04:04 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -82,7 +82,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	/**
 	 */
-	private IEmfFormEditorConfig _editorConfig;
+	private IEmfFormEditorConfig<T> _editorConfig;
 
 	/**
 	 * This is the one adapter factory used for providing views of the model.
@@ -137,8 +137,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	/**
 	 * @return the {@link IEmfFormEditorConfig} the editor will use as its configuration
 	 */
-	protected IEmfFormEditorConfig getFormEditorConfig() {
-		return new DefaultEmfFormEditorConfig();
+	protected IEmfFormEditorConfig<T> getFormEditorConfig() {
+		return new DefaultEmfFormEditorConfig<T>(this);
 	}
 
 	private void init() {
@@ -651,7 +651,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	private IContentOutlinePage getContentOutlinePage() {
 		if (contentOutlinePage == null) {
 			contentOutlinePage = new EmfContentOutlinePage(this);
-			contentOutlinePage.setViewerInput(getCurrentEObject().eResource());
+			contentOutlinePage.setViewerInput(_editorConfig.getOutlineInput(getCurrentEObject()));
 
 			// Listen to selection so that we can handle it is a special way.
 			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
