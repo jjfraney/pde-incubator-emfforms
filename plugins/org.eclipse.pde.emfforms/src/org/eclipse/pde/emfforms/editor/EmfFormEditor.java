@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.core.internal.databinding.observable.masterdetail.DetailObservableValue;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.command.*;
@@ -29,6 +31,7 @@ import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.databinding.internal.EMFObservableValueDecorator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -43,7 +46,9 @@ import org.eclipse.emf.edit.ui.provider.*;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.emf.validation.marker.MarkerUtil;
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
@@ -59,6 +64,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.forms.IMessageManager;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -146,6 +152,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		_editingDomain = createEditingDomain();
 		_bindingContext = new EMFDataBindingContext();
 		_validator = new ValidatingEContentAdapter(_observableValue, _bindingContext, this);
+		//	_validator = new LiveValidationEContentAdapter(this, _observableValue);
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
@@ -476,12 +483,12 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	protected void setMainResource(Resource resource) {
-		if (_currentEObject != null)
-			_currentEObject.eAdapters().remove(_validator);
+//		if (_currentEObject != null)
+//			_currentEObject.eAdapters().remove(_validator);
 
 		_currentEObject = getRootObject(resource);
 		_observableValue.setValue(_currentEObject);
-		_currentEObject.eAdapters().add(_validator);
+//		_currentEObject.eAdapters().add(_validator);
 	}
 
 	protected T getRootObject(Resource resource) {
@@ -615,9 +622,112 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+
+		/**
+		 * return bindings where eObject is the model.
+		 * 
+		 * @param eObject
+		 * @return
+		 */
+		private List<Binding> findBindingsFor(EObject eObject) {
+			List<Binding> result = new ArrayList<Binding>();
+			for (Object o : getDataBindingContext().getBindings()) {
+				Binding binding = (Binding) o;
+
+				if (binding.getModel() instanceof EMFObservableValueDecorator) {
+					EMFObservableValueDecorator decorator = (EMFObservableValueDecorator) binding.getModel();
+					if (decorator.getObserved() == eObject) {
+						result.add(binding);
+					}
+				} else if (binding.getModel() instanceof DetailObservableValue) {
+					DetailObservableValue observable = (DetailObservableValue) binding.getModel();
+					if (observable.getObserved() == eObject) {
+						result.add(binding);
+					}
+				}
+			}
+			return result;
+		}
+
+		private void removeMessage(IMarkerDelta delta) {
+			EObject eObject = getEObjectFrom(delta);
+			if (eObject == null) {
+				return;
+			}
+			IMessageManager messageManager = getActivePageInstance().getManagedForm().getMessageManager();
+
+			// list of bindings where eObject is the 'model'.  Bindings where eObject is 'target' are irrelevant.
+			List<Binding> bindings = findBindingsFor(eObject);
+
+			if (bindings.isEmpty()) {
+				messageManager.removeMessage(eObject);
+			}
+
+			for (Binding binding : bindings) {
+				if (binding.getTarget() instanceof ISWTObservable) {
+					ISWTObservable swtObservable = (ISWTObservable) binding.getTarget();
+					if (swtObservable.getWidget() instanceof Control) {
+						messageManager.removeMessage(binding.getTarget(), (Control) swtObservable.getWidget());
+					}
+				}
+
+			}
+		}
+
+		private void addMessage(IMarker marker) {
+			EObject eObject = getEObjectFrom(marker);
+			String message = marker.getAttribute(IMarker.MESSAGE, null);
+			if (eObject == null || message == null) {
+				return;
+			}
+			IMessageManager messageManager = getActivePageInstance().getManagedForm().getMessageManager();
+
+			// list of bindings where eObject is the 'model'.  Bindings where eObject is 'target' are irrelevant.
+			List<Binding> bindings = findBindingsFor(eObject);
+
+			if (bindings.isEmpty()) {
+				messageManager.addMessage(eObject, message, null, mapToMessageSeverity(marker));
+			}
+
+			for (Binding binding : bindings) {
+				if (binding.getTarget() instanceof ISWTObservable) {
+					ISWTObservable swtObservable = (ISWTObservable) binding.getTarget();
+					if (swtObservable.getWidget() instanceof Control) {
+						int severity = mapToMessageSeverity(marker);
+						messageManager.addMessage(binding.getTarget(), message, null, severity, (Control) swtObservable.getWidget());
+					}
+				}
+
+			}
+		}
+
+		private int mapToMessageSeverity(IMarker marker) {
+			int severity = IMessageProvider.INFORMATION;
+			switch (marker.getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR)) {
+				case IMarker.SEVERITY_ERROR :
+					severity = IMessageProvider.ERROR;
+					break;
+				case IMarker.SEVERITY_WARNING :
+					severity = IMessageProvider.WARNING;
+					break;
+			}
+			return severity;
+		}
+
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			// filter events related to changes on markers
 			if ((delta.getFlags() & IResourceDelta.MARKERS) == IResourceDelta.MARKERS) {
+				for (IMarkerDelta markerDelta : delta.getMarkerDeltas()) {
+					switch (markerDelta.getKind()) {
+						case IResourceDelta.ADDED :
+						case IResourceDelta.CHANGED :
+							addMessage(markerDelta.getMarker());
+							break;
+						case IResourceDelta.REMOVED :
+							removeMessage(markerDelta);
+							break;
+					}
+				}
 				return false;
 			}
 
@@ -864,23 +974,42 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		if (getViewer() == null)
 			return; // atm we only handle in-viewer selection
 
+		EObject eObject = getEObjectFrom(marker);
+
+		if (eObject != null && (getEditingDomain() instanceof AdapterFactoryEditingDomain)) {
+			AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain) getEditingDomain();
+			if (getViewer() != null) {
+				getViewer().setSelection(new StructuredSelection(Collections.singleton(editingDomain.getWrapper(eObject)).toArray()));
+			}
+		}
+	}
+
+	private EObject getEObjectFrom(IMarker marker) {
+		EObject eObject = null;
 		try {
-			if (marker.getType().equals(EValidator.MARKER)) {
-				String uriAttribute = marker.getAttribute(EValidator.URI_ATTRIBUTE, null);
-				if (uriAttribute != null) {
-					URI uri = URI.createURI(uriAttribute);
-					EObject eObject = getEditingDomain().getResourceSet().getEObject(uri, true);
-					if (eObject != null && (getEditingDomain() instanceof AdapterFactoryEditingDomain)) {
-						AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain) getEditingDomain();
-						if (getViewer() != null) {
-							getViewer().setSelection(new StructuredSelection(Collections.singleton(editingDomain.getWrapper(eObject)).toArray()));
-						}
-					}
-				}
+			// emf has two validation markers
+			if (marker.getType().equals(EValidator.MARKER) || marker.getType().equals(MarkerUtil.VALIDATION_MARKER_TYPE)) {
+				Map attributes = marker.getAttributes();
+				eObject = getEObjectFrom(attributes);
 			}
 		} catch (CoreException exception) {
 			Activator.log(exception);
 		}
+		return eObject;
+	}
+
+	private EObject getEObjectFrom(IMarkerDelta delta) {
+		return getEObjectFrom(delta.getAttributes());
+	}
+
+	private EObject getEObjectFrom(Map attributes) {
+		String uriAttribute = (String) attributes.get(EValidator.URI_ATTRIBUTE);
+		EObject o = null;
+		if (uriAttribute != null) {
+			URI uri = URI.createURI(uriAttribute);
+			o = getEditingDomain().getResourceSet().getEObject(uri, true);
+		}
+		return o;
 	}
 
 	public DataBindingContext getDataBindingContext() {
@@ -900,6 +1029,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	/* package */void validate() {
 		// TODO perform validation in a separate job
-		_validator.validate();
+		//_validator.validate();
 	}
 }
