@@ -40,7 +40,7 @@ public abstract class AbstractAddAction extends Action {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return ImageDescriptor.createFromURL(Activator.getDefault().getBundle().getResource(IEmfFormsImages.ADD_TOOLBAR_BUTTON)); //$NON-NLS-1$
+		return ImageDescriptor.createFromURL(Activator.getDefault().getBundle().getResource(IEmfFormsImages.ADD_TOOLBAR_BUTTON));
 	}
 
 }

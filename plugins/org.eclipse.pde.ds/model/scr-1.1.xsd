@@ -67,6 +67,8 @@
 			default="activate" />
 		<attribute name="deactivate" type="token" use="optional"
 			default="deactivate" />
+		<attribute name="modified" type="token" use="optional"
+			default="modified" />
 		<anyAttribute />
 	</complexType>
 	<complexType name="Timplementation">

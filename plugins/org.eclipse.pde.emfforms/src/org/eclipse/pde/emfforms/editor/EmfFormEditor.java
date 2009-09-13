@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.22 2009/09/11 20:10:54 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.26 2009/09/12 20:36:02 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -41,8 +41,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
-import org.eclipse.emf.edit.ui.dnd.*;
-import org.eclipse.emf.edit.ui.provider.*;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
@@ -57,8 +56,6 @@ import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.pde.emfforms.internal.editor.*;
 import org.eclipse.pde.emfforms.internal.validation.ValidatingEContentAdapter;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
@@ -69,7 +66,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -136,6 +132,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private boolean isSaving = false;
 
+	private EmfContentOutlinePage contentOutlinePage;
+
+	private ResourceDeltaVisitor _visitor;
+
 	public EmfFormEditor() {
 		this._editorConfig = getFormEditorConfig();
 		init();
@@ -198,9 +198,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		// executed.
 		BasicCommandStack commandStack = new BasicCommandStack();
 
-		// Create the editing domain with a special command stack, and if it's
-		// asked a shared Clipboard
-		if (isUsingSharedClipboard())
+		if (_editorConfig.isUsingSharedClipboard())
 			return new SharedClipboardAdapterFactoryEditingDomain(_adapterFactory, commandStack, new HashMap<Resource, Boolean>());
 		// else
 		return new AdapterFactoryEditingDomain(_adapterFactory, commandStack, new HashMap<Resource, Boolean>());
@@ -324,7 +322,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	 * @param monitor
 	 */
 	protected void internalDoValidate(IProgressMonitor monitor) {
-		VALIDATE_ON_SAVE validateOnSave = validateOnSave();
+		VALIDATE_ON_SAVE validateOnSave = _editorConfig.getValidateOnSave();
 
 		// result of the Validation
 		Diagnostic diagnostic = Diagnostic.OK_INSTANCE;
@@ -375,30 +373,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			}
 
 		}
-	}
-
-	/**
-	 * Return a member of {@link VALIDATE_ON_SAVE}, in order to say if a
-	 * validation must be executed before saving resource
-	 * 
-	 * <ul>
-	 * <li>
-	 * {@link VALIDATE_ON_SAVE.NO_VALIDATION} no validation executed before
-	 * saving resource</li>
-	 * <li>{@link VALIDATE_ON_SAVE.VALIDATE_AND_WARN} a validation is executed,
-	 * and only warn the user if the validation is not OK</li>
-	 * <li>
-	 * {@link VALIDATE_ON_SAVE.VALIDATE_AND_ABORT} a validation is executed, and
-	 * the resource cannot be saved</li>
-	 * </ul>
-	 * 
-	 * Clients can override this method, by default return
-	 * {@link VALIDATE_ON_SAVE.NO_VALIDATION}
-	 * 
-	 * @return {@link VALIDATE_ON_SAVE}
-	 */
-	protected final VALIDATE_ON_SAVE validateOnSave() {
-		return _editorConfig.getValidateOnSave();
 	}
 
 	/**
@@ -559,15 +533,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	public Viewer getViewer() {
 		AbstractEmfFormPage page = (AbstractEmfFormPage) pages.get(getActivePage());
 		return page.getViewer();
-	}
-
-	/**
-	 * @return <code>true</code> if this editor must use a shared clipboard,
-	 *         which will allow copy/paste actions between different instance of
-	 *         the same editor. The default return value is <code>false</code>
-	 */
-	public final boolean isUsingSharedClipboard() {
-		return this._editorConfig.isUsingSharedClipboard();
 	}
 
 	/**
@@ -796,70 +761,12 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * This is the content outline page.
-	 */
-	protected IContentOutlinePage contentOutlinePage;
-
-	protected IStatusLineManager contentOutlineStatusLineManager;
-
-	/**
-	 * This is the content outline page's viewer.
-	 */
-	protected TreeViewer contentOutlineViewer;
-
-	private ResourceDeltaVisitor _visitor;
-
-	/**
 	 * This accesses a cached version of the content outliner.
-	 * @generated
 	 */
-	public IContentOutlinePage getContentOutlinePage() {
+	private IContentOutlinePage getContentOutlinePage() {
 		if (contentOutlinePage == null) {
-			// The content outline is just a tree.
-			class MyContentOutlinePage extends ContentOutlinePage {
-				@Override
-				public void createControl(Composite parent) {
-					super.createControl(parent);
-					contentOutlineViewer = getTreeViewer();
-					contentOutlineViewer.addSelectionChangedListener(this);
-
-					// Set up the tree viewer.
-					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
-					contentOutlineViewer.setLabelProvider(new DecoratingLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator()));
-					contentOutlineViewer.setInput(getCurrentEObject().eResource());
-					contentOutlineViewer.addFilter(new ViewerFilter() {
-						@Override
-						public boolean select(Viewer viewer, Object parentElement, Object element) {
-							return (!(AdapterFactoryEditingDomain.unwrap(element) instanceof String));
-						}
-					});
-
-					// Make sure our popups work.
-					createContextMenuFor(contentOutlineViewer);
-
-					if (!getEditingDomain().getResourceSet().getResources().isEmpty()) {
-						// Select the root object in the view.
-						contentOutlineViewer.setSelection(new StructuredSelection(getEditingDomain().getResourceSet().getResources().get(0)), true);
-					}
-
-				}
-
-				@Override
-				public void makeContributions(IMenuManager menuManager, IToolBarManager toolBarManager, IStatusLineManager statusLineManager) {
-					super.makeContributions(menuManager, toolBarManager, statusLineManager);
-					contentOutlineStatusLineManager = statusLineManager;
-				}
-
-				@Override
-				public void setActionBars(IActionBars actionBars) {
-					super.setActionBars(actionBars);
-					if (getActionBarContributor() != null) {
-						getActionBarContributor().shareGlobalActions(this, actionBars);
-					}
-				}
-			}
-
-			contentOutlinePage = new MyContentOutlinePage();
+			contentOutlinePage = new EmfContentOutlinePage(this);
+			contentOutlinePage.setViewerInput(getCurrentEObject().eResource());
 
 			// Listen to selection so that we can handle it is a special way.
 			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -872,7 +779,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 			addSelectionChangedListener(new ISelectionChangedListener() {
 				// This ensures that we handle selections correctly.
 				public void selectionChanged(SelectionChangedEvent event) {
-					handleContentOutlineSelection(event.getSelection(), contentOutlineViewer);
+					handleContentOutlineSelection(event.getSelection(), contentOutlinePage.getViewer());
 				}
 			});
 		}
@@ -881,7 +788,11 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * This deals with how we want selection in the outline to affect the other views.
+	 * This deals with how we want selection in the outline to affect the other views.<br><br>
+	 * <strong>Clients can override this method</strong> to have some special behaviour on selection changed events in the outline, such
+	 * as giving focus to a particular page of the editor. 
+	 * @param selection the current selection in the outline
+	 * @param viewerToSnych the viewer of the active page (if any)
 	 */
 	public void handleContentOutlineSelection(ISelection selection, Viewer viewerToSnych) {
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection && viewerToSnych != null) {
@@ -889,25 +800,6 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 				viewerToSnych.setSelection(new StructuredSelection(((IStructuredSelection) selection).getFirstElement()));
 			}
 		}
-	}
-
-	/**
-	 * This creates a context menu for the viewer and adds a listener as well registering the menu for extension.
-	 */
-	protected void createContextMenuFor(StructuredViewer viewer) {
-		MenuManager contextMenu = new MenuManager("#PopUp");
-		contextMenu.add(new Separator("additions"));
-		contextMenu.setRemoveAllWhenShown(true);
-		// TODO
-		// contextMenu.addMenuListener(this);
-		Menu menu = contextMenu.createContextMenu(viewer.getControl());
-		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
-
-		int dndOperations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
-		Transfer[] transfers = new Transfer[] {LocalTransfer.getInstance()};
-		viewer.addDragSupport(dndOperations, transfers, new ViewerDragAdapter(viewer));
-		viewer.addDropSupport(dndOperations, transfers, new EditingDomainViewerDropAdapter(getEditingDomain(), viewer));
 	}
 
 	private EmfFormEditor<T> getCurrentInstance() {

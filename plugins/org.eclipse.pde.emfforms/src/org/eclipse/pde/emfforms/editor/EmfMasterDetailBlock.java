@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfMasterDetailBlock.java,v 1.15 2009/09/02 14:11:43 bcabe Exp $
+ * $Id: EmfMasterDetailBlock.java,v 1.17 2009/09/11 22:08:45 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -39,16 +39,35 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.forms.*;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.widgets.*;
 
 public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements IDetailsPageProvider, IMenuListener {
 
 	protected EmfFormEditor<?> parentEditor;
 
+	/**
+	 * Style constant to indicate that no generic buttons (neither toolbar nor push) should be displayed 
+	 */
 	public static final int NO_BUTTONS = 0;
+
+	/**
+	 * Style constant to indicate whether generic toolbar buttons should be displayed or not 
+	 */
 	public static final int USE_GENERIC_TOOLBAR_BUTTONS = 1 << 0;
+
+	/**
+	 * Style constant to indicate whether generic push buttons should be displayed on the
+	 * right-hand side of the tree viewer or not
+	 */
 	public static final int USE_GENERIC_PUSH_BUTTONS = 1 << 1;
+
+	/**
+	 * Style constant to indicate whether custom push buttons should be displayed on the
+	 * right-hand side of the tree viewer or not.
+	 * If the flag is set, the {@link EmfMasterDetailBlock#createCustomButtons(Composite)} will be called. 
+	 */
+	public static final int USE_CUSTOM_PUSH_BUTTONS = 1 << 2;
+
 	protected int buttonOption = USE_GENERIC_TOOLBAR_BUTTONS;
 
 	private String title;
@@ -73,7 +92,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	protected void createMasterPart(final IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = parentEditor.getToolkit();
 
-		Section section = toolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
+		Section section = toolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
 		section.setText(title);
 		section.setDescription("Edit " + title); //$NON-NLS-1$
 		section.marginWidth = 5;
@@ -93,10 +112,13 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 			Composite buttonComposite = new Composite(client, SWT.NONE);
 			GridLayoutFactory.fillDefaults().numColumns(1).applyTo(buttonComposite);
 
-			addButton = createButton(buttonComposite, "Add"); //$NON-NLS-1$
-			removeButton = createButton(buttonComposite, "Remove"); //$NON-NLS-1$
+			if (showGenericPushButtons())
+				addButton = createButton(buttonComposite, "Add"); //$NON-NLS-1$
+			if (showCustomPushButtons())
+				createCustomButtons(buttonComposite);
+			if (showGenericPushButtons())
+				removeButton = createButton(buttonComposite, "Remove"); //$NON-NLS-1$
 
-			createCustomButtons(buttonComposite);
 			GridDataFactory.fillDefaults().grab(false, false).applyTo(buttonComposite);
 		}
 
@@ -156,7 +178,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 		// ActionBarContributor's global handlers
 		configureActionBarManagement();
 
-		if (showPushButtons()) {
+		if (getRemoveButton() != null) {
 
 			DataBindingContext bindingContext = new DataBindingContext();
 
@@ -226,7 +248,15 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	}
 
 	private boolean showPushButtons() {
-		return (buttonOption & USE_GENERIC_PUSH_BUTTONS) > 0;
+		return showCustomPushButtons() || showGenericPushButtons();
+	}
+
+	private boolean showCustomPushButtons() {
+		return ((buttonOption & USE_CUSTOM_PUSH_BUTTONS) > 0);
+	}
+
+	private boolean showGenericPushButtons() {
+		return ((buttonOption & USE_GENERIC_PUSH_BUTTONS) > 0);
 	}
 
 	private boolean showToolbarButtons() {
@@ -246,7 +276,7 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 	protected Button createButton(Composite parent, String btnText) {
 		Button btn = new Button(parent, SWT.FLAT | SWT.PUSH);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(btn);
-		btn.setText(btnText); //$NON-NLS-1$
+		btn.setText(btnText);
 
 		return btn;
 	}
@@ -289,6 +319,14 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 
 	public Button getRemoveButton() {
 		return removeButton;
+	}
+
+	public void setAddButton(Button addButton) {
+		this.addButton = addButton;
+	}
+
+	public void setRemoveButton(Button removeButton) {
+		this.removeButton = removeButton;
 	}
 
 	protected void createContextMenuFor(StructuredViewer viewer) {
