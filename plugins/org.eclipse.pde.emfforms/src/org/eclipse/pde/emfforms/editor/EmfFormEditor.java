@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.27 2009/09/13 18:04:04 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.28 2009/09/13 18:18:43 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -69,10 +69,10 @@ import org.osgi.framework.BundleContext;
  * A {@link FormEditor} allowing to edit an EMF {@link EObject} in a convenient
  * way
  * 
- * @param <T>
+ * @param <O>
  *            The type of the {@link EObject} to edit.
  */
-public abstract class EmfFormEditor<T extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener, IGotoMarker {
+public abstract class EmfFormEditor<O extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener, IGotoMarker {
 
 	/**
 	 * This keeps track of the editing domain that is used to track all changes
@@ -82,7 +82,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	/**
 	 */
-	private IEmfFormEditorConfig<T> _editorConfig;
+	private IEmfFormEditorConfig<EmfFormEditor<O>, O> _editorConfig;
 
 	/**
 	 * This is the one adapter factory used for providing views of the model.
@@ -91,7 +91,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private final IObservableValue _observableValue = new WritableValue();
 
-	private T _currentEObject;
+	private O _currentEObject;
 
 	/**
 	 * This keeps track of all the
@@ -137,8 +137,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	/**
 	 * @return the {@link IEmfFormEditorConfig} the editor will use as its configuration
 	 */
-	protected IEmfFormEditorConfig<T> getFormEditorConfig() {
-		return new DefaultEmfFormEditorConfig<T>(this);
+	protected IEmfFormEditorConfig<EmfFormEditor<O>, O> getFormEditorConfig() {
+		return new DefaultEmfFormEditorConfig<EmfFormEditor<O>, O>(this);
 	}
 
 	private void init() {
@@ -452,7 +452,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		if (_currentEObject != null)
 			_currentEObject.eAdapters().remove(_validator);
 
-		_currentEObject = (T) resource.getContents().get(0);
+		_currentEObject = (O) resource.getContents().get(0);
 		_observableValue.setValue(_currentEObject);
 		_currentEObject.eAdapters().add(_validator);
 	}
@@ -476,9 +476,9 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * @return The {@link T} currently edited
+	 * @return The {@link O} currently edited
 	 */
-	public T getCurrentEObject() {
+	public O getCurrentEObject() {
 		return _currentEObject;
 	}
 
@@ -687,7 +687,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		}
 	}
 
-	private EmfFormEditor<T> getCurrentInstance() {
+	private EmfFormEditor<O> getCurrentInstance() {
 		return this;
 	}
 

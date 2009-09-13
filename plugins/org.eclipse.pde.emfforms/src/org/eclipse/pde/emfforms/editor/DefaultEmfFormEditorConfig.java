@@ -8,22 +8,22 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DefaultEmfFormEditorConfig.java,v 1.5 2009/09/13 18:04:04 bcabe Exp $
+ * $Id: DefaultEmfFormEditorConfig.java,v 1.6 2009/09/13 18:18:43 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Display;
 
-public class DefaultEmfFormEditorConfig<T extends EObject> implements IEmfFormEditorConfig<T> {
+public class DefaultEmfFormEditorConfig<E extends EmfFormEditor<O>, O extends EObject> implements IEmfFormEditorConfig<E, O> {
 	private PDEFormToolkit customizedToolkit = null;
-	private EmfFormEditor<T> editor;
+	private E editor;
 
-	public DefaultEmfFormEditorConfig(EmfFormEditor<T> editor) {
+	public DefaultEmfFormEditorConfig(E editor) {
 		this.editor = editor;
 	}
 
-	public EmfFormEditor<T> getEditor() {
+	public E getEditor() {
 		return editor;
 	}
 
@@ -58,7 +58,7 @@ public class DefaultEmfFormEditorConfig<T extends EObject> implements IEmfFormEd
 		this.customizedToolkit = customizedToolkit;
 	}
 
-	public Object getOutlineInput(T suggestedInput) {
+	public Object getOutlineInput(O suggestedInput) {
 		return suggestedInput.eResource();
 	};
 
