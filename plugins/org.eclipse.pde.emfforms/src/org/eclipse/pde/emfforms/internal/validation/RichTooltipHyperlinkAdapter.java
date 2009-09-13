@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: RichTooltipHyperlinkAdapter.java,v 1.1 2009/09/13 20:32:58 bcabe Exp $
+ * $Id: RichTooltipHyperlinkAdapter.java,v 1.2 2009/09/13 21:28:29 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.internal.validation;
 
@@ -152,7 +152,6 @@ public class RichTooltipHyperlinkAdapter extends HyperlinkAdapter {
 		}
 		pw.println("</form>");
 		pw.flush();
-		//	System.out.println(sw.toString());
 		return sw.toString();
 	}
 
