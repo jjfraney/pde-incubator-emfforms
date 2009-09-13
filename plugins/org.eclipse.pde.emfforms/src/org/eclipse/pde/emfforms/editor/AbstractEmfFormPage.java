@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: AbstractEmfFormPage.java,v 1.7 2009/08/07 11:03:24 bcabe Exp $
+ * $Id: AbstractEmfFormPage.java,v 1.8 2009/09/13 21:30:05 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -16,12 +16,14 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.pde.emfforms.internal.validation.RichTooltipHyperlinkAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.internal.forms.widgets.FormHeading;
 
 /**
  * Generic page for {@link EObject} edition
@@ -102,6 +104,10 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 			}
 		}
 
+		if (getEditor().getEditorConfig().isUseRichFormsTooltips()) {
+			managedForm.getForm().getForm().addMessageHyperlinkListener(new RichTooltipHyperlinkAdapter(managedForm));
+			((FormHeading) managedForm.getForm().getForm().getHead()).setMessageToolTipManager(null);
+		}
 	}
 
 	private void createHeader() {

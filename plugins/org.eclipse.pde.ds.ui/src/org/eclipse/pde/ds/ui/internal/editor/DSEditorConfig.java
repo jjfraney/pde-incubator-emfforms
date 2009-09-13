@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditorConfig.java,v 1.5 2009/09/13 18:18:42 bcabe Exp $
+ * $Id: DSEditorConfig.java,v 1.6 2009/09/13 21:30:27 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
@@ -32,6 +32,11 @@ public class DSEditorConfig extends DefaultEmfFormEditorConfig<DSEditor, Compone
 
 	@Override
 	public boolean isShowSourcePage() {
+		return true;
+	}
+
+	@Override
+	public boolean isUseRichFormsTooltips() {
 		return true;
 	}
 }
