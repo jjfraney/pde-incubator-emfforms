@@ -8,7 +8,7 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: EmfFormEditor.java,v 1.26 2009/09/12 20:36:02 bcabe Exp $
+ * $Id: EmfFormEditor.java,v 1.29 2009/09/13 21:30:05 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
@@ -76,10 +76,10 @@ import org.osgi.framework.BundleContext;
  * A {@link FormEditor} allowing to edit an EMF {@link EObject} in a convenient
  * way
  * 
- * @param <T>
+ * @param <O>
  *            The type of the {@link EObject} to edit.
  */
-public abstract class EmfFormEditor<T extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener, IGotoMarker {
+public abstract class EmfFormEditor<O extends EObject> extends FormEditor implements IEditingDomainProvider, ISelectionProvider, IViewerProvider, IResourceChangeListener, IGotoMarker {
 
 	/**
 	 * This keeps track of the editing domain that is used to track all changes
@@ -89,7 +89,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	/**
 	 */
-	private IEmfFormEditorConfig _editorConfig;
+	private IEmfFormEditorConfig<EmfFormEditor<O>, O> _editorConfig;
 
 	/**
 	 * This is the one adapter factory used for providing views of the model.
@@ -98,7 +98,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 
 	private final IObservableValue _observableValue = new WritableValue();
 
-	private T _currentEObject;
+	private O _currentEObject;
 
 	/**
 	 * This keeps track of all the
@@ -144,8 +144,8 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	/**
 	 * @return the {@link IEmfFormEditorConfig} the editor will use as its configuration
 	 */
-	protected IEmfFormEditorConfig getFormEditorConfig() {
-		return new DefaultEmfFormEditorConfig();
+	protected IEmfFormEditorConfig<EmfFormEditor<O>, O> getFormEditorConfig() {
+		return new DefaultEmfFormEditorConfig<EmfFormEditor<O>, O>(this);
 	}
 
 	private void init() {
@@ -488,9 +488,9 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	/**
-	 * @return The {@link T} currently edited
+	 * @return The {@link O} currently edited
 	 */
-	public T getCurrentEObject() {
+	public O getCurrentEObject() {
 		return _currentEObject;
 	}
 
@@ -766,7 +766,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	private IContentOutlinePage getContentOutlinePage() {
 		if (contentOutlinePage == null) {
 			contentOutlinePage = new EmfContentOutlinePage(this);
-			contentOutlinePage.setViewerInput(getCurrentEObject().eResource());
+			contentOutlinePage.setViewerInput(_editorConfig.getOutlineInput(getCurrentEObject()));
 
 			// Listen to selection so that we can handle it is a special way.
 			contentOutlinePage.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -802,7 +802,7 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 		}
 	}
 
-	private EmfFormEditor<T> getCurrentInstance() {
+	private EmfFormEditor<O> getCurrentInstance() {
 		return this;
 	}
 
@@ -918,6 +918,10 @@ public abstract class EmfFormEditor<T extends EObject> extends FormEditor implem
 	}
 
 	public abstract String getID();
+
+	public IEmfFormEditorConfig<EmfFormEditor<O>, O> getEditorConfig() {
+		return _editorConfig;
+	}
 
 	/* package */void validate() {
 		// TODO perform validation in a separate job

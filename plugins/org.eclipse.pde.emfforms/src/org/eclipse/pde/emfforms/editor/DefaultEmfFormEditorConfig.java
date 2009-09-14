@@ -8,14 +8,24 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DefaultEmfFormEditorConfig.java,v 1.4 2009/08/19 15:13:23 bcabe Exp $
+ * $Id: DefaultEmfFormEditorConfig.java,v 1.8 2009/09/13 21:30:06 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Display;
 
-public class DefaultEmfFormEditorConfig implements IEmfFormEditorConfig {
+public class DefaultEmfFormEditorConfig<E extends EmfFormEditor<O>, O extends EObject> implements IEmfFormEditorConfig<E, O> {
 	private PDEFormToolkit customizedToolkit = null;
+	private E editor;
+
+	public DefaultEmfFormEditorConfig(E editor) {
+		this.editor = editor;
+	}
+
+	public E getEditor() {
+		return editor;
+	}
 
 	public VALIDATE_ON_SAVE getValidateOnSave() {
 		return VALIDATE_ON_SAVE.NO_VALIDATION;
@@ -37,6 +47,10 @@ public class DefaultEmfFormEditorConfig implements IEmfFormEditorConfig {
 		return false;
 	}
 
+	public boolean isUseRichFormsTooltips() {
+		return false;
+	}
+
 	public PDEFormToolkit createPDEFormToolkit(Display display) {
 		if (this.customizedToolkit != null) {
 			return this.customizedToolkit;
@@ -47,5 +61,12 @@ public class DefaultEmfFormEditorConfig implements IEmfFormEditorConfig {
 	public void setCustomizedToolkit(PDEFormToolkit customizedToolkit) {
 		this.customizedToolkit = customizedToolkit;
 	}
+
+	/**
+	 * This default implementation returns the eResource of suggestedInput
+	 */
+	public Object getOutlineInput(O suggestedInput) {
+		return suggestedInput.eResource();
+	};
 
 }

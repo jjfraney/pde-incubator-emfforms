@@ -8,13 +8,18 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: DSEditorConfig.java,v 1.3 2009/09/11 22:00:14 bcabe Exp $
+ * $Id: DSEditorConfig.java,v 1.6 2009/09/13 21:30:27 bcabe Exp $
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
+import org.eclipse.pde.ds.scr.Component;
 import org.eclipse.pde.emfforms.editor.DefaultEmfFormEditorConfig;
 
-public class DSEditorConfig extends DefaultEmfFormEditorConfig {
+public class DSEditorConfig extends DefaultEmfFormEditorConfig<DSEditor, Component> {
+	public DSEditorConfig(DSEditor editor) {
+		super(editor);
+	}
+
 	@Override
 	public boolean isUsingSharedClipboard() {
 		return true;
@@ -27,6 +32,11 @@ public class DSEditorConfig extends DefaultEmfFormEditorConfig {
 
 	@Override
 	public boolean isShowSourcePage() {
+		return true;
+	}
+
+	@Override
+	public boolean isUseRichFormsTooltips() {
 		return true;
 	}
 }

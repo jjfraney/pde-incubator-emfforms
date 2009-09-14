@@ -8,17 +8,20 @@
  * Contributors:
  *     Anyware Technologies - initial API and implementation
  *
- * $Id: IEmfFormEditorConfig.java,v 1.4 2009/09/12 20:16:06 bcabe Exp $
+ * $Id: IEmfFormEditorConfig.java,v 1.7 2009/09/13 21:30:06 bcabe Exp $
  */
 package org.eclipse.pde.emfforms.editor;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Display;
 
-public interface IEmfFormEditorConfig {
+public interface IEmfFormEditorConfig<E extends EmfFormEditor<O>, O extends EObject> {
 
 	public enum VALIDATE_ON_SAVE {
 		NO_VALIDATION, VALIDATE_AND_WARN, VALIDATE_AND_ABORT
 	}
+
+	E getEditor();
 
 	/**
 	 * Return a member of {@link VALIDATE_ON_SAVE}, in order to say if a
@@ -52,11 +55,15 @@ public interface IEmfFormEditorConfig {
 
 	boolean isShowSourcePage();
 
+	boolean isUseRichFormsTooltips();
+
 	/**
 	 * 
 	 * @param display
 	 * @return customized toolkit if not null, otherwise default toolkit from display
 	 */
 	PDEFormToolkit createPDEFormToolkit(Display display);
+
+	Object getOutlineInput(O suggestedInput);
 
 }
