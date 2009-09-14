@@ -46,7 +46,6 @@ import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.emf.validation.marker.MarkerUtil;
-import org.eclipse.jface.action.*;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
@@ -465,8 +464,8 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 //		_currentEObject.eAdapters().add(_validator);
 	}
 
-	protected T getRootObject(Resource resource) {
-		return (T) resource.getContents().get(0);
+	protected O getRootObject(Resource resource) {
+		return (O) resource.getContents().get(0);
 	}
 
 	/**
