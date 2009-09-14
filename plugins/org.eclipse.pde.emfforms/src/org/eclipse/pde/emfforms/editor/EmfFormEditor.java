@@ -597,20 +597,24 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 			List<Binding> result = new ArrayList<Binding>();
 			for (Object o : getDataBindingContext().getBindings()) {
 				Binding binding = (Binding) o;
+				Object observed = getModelObserved(binding);
 
-				if (binding.getModel() instanceof EMFObservableValueDecorator) {
-					EMFObservableValueDecorator decorator = (EMFObservableValueDecorator) binding.getModel();
-					if (decorator.getObserved() == eObject) {
-						result.add(binding);
-					}
-				} else if (binding.getModel() instanceof DetailObservableValue) {
-					DetailObservableValue observable = (DetailObservableValue) binding.getModel();
-					if (observable.getObserved() == eObject) {
-						result.add(binding);
-					}
-				}
+				if (observed == eObject)
+					result.add(binding);
 			}
 			return result;
+		}
+
+		private Object getModelObserved(Binding binding) {
+			Object observed = null;
+			if (binding.getModel() instanceof EMFObservableValueDecorator) {
+				EMFObservableValueDecorator decorator = (EMFObservableValueDecorator) binding.getModel();
+				observed = decorator.getObserved();
+			} else if (binding.getModel() instanceof DetailObservableValue) {
+				DetailObservableValue observable = (DetailObservableValue) binding.getModel();
+				observed = observable.getObserved();
+			}
+			return observed;
 		}
 
 		private void removeMessage(IMarkerDelta delta) {
@@ -631,7 +635,7 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 				if (binding.getTarget() instanceof ISWTObservable) {
 					ISWTObservable swtObservable = (ISWTObservable) binding.getTarget();
 					if (swtObservable.getWidget() instanceof Control) {
-						messageManager.removeMessage(binding.getTarget(), (Control) swtObservable.getWidget());
+						messageManager.removeMessage(getModelObserved(binding), (Control) swtObservable.getWidget());
 					}
 				}
 
@@ -658,7 +662,7 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 					ISWTObservable swtObservable = (ISWTObservable) binding.getTarget();
 					if (swtObservable.getWidget() instanceof Control) {
 						int severity = mapToMessageSeverity(marker);
-						messageManager.addMessage(binding.getTarget(), message, null, severity, (Control) swtObservable.getWidget());
+						messageManager.addMessage(getModelObserved(binding), message, null, severity, (Control) swtObservable.getWidget());
 					}
 				}
 
@@ -692,7 +696,7 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 							break;
 					}
 				}
-				return false;
+				return true;
 			}
 
 			if (delta.getResource().getType() == IResource.FILE) {
