@@ -154,6 +154,8 @@ public abstract class EmfMasterDetailBlock extends MasterDetailsBlock implements
 
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
+				IMessageManager messageManager = getEditor().getActivePageInstance().getManagedForm().getMessageManager();
+				messageManager.removeAllMessages();
 				managedForm.fireSelectionChanged(spart, event.getSelection());
 			}
 		});

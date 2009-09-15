@@ -12,6 +12,9 @@
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -60,28 +63,30 @@ public class ReferenceDetailsPart extends EmfDetailsPart {
 		referenceComposite.getComboPolicy().setInput(Policy.values());
 	}
 
-	protected void bind(DataBindingContext bindingContext) {
+	protected List<Binding> bind(DataBindingContext bindingContext) {
+		List<Binding> bindings = new ArrayList<Binding>();
 		// Name
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextName()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Name()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextName()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Name()).observeDetail(getCurrentSelection()), null, null));
 
 		// Interface
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextInterface()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Interface()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextInterface()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Interface()).observeDetail(getCurrentSelection()), null, null));
 
 		// Cardinality
-		bindingContext.bindValue(ViewerProperties.singleSelection().observe(referenceComposite.getComboCardinality()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Cardinality()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(ViewerProperties.singleSelection().observe(referenceComposite.getComboCardinality()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Cardinality()).observeDetail(getCurrentSelection()), null, null));
 
 		// Policy
-		bindingContext.bindValue(ViewerProperties.singleSelection().observe(referenceComposite.getComboPolicy()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Policy()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(ViewerProperties.singleSelection().observe(referenceComposite.getComboPolicy()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Policy()).observeDetail(getCurrentSelection()), null, null));
 
 		// Target
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextTarget()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Target()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextTarget()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Target()).observeDetail(getCurrentSelection()), null, null));
 
 		// Bind
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextBind()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Bind()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextBind()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Bind()).observeDetail(getCurrentSelection()), null, null));
 
 		// Unbind
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextUnbind()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Unbind()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(referenceComposite.getTextUnbind()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getReference_Unbind()).observeDetail(getCurrentSelection()), null, null));
 
+		return bindings;
 	}
 
 	public void setFocus() {

@@ -12,6 +12,9 @@
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart.properties;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -60,16 +63,18 @@ public class PropertyDetailsPart extends EmfDetailsPart {
 		propertyComposite.getComboType().setInput(JavaType.values());
 	}
 
-	protected void bind(DataBindingContext bindingContext) {
+	protected List<Binding> bind(DataBindingContext bindingContext) {
+		List<Binding> bindings = new ArrayList<Binding>();
 		// Name
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextName()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Name()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextName()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Name()).observeDetail(getCurrentSelection()), null, null));
 
 		// Type
-		bindingContext.bindValue(ViewersObservables.observeSingleSelection(propertyComposite.getComboType()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Type()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(ViewersObservables.observeSingleSelection(propertyComposite.getComboType()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Type()).observeDetail(getCurrentSelection()), null, null));
 
 		//Value
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextValue()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(propertyComposite.getTextValue()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProperty_Value()).observeDetail(getCurrentSelection()), null, null));
 
+		return bindings;
 	}
 
 	public void setFocus() {

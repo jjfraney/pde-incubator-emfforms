@@ -12,6 +12,9 @@
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
@@ -39,10 +42,11 @@ public class PropertiesPage extends AbstractEmfFormPage {
 		super(editor, 1, true);
 	}
 
-	public void bind(DataBindingContext bindingContext) {
+	public List<Binding> bind(DataBindingContext bindingContext) {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
+		List<Binding> bindings = new ArrayList<Binding>();
 
-		bindingContext.bindValue(ViewerProperties.input().observe(_propertiesMasterDetail.getTreeViewer()), getEditor().getInputObservable());
+		bindings.add(bindingContext.bindValue(ViewerProperties.input().observe(_propertiesMasterDetail.getTreeViewer()), getEditor().getInputObservable()));
 
 		_propertiesMasterDetail.getAddButtonProperty().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -87,6 +91,8 @@ public class PropertiesPage extends AbstractEmfFormPage {
 				}
 			}
 		});
+
+		return bindings;
 
 	}
 

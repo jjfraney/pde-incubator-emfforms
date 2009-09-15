@@ -13,8 +13,8 @@
 package org.eclipse.pde.ds.ui.internal.editor;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.EventObject;
+import java.util.*;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -53,7 +53,7 @@ public class SourcePage extends AbstractEmfFormPage {
 		super(editor);
 	}
 
-	public void bind(DataBindingContext bindingContext) {
+	public List<Binding> bind(DataBindingContext bindingContext) {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
 
 		editingDomain.getCommandStack().addCommandStackListener(new CommandStackListener() {
@@ -64,6 +64,7 @@ public class SourcePage extends AbstractEmfFormPage {
 
 		// initialize content
 		refreshSourceContent();
+		return Collections.EMPTY_LIST;
 	}
 
 	private void refreshSourceContent() {

@@ -16,11 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.List;
-import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
-import org.eclipse.core.internal.databinding.observable.masterdetail.DetailObservableValue;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.command.*;
@@ -31,7 +29,6 @@ import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.databinding.internal.EMFObservableValueDecorator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -46,7 +43,6 @@ import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.emf.validation.marker.MarkerUtil;
-import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.viewers.*;
@@ -60,7 +56,6 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.forms.IMessageManager;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -98,6 +93,12 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 	private final IObservableValue _observableValue = new WritableValue();
 
 	private O _currentEObject;
+
+	/**
+	 * the list of markers this editor knows about.
+	 * TODO: if there is a better way to get markers....
+	 */
+	private Set<IMarker> markers = new HashSet<IMarker>();
 
 	/**
 	 * This keeps track of all the
@@ -587,113 +588,25 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 
 	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
 
-		/**
-		 * return bindings where eObject is the model.
-		 * 
-		 * @param eObject
-		 * @return
-		 */
-		private List<Binding> findBindingsFor(EObject eObject) {
-			List<Binding> result = new ArrayList<Binding>();
-			for (Object o : getDataBindingContext().getBindings()) {
-				Binding binding = (Binding) o;
-				Object observed = getModelObserved(binding);
-
-				if (observed == eObject)
-					result.add(binding);
-			}
-			return result;
-		}
-
-		private Object getModelObserved(Binding binding) {
-			Object observed = null;
-			if (binding.getModel() instanceof EMFObservableValueDecorator) {
-				EMFObservableValueDecorator decorator = (EMFObservableValueDecorator) binding.getModel();
-				observed = decorator.getObserved();
-			} else if (binding.getModel() instanceof DetailObservableValue) {
-				DetailObservableValue observable = (DetailObservableValue) binding.getModel();
-				observed = observable.getObserved();
-			}
-			return observed;
-		}
-
-		private void removeMessage(IMarkerDelta delta) {
-			EObject eObject = getEObjectFrom(delta);
-			if (eObject == null) {
-				return;
-			}
-			IMessageManager messageManager = getActivePageInstance().getManagedForm().getMessageManager();
-
-			// list of bindings where eObject is the 'model'.  Bindings where eObject is 'target' are irrelevant.
-			List<Binding> bindings = findBindingsFor(eObject);
-
-			if (bindings.isEmpty()) {
-				messageManager.removeMessage(eObject);
-			}
-
-			for (Binding binding : bindings) {
-				if (binding.getTarget() instanceof ISWTObservable) {
-					ISWTObservable swtObservable = (ISWTObservable) binding.getTarget();
-					if (swtObservable.getWidget() instanceof Control) {
-						messageManager.removeMessage(getModelObserved(binding), (Control) swtObservable.getWidget());
-					}
-				}
-
-			}
-		}
-
-		private void addMessage(IMarker marker) {
-			EObject eObject = getEObjectFrom(marker);
-			String message = marker.getAttribute(IMarker.MESSAGE, null);
-			if (eObject == null || message == null) {
-				return;
-			}
-			IMessageManager messageManager = getActivePageInstance().getManagedForm().getMessageManager();
-
-			// list of bindings where eObject is the 'model'.  Bindings where eObject is 'target' are irrelevant.
-			List<Binding> bindings = findBindingsFor(eObject);
-
-			if (bindings.isEmpty()) {
-				messageManager.addMessage(eObject, message, null, mapToMessageSeverity(marker));
-			}
-
-			for (Binding binding : bindings) {
-				if (binding.getTarget() instanceof ISWTObservable) {
-					ISWTObservable swtObservable = (ISWTObservable) binding.getTarget();
-					if (swtObservable.getWidget() instanceof Control) {
-						int severity = mapToMessageSeverity(marker);
-						messageManager.addMessage(getModelObserved(binding), message, null, severity, (Control) swtObservable.getWidget());
-					}
-				}
-
-			}
-		}
-
-		private int mapToMessageSeverity(IMarker marker) {
-			int severity = IMessageProvider.INFORMATION;
-			switch (marker.getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR)) {
-				case IMarker.SEVERITY_ERROR :
-					severity = IMessageProvider.ERROR;
-					break;
-				case IMarker.SEVERITY_WARNING :
-					severity = IMessageProvider.WARNING;
-					break;
-			}
-			return severity;
-		}
-
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			// filter events related to changes on markers
 			if ((delta.getFlags() & IResourceDelta.MARKERS) == IResourceDelta.MARKERS) {
 				for (IMarkerDelta markerDelta : delta.getMarkerDeltas()) {
-					switch (markerDelta.getKind()) {
-						case IResourceDelta.ADDED :
-						case IResourceDelta.CHANGED :
-							addMessage(markerDelta.getMarker());
-							break;
-						case IResourceDelta.REMOVED :
-							removeMessage(markerDelta);
-							break;
+					EObject eObject = getEObjectFrom(markerDelta);
+					if (eObject != null) {
+						IMarker marker = markerDelta.getMarker();
+						switch (markerDelta.getKind()) {
+							case IResourceDelta.ADDED :
+								markers.add(marker);
+								break;
+							case IResourceDelta.CHANGED :
+								markers.remove(marker);
+								markers.add(marker);
+								break;
+							case IResourceDelta.REMOVED :
+								markers.remove(marker);
+								break;
+						}
 					}
 				}
 				return true;
@@ -879,7 +792,7 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 		}
 	}
 
-	private EObject getEObjectFrom(IMarker marker) {
+	public EObject getEObjectFrom(IMarker marker) {
 		EObject eObject = null;
 		try {
 			// emf has two validation markers
@@ -898,11 +811,14 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 	}
 
 	private EObject getEObjectFrom(Map attributes) {
-		String uriAttribute = (String) attributes.get(EValidator.URI_ATTRIBUTE);
 		EObject o = null;
-		if (uriAttribute != null) {
-			URI uri = URI.createURI(uriAttribute);
-			o = getEditingDomain().getResourceSet().getEObject(uri, true);
+		if (attributes != null) {
+			String uriAttribute = (String) attributes.get(EValidator.URI_ATTRIBUTE);
+
+			if (uriAttribute != null) {
+				URI uri = URI.createURI(uriAttribute);
+				o = getEditingDomain().getResourceSet().getEObject(uri, true);
+			}
 		}
 		return o;
 	}
@@ -930,4 +846,9 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 		// TODO perform validation in a separate job
 		//_validator.validate();
 	}
+
+	public Set<IMarker> getMarkers() {
+		return markers;
+	}
+
 }

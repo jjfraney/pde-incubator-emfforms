@@ -14,8 +14,8 @@ package org.eclipse.pde.emfforms.internal.editor;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Collections;
-import java.util.EventObject;
+import java.util.*;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -48,7 +48,7 @@ public abstract class AbstractSourcePage extends AbstractEmfFormPage {
 		super(editor);
 	}
 
-	public void bind(DataBindingContext bindingContext) {
+	public List<Binding> bind(DataBindingContext bindingContext) {
 		_editingDomain = ((EmfFormEditor<?>) getEditor()).getEditingDomain();
 
 		_commandStackListener = new CommandStackListener() {
@@ -60,6 +60,7 @@ public abstract class AbstractSourcePage extends AbstractEmfFormPage {
 
 		// initialize content
 		refreshSourceContent();
+		return Collections.EMPTY_LIST;
 	}
 
 	private void refreshSourceContent() {

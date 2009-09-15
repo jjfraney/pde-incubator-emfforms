@@ -12,6 +12,8 @@
  */
 package org.eclipse.pde.emfforms.editor;
 
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
@@ -21,7 +23,13 @@ public interface IEmfFormPage extends IFormPage {
 
 	void createContents(Composite parent);
 
-	void bind(DataBindingContext bindingContext);
+	/**
+	 * build databindings for this form.  The returned bindings can be used by this
+	 * form to match bindings to markers on the resource;
+	 * @param bindingContext
+	 * @return
+	 */
+	List<Binding> bind(DataBindingContext bindingContext);
 
 	/**
 	 * If the page contains a viewer of special interest, this method must return it.

@@ -12,6 +12,8 @@
  */
 package org.eclipse.pde.emfforms.editor;
 
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -153,7 +155,6 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 	@Override
 	public void setActive(boolean active) {
 		if (active) {
-			getEditor().validate();
 
 			// force the selection on the viewer if there is any, to avoid a bug on the ContextMenu (on tab
 			// changed, display menu was unconsistent)
@@ -165,7 +166,8 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 		}
 	}
 
-	public abstract void bind(DataBindingContext bindingContext);
+	public abstract List<Binding> bind(DataBindingContext bindingContext);
 
 	public abstract void createContents(Composite parent);
+
 }

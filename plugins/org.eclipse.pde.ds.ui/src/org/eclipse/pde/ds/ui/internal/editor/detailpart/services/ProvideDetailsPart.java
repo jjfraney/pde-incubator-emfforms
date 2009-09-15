@@ -12,6 +12,9 @@
  */
 package org.eclipse.pde.ds.ui.internal.editor.detailpart.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
@@ -56,9 +59,11 @@ public class ProvideDetailsPart extends EmfDetailsPart {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(section);
 	}
 
-	protected void bind(DataBindingContext bindingContext) {
+	protected List<Binding> bind(DataBindingContext bindingContext) {
+		List<Binding> bindings = new ArrayList<Binding>();
 		// Interface
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(provideComposite.getTextInterface()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProvide_Interface()).observeDetail(getCurrentSelection()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(provideComposite.getTextInterface()), EMFEditProperties.value(getEditingDomain(), ScrPackage.eINSTANCE.getProvide_Interface()).observeDetail(getCurrentSelection()), null, null));
+		return bindings;
 	}
 
 	public void setFocus() {

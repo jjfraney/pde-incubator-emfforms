@@ -12,6 +12,9 @@
  */
 package org.eclipse.pde.ds.ui.internal.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
@@ -46,49 +49,52 @@ public class OverviewPage extends AbstractEmfFormPage {
 		super(editor, 2, false);
 	}
 
-	public void bind(DataBindingContext bindingContext) {
+	public List<Binding> bind(DataBindingContext bindingContext) {
 		final EditingDomain editingDomain = ((DSEditor) getEditor()).getEditingDomain();
 
+		List<Binding> bindings = new ArrayList<Binding>();
 		/**
 		 * Bind Component composite
 		 */
 		// component name
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextName()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Name()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextName()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Name()).observeDetail(getObservedValue()), null, null));
 		// component impl
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextImplementation()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Implementation()).value(ScrPackage.eINSTANCE.getImplementation_Class()).observeDetail(getObservedValue()), new EMFUpdateValueStrategy() {
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextImplementation()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Implementation()).value(ScrPackage.eINSTANCE.getImplementation_Class()).observeDetail(getObservedValue()), new EMFUpdateValueStrategy() {
 			@Override
 			public Object convert(Object value) {
 				if (((String) value).trim().equals(""))
 					return null;
 				return super.convert(value);
 			}
-		}, null);
+		}, null));
 
 		// component activate
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextActivate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Activate()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextActivate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Activate()).observeDetail(getObservedValue()), null, null));
 
 		// component deactivate
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextDeactivate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Deactivate()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextDeactivate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Deactivate()).observeDetail(getObservedValue()), null, null));
 
 		// component modified
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextModified()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Modified()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_componentComposite.getTextModified()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Modified()).observeDetail(getObservedValue()), null, null));
 
 		/**
 		 * Bind Options composite
 		 */
 		// component factory ID
-		bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_optionsComposite.getTextFactory()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Factory()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.text(SWT.FocusOut).observe(_optionsComposite.getTextFactory()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Factory()).observeDetail(getObservedValue()), null, null));
 		// component configuration policy
-		bindingContext.bindValue(ViewerProperties.singleSelection().observe(_optionsComposite.getComboViewerConfigurationPolicy()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_ConfigurationPolicy()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(ViewerProperties.singleSelection().observe(_optionsComposite.getComboViewerConfigurationPolicy()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_ConfigurationPolicy()).observeDetail(getObservedValue()), null, null));
 		// component enablement
-		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonEnabled()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Enabled()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonEnabled()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Enabled()).observeDetail(getObservedValue()), null, null));
 		// component immediacy
-		bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonImmediate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Immediate()).observeDetail(getObservedValue()), null, null);
+		bindings.add(bindingContext.bindValue(WidgetProperties.selection().observe(_optionsComposite.getButtonImmediate()), EMFEditProperties.value(editingDomain, ScrPackage.eINSTANCE.getComponent_Immediate()).observeDetail(getObservedValue()), null, null));
 
 		// perform bindings to get a message manager up to date
 		// FIXME this is just not good to do such a thing :)
 		bindingContext.updateModels();
 		editingDomain.getCommandStack().flush();
+
+		return bindings;
 	}
 
 	public void createContents(Composite parent) {
