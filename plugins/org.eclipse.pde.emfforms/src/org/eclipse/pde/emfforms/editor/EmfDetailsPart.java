@@ -172,7 +172,6 @@ public abstract class EmfDetailsPart implements IDetailsPage {
 			Object unwrapped = AdapterFactoryEditingDomain.unwrap(sel.getFirstElement());
 			getCurrentSelection().setValue(unwrapped);
 			addMessagesFromMarkers(_bindings, unwrapped);
-			getEditor().validate();
 		}
 	}
 

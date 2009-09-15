@@ -15,7 +15,6 @@ package org.eclipse.pde.emfforms.editor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.List;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -24,9 +23,7 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.emf.common.command.*;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.MarkerHelper;
-import org.eclipse.emf.common.ui.dialogs.DiagnosticDialog;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
@@ -43,18 +40,23 @@ import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.emf.validation.marker.MarkerUtil;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.*;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.pde.emfforms.editor.IEmfFormEditorConfig.VALIDATE_ON_SAVE;
 import org.eclipse.pde.emfforms.internal.Activator;
 import org.eclipse.pde.emfforms.internal.editor.*;
-import org.eclipse.pde.emfforms.internal.validation.ValidatingEContentAdapter;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
+import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -128,8 +130,6 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 
 	private DataBindingContext _bindingContext;
 
-	private ValidatingEContentAdapter _validator;
-
 	private boolean isSaving = false;
 
 	private EmfContentOutlinePage contentOutlinePage;
@@ -151,8 +151,6 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 	private void init() {
 		_editingDomain = createEditingDomain();
 		_bindingContext = new EMFDataBindingContext();
-		_validator = new ValidatingEContentAdapter(_observableValue, _bindingContext, this);
-		//	_validator = new LiveValidationEContentAdapter(this, _observableValue);
 
 		// Add a listener to set the most recent command's affected objects to
 		// be the selection of the viewer with focus.
@@ -210,6 +208,8 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 	protected void addPages() {
 		// Creates the model from the editor input
 		createModel();
+
+		// TODO: validate model
 
 		try {
 			for (IEmfFormPage page : getPagesToAdd())
@@ -324,52 +324,79 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 	protected void internalDoValidate(IProgressMonitor monitor) {
 		VALIDATE_ON_SAVE validateOnSave = _editorConfig.getValidateOnSave();
 
-		// result of the Validation
-		Diagnostic diagnostic = Diagnostic.OK_INSTANCE;
-
 		// if the validation is asked by the user
-		if (validateOnSave != VALIDATE_ON_SAVE.NO_VALIDATION)
-			diagnostic = _validator.validate(getCurrentEObject());
 
-		if (diagnostic.getSeverity() != Diagnostic.OK) {
+		final IStatus status;
+		if (validateOnSave != VALIDATE_ON_SAVE.NO_VALIDATION) {
+			status = validate(getCurrentEObject());
+		} else {
+			status = Status.OK_STATUS;
+		}
+
+		if (status != Status.OK_STATUS && status.getCode() != IStatus.OK) {
+
+			ListDialog dialog = new ListDialog(getSite().getShell());
+			dialog.setInput(status);
+			dialog.setTitle(Messages.EmfFormEditor_DiaDialog_InvalidModel_Title);
+			dialog.setContentProvider(new IStructuredContentProvider() {
+				public void dispose() {
+					// nothing to dispose
+				}
+
+				public Object[] getElements(Object inputElement) {
+					if (status != null && status.isMultiStatus() && status == inputElement) {
+						List<IStatus> children = new ArrayList<IStatus>();
+						for (IStatus child : status.getChildren()) {
+							if (child.getCode() != IStatus.OK) {
+								children.add(child);
+							}
+						}
+						return children.toArray(new IStatus[children.size()]);
+
+					} else if (status != null && status.getCode() != IStatus.OK && status == inputElement) {
+						return new Object[] {status};
+					}
+					return new Object[0];
+				}
+
+				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+					// Do nothing.
+				}
+			});
+			dialog.setLabelProvider(new LabelProvider() {
+				@Override
+				public String getText(Object element) {
+					if (element instanceof IStatus) {
+						return ((IStatus) element).getMessage();
+					}
+					return null;
+				}
+			});
+			dialog.setBlockOnOpen(true);
 			switch (validateOnSave) {
 				case VALIDATE_AND_WARN :
-					int dialogResult = new DiagnosticDialog(getSite().getShell(), Messages.EmfFormEditor_DiaDialog_InvalidModel_Title, null, diagnostic, Diagnostic.ERROR | Diagnostic.WARNING) {
-						@Override
-						protected Control createMessageArea(Composite composite) {
-							message = Messages.EmfFormEditor_ValidationWarn_Msg;
-							return super.createMessageArea(composite);
-						}
+					dialog.setMessage(Messages.EmfFormEditor_ValidationWarn_Msg);
+					break;
+				case VALIDATE_AND_ABORT :
+					dialog.setAddCancelButton(false);
+					dialog.setMessage(Messages.EmfFormEditor_ValidationError_Msg);
+					break;
+			}
 
-						@Override
-						protected void createButtonsForButtonBar(Composite parent) {
-							// create OK and Details buttons
-							createButton(parent, IDialogConstants.OK_ID, IDialogConstants.YES_LABEL, true);
-							createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.NO_LABEL, true);
-							createDetailsButton(parent);
-						}
-					}.open();
-
-					if (dialogResult != Window.OK) {
+			int userSays = dialog.open();
+			switch (validateOnSave) {
+				case VALIDATE_AND_WARN :
+					if (userSays != Window.OK) {
 						if (monitor != null)
 							monitor.setCanceled(true);
+
 						throw new OperationCanceledException();
 					}
 					break;
 				case VALIDATE_AND_ABORT :
-					new DiagnosticDialog(getSite().getShell(), Messages.EmfFormEditor_DiaDialog_InvalidModel_Title, null, diagnostic, Diagnostic.ERROR | Diagnostic.WARNING) {
-						@Override
-						protected Control createMessageArea(Composite composite) {
-							message = Messages.EmfFormEditor_ValidationError_Msg;
-							return super.createMessageArea(composite);
-						}
-					}.open();
-
-					monitor.setCanceled(true);
-
+					if (monitor != null)
+						monitor.setCanceled(true);
 					throw new OperationCanceledException();
-				default :
-					// fall through
 			}
 
 		}
@@ -452,17 +479,14 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 		}
 
 		setMainResource(resource);
-
+		validate(getCurrentEObject());
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	protected void setMainResource(Resource resource) {
-//		if (_currentEObject != null)
-//			_currentEObject.eAdapters().remove(_validator);
 
 		_currentEObject = getRootObject(resource);
 		_observableValue.setValue(_currentEObject);
-//		_currentEObject.eAdapters().add(_validator);
 	}
 
 	protected O getRootObject(Resource resource) {
@@ -792,6 +816,7 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public EObject getEObjectFrom(IMarker marker) {
 		EObject eObject = null;
 		try {
@@ -810,6 +835,7 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 		return getEObjectFrom(delta.getAttributes());
 	}
 
+	@SuppressWarnings("unchecked")
 	private EObject getEObjectFrom(Map attributes) {
 		EObject o = null;
 		if (attributes != null) {
@@ -842,13 +868,23 @@ public abstract class EmfFormEditor<O extends EObject> extends FormEditor implem
 		return _editorConfig;
 	}
 
-	/* package */void validate() {
-		// TODO perform validation in a separate job
-		//_validator.validate();
-	}
-
 	public Set<IMarker> getMarkers() {
 		return markers;
 	}
 
+	private IStatus validate(EObject selectedEObjects) {
+
+		IBatchValidator validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+		validator.setOption(IBatchValidator.OPTION_TRACK_RESOURCES, true);
+
+		IStatus status = validator.validate(selectedEObjects);
+		try {
+			MarkerUtil.updateMarkers(status);
+		} catch (CoreException e) {
+			Activator.log(e);
+		}
+		return status;
+
+	}
 }

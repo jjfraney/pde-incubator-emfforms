@@ -95,7 +95,6 @@ public abstract class AbstractEmfFormPage extends FormPage implements IEmfFormPa
 
 		DataBindingContext bindingContext = ((EmfFormEditor<?>) getEditor()).getDataBindingContext();
 		bind(bindingContext);
-		getEditor().validate();
 
 		//select first element if there is one
 		if (getViewer() != null && getViewer() instanceof TreeViewer) {
