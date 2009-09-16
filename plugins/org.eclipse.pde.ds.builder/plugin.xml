@@ -100,10 +100,9 @@
       <clientContext
             default="false"
             id="org.eclipse.pde.ds.builder.validationContext">
-         <enablement>
-            <instanceof
-                  value="java.lang.Object">
-            </instanceof></enablement>
+         <selector
+               class="org.eclipse.pde.ds.builder.internal.validation.ClientSelector">
+         </selector>
       </clientContext>
       <binding
             context="org.eclipse.pde.ds.builder.validationContext"
