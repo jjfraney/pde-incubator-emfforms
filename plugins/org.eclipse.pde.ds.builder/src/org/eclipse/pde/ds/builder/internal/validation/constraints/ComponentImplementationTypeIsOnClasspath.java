@@ -35,8 +35,8 @@ public class ComponentImplementationTypeIsOnClasspath extends
 				.eResource()));
 		IType type;
 		try {
-			type = project.findType(impl.getClass_());
-			if (type == null || !type.exists()) {
+			String clss = impl.getClass_();
+			if(clss == null || (type = project.findType(clss)) == null || !type.exists()) {
 				ConstraintStatus s = (ConstraintStatus) ctx
 						.createFailureStatus(impl.getClass_());
 				EnhancedConstraintStatus enhancedStatus = new EnhancedConstraintStatus(
